@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
+
+    >
+
+        <RadioButton
+            android:id="@+id/verbose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verbose: 2"/>
+
+        <RadioButton
+            android:id="@+id/debug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Debug: 3"/>
+
+        <RadioButton
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Info: 4"/>
+
+        <RadioButton
+            android:id="@+id/warn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Warn: 5"/>
+
+        <RadioButton
+            android:id="@+id/error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Error: 6"/>
+
+        <RadioButton
+            android:id="@+id/asert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assert: 7"/>
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/clickme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/radio_group"
+        android:layout_alignParentEnd="true"
+        android:onClick="button_clicked"
+        android:padding="50dp"
+        android:text="HIT ME!" android:layout_alignParentRight="true"/>
+
+    <Button
+        android:id="@+id/burst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/clickme"
+        android:layout_alignParentEnd="true"
+        android:onClick="burst_clicked"
+        android:text="burst" android:layout_alignParentRight="true"/>
+
+    <Button
+        android:id="@+id/copyZip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_above="@id/burst"
+        android:layout_alignLeft="@id/clickme"
+
+        android:layout_alignParentEnd="true"
+        android:onClick="cz_clicked"
+        android:text="Show logs" android:layout_alignParentRight="true"/>
+
+    <EditText
+        android:id="@+id/burst_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/copyZip"
+        android:layout_alignLeft="@id/clickme"
+        android:layout_toLeftOf="@id/burst"
+        android:text="50"
+
+    />
+
+</RelativeLayout>
