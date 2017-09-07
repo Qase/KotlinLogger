@@ -10,7 +10,7 @@ Mostly used in Prague based android develpoment company - [Quanti](https://www.q
 
 Usage is simple
 
-1) To your app class add all logers that zou want to log on
+1) To your app class add all logers that you want to log on
 ```java
 Log.addLogger(new FileLogger(this));
 Log.addLogger(new BaseAndroidLog());
