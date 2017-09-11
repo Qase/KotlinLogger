@@ -120,7 +120,6 @@
         android:layout_alignLeft="@id/clickme"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-
         android:onClick="test_2"
         android:text="test #2"/>
 
@@ -132,8 +131,18 @@
         android:layout_alignLeft="@id/clickme"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-
         android:onClick="test_3"
         android:text="test #3"/>
+
+    <Button
+        android:id="@+id/testn4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/testn3"
+        android:layout_alignLeft="@id/clickme"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:onClick="test_4"
+        android:text="test #4 - crash"/>
 
 </RelativeLayout>

@@ -4,12 +4,12 @@ import android.content.Context
 
 
 
+
 /**
  * Created by Trnka Vladislav on 11.09.2017.
  *
- * TODO: description
+ * Another helper class ;);););]
  */
-
 
 fun Context.getApplicationName(): String {
     val stringId = applicationInfo.labelRes

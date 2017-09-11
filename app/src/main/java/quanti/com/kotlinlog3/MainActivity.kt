@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
             Log.addLogger(FileLoggerAsync(applicationContext))
         }
 
+        Log.useUncheckedErrorHandler()
         Log.addLogger(AndroidLogger())
 
         (findViewById(R.id.radio_group) as RadioGroup).setOnCheckedChangeListener(this)
@@ -188,6 +189,11 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                 }
 
     }
+
+    fun test_4(view: View) {
+        throw ArrayIndexOutOfBoundsException("unchecked exception")
+    }
+
 
 
 }

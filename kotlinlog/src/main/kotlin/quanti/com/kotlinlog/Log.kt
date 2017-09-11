@@ -10,6 +10,7 @@ import quanti.com.kotlinlog.base.ILogger
  * Main logger to all subloggers
  */
 
+
 class Log {
 
     companion object {
@@ -32,6 +33,21 @@ class Log {
 
         @JvmStatic
         fun e(text: String, e: Throwable) = allLogThrowable(text, e)
+
+        @JvmStatic
+        fun useUncheckedErrorHandler() {
+
+            val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
+
+            Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
+                e("", paramThrowable)
+
+                if (oldHandler != null)
+                    oldHandler.uncaughtException( paramThread, paramThrowable) //Delegates to Android's error handling
+                else
+                    System.exit(2) //Prevents the service/app from freezing
+            }
+        }
 
         /**
          * Adds new logger
@@ -83,7 +99,7 @@ class Log {
             }
         }
 
-        private fun allLogThrowable(text: String, t: Throwable){
+        private fun allLogThrowable(text: String, t: Throwable) {
             if (loggers.size == 0) {
                 android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
                 return
