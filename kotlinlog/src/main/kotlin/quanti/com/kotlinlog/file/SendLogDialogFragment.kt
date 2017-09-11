@@ -24,13 +24,22 @@ class SendLogDialogFragment : DialogFragment() {
         const val FILE_BUTTON_TEXT = "file_button"
         const val SEND_EMAIL_ADDRESSES = "send_address"
 
+        @JvmOverloads
         fun newInstance(
+                sendEmailAddress: String,
                 message: String = "Would you like to send logs by email or save them to SD card?",
                 title: String = "Send logs",
                 emailButtonText: String = "Email",
-                fileButtonText: String = "Save",
-                sendEmailAdress: Array<String> = arrayOf("mobilne@quanti.cz")
+                fileButtonText: String = "Save"
+        ) = newInstance(arrayOf(sendEmailAddress), message, title, emailButtonText, fileButtonText)
 
+        @JvmOverloads
+        fun newInstance(
+                sendEmailAddress: Array<String>,
+                message: String = "Would you like to send logs by email or save them to SD card?",
+                title: String = "Send logs",
+                emailButtonText: String = "Email",
+                fileButtonText: String = "Save"
         ): SendLogDialogFragment {
             val myFragment = SendLogDialogFragment()
 
@@ -39,7 +48,7 @@ class SendLogDialogFragment : DialogFragment() {
             args.putString(TITLE, title)
             args.putString(EMAIL_BUTTON_TEXT, emailButtonText)
             args.putString(FILE_BUTTON_TEXT, fileButtonText)
-            args.putStringArray(SEND_EMAIL_ADDRESSES, sendEmailAdress)
+            args.putStringArray(SEND_EMAIL_ADDRESSES, sendEmailAddress)
 
             myFragment.arguments = args
 
@@ -64,7 +73,7 @@ class SendLogDialogFragment : DialogFragment() {
      */
     private fun positiveButtonClick() {
         FileLogger
-                .getZipOfLogsUri()
+                .getZipOfLogsUri(activity.applicationContext)
                 .map {
                     val i = Intent(Intent.ACTION_SEND)
                     i.type = "message/rfc822"
@@ -96,7 +105,7 @@ class SendLogDialogFragment : DialogFragment() {
      */
     private fun neutralButtonClick() {
         FileLogger
-                .copyLogsToSDCard()
+                .copyLogsToSDCard(activity.applicationContext)
                 .subscribe({
                     Toast.makeText(
                             context,

@@ -64,7 +64,7 @@ class Log {
         private fun allLog(androidLogLevel: Int, text: String, t: Throwable? = null) {
 
             if (loggers.size == 0) {
-                android.util.Log.i("Logger", "There is not logger to log to. Did not you forget to add logger?")
+                android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
                 return
             }
 

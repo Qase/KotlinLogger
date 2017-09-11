@@ -39,8 +39,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     MY_PERMISSIONS_REQUEST)
         } else {
-            FileLogger.setUp(this)
-            Log.addLogger(FileLogger)
+            Log.addLogger(FileLogger(applicationContext))
         }
 
 
@@ -80,7 +79,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     fun cz_clicked(view: View) {
-        SendLogDialogFragment.newInstance().show(supportFragmentManager, "OMG")
+        SendLogDialogFragment.newInstance("kidal5@centrum.cz").show(supportFragmentManager, "OMG")
     }
 
 
@@ -88,8 +87,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         if (requestCode == MY_PERMISSIONS_REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.i("Diky za permission")
-            FileLogger.setUp(this)
-            Log.addLogger(FileLogger)
+            Log.addLogger(FileLogger(applicationContext))
         } else {
             //show some shit
             AlertDialog.Builder(this)
