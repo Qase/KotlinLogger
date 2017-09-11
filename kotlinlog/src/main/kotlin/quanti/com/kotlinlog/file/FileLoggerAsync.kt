@@ -2,6 +2,10 @@ package quanti.com.kotlinlog.file
 
 import android.content.Context
 import quanti.com.kotlinlog.base.LogLevel
+import quanti.com.kotlinlog.file.base.FileLoggerBase
+import quanti.com.kotlinlog.file.base.FileLoggerBundle
+import quanti.com.kotlinlog.file.file.CrashLogFile
+import quanti.com.kotlinlog.file.file.DayLogFile
 import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.mergeToFile
 import java.util.concurrent.Executors
@@ -15,7 +19,10 @@ import kotlin.concurrent.withLock
 /**
  * Created by Trnka Vladislav on 30.05.2017.
  *
- * Implementation of file logger
+ * Implementation of async file logger
+ *
+ * Does not have temp file as backing
+ *
  *
  * @param appCtx application (!) context
  * @param bun file logger settings
@@ -27,6 +34,7 @@ class FileLoggerAsync @JvmOverloads constructor(
 ) : FileLoggerBase(appCtx, bun) {
 
     val dayLock = ReentrantLock()
+    val dayFile = DayLogFile(appCtx, bun)
 
     val blockingQueue = LinkedBlockingQueue<String>()
     val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
@@ -36,18 +44,9 @@ class FileLoggerAsync @JvmOverloads constructor(
                 {
                     val fl = blockingQueue.size
                     while (blockingQueue.isNotEmpty()) {
-                        if (actualLogFile.isFull()) {
-                            actualLogFile.closeOutputStream()
-
                             dayLock.withLock {
-                                mergeToFile(actualLogFile.getName(), getDayTemp(), ctx)
+                                dayFile.write(blockingQueue.poll())
                             }
-
-                            actualLogFile.delete()
-
-                            actualLogFile = LogFile(ctx, bun)
-                        }
-                        actualLogFile.write(blockingQueue.poll())
                     }
                     android.util.Log.i("Tag", "Flushed: $fl")
                 }, 1, 5, TimeUnit.SECONDS
@@ -66,7 +65,7 @@ class FileLoggerAsync @JvmOverloads constructor(
     }
 
     override fun logThrowable(tag: String, methodName: String, text: String, t: Throwable) {
-        val errorFile = LogFile(ctx, bun, true, t.javaClass.simpleName)
+        val errorFile = CrashLogFile(ctx, bun, t.javaClass.simpleName)
 
         val formattedString = getFormatedString(LogLevel.ERROR, tag, methodName, text)
 
@@ -75,7 +74,7 @@ class FileLoggerAsync @JvmOverloads constructor(
         errorFile.closeOutputStream()
 
         dayLock.withLock {
-            mergeToFile(errorFile.getName(), getDayTemp(), ctx)
+            mergeToFile(errorFile.getFileName(), dayFile.getFileName(), ctx)
         }
     }
 }

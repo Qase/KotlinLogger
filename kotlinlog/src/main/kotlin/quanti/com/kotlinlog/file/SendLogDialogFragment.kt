@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import quanti.com.kotlinlog.R
+import quanti.com.kotlinlog.file.base.FileLoggerBase
 import quanti.com.kotlinlog.utils.getFormatedFileNameDayNow
 
 /**

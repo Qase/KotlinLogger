@@ -1,4 +1,4 @@
-package quanti.com.kotlinlog.file
+package quanti.com.kotlinlog.file.base
 
 import quanti.com.kotlinlog.base.LogLevel
 

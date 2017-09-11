@@ -1,7 +1,7 @@
+
 import android.content.Context
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -11,8 +11,8 @@ import org.robolectric.shadows.ShadowApplication
 import org.robolectric.shadows.ShadowLog
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.base.LogLevel
-import quanti.com.kotlinlog.file.FileLogger
-import quanti.com.kotlinlog.file.FileLoggerBundle
+import quanti.com.kotlinlog.file.base.FileLoggerBundle
+import quanti.com.kotlinlog.file.deprecated.FileLogger
 import quanti.com.kotlinlog.utils.ActualTime
 import quanti.com.kotlinlog.utils.getFormatedFileNameDayNow
 
@@ -40,8 +40,7 @@ class FileLoggerTest {
 
         //add logger
         //Log.addLogger(AndroidLogger())
-        FileLogger.setUp(ctx, bundle)
-        Log.addLogger(FileLogger)
+        Log.addLogger(FileLogger(ctx))
 
     }
 

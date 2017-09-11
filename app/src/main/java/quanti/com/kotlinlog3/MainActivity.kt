@@ -16,9 +16,9 @@ import io.reactivex.schedulers.Schedulers
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
-import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.FileLoggerAsync
 import quanti.com.kotlinlog.file.SendLogDialogFragment
+import quanti.com.kotlinlog.file.deprecated.FileLogger
 
 
 class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         if (requestCode == MY_PERMISSIONS_REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.i("Diky za permission")
-            Log.addLogger(FileLogger(applicationContext))
+            Log.addLogger(FileLoggerAsync(applicationContext))
         } else {
             //show some shit
             AlertDialog.Builder(this)
@@ -141,6 +141,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         Log.removeAllLoggers()
         Log.addLogger(AndroidLogger())
+
 
         Log.i("Sync: ${endTime1 - startTime1}\tAsync: ${endTime2 - startTime2}")
     }

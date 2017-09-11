@@ -4,7 +4,6 @@ import android.content.Context
 import android.media.MediaScannerConnection
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.Log.Companion.i
-import quanti.com.kotlinlog.file.FileLogger
 import java.io.*
 import java.util.*
 import java.util.concurrent.TimeUnit

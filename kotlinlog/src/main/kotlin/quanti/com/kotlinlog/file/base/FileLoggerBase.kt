@@ -1,4 +1,4 @@
-package quanti.com.kotlinlog.file
+package quanti.com.kotlinlog.file.base
 
 import android.Manifest
 import android.content.Context
@@ -9,6 +9,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.getLogLevelString
+import quanti.com.kotlinlog.file.file.BaseLogFile
 import quanti.com.kotlinlog.utils.*
 import java.io.File
 import java.io.FileFilter
@@ -17,7 +18,7 @@ import java.io.FileNotFoundException
 /**
  * Created by Trnka Vladislav on 11.09.2017.
  *
- * TODO: description
+ * Base class for file loggers
  */
 
 abstract class FileLoggerBase @JvmOverloads constructor(
@@ -25,7 +26,6 @@ abstract class FileLoggerBase @JvmOverloads constructor(
         protected var bun: FileLoggerBundle = FileLoggerBundle()
 ): ILogger {
 
-    protected var actualLogFile: LogFile
 
     init {
         //check permission
@@ -34,9 +34,8 @@ abstract class FileLoggerBase @JvmOverloads constructor(
             throw SecurityException("Give me ${Manifest.permission.WRITE_EXTERNAL_STORAGE}")
         }
 
-        LogFile.removeAllOldTemps(ctx, bun.maxDaysSaved)
+        BaseLogFile.removeAllOldTemps(ctx, bun.maxDaysSaved)
 
-        actualLogFile = LogFile(ctx, bun)
     }
 
     protected fun getDayTemp() = "${getFormattedFileNameForDayTemp()}_daytemp.log"
@@ -58,7 +57,7 @@ abstract class FileLoggerBase @JvmOverloads constructor(
 
     /**
      * Static methods
-     * They do not exactly match ILogger interface
+     * Their purpose do not exactly match ILogger interface and it is hard to get them using instance
      */
     companion object {
 
@@ -70,7 +69,7 @@ abstract class FileLoggerBase @JvmOverloads constructor(
         fun getZipOfLogsUri(appCtx: Context, fileAge: Int = 4): Observable<Uri> {
             return getZipOfLogs(appCtx, fileAge)
                     .map {
-                        FileProvider.getUriForFile(appCtx, appCtx.packageName, it) //todo this
+                        FileProvider.getUriForFile(appCtx, appCtx.packageName, it)
                     }
                     .observeOn(AndroidSchedulers.mainThread())
         }
@@ -89,6 +88,7 @@ abstract class FileLoggerBase @JvmOverloads constructor(
                         val dir = File(Environment.getExternalStorageDirectory(), sdCardFolderName)
                         dir.mkdirs()
                         val output = File(dir, it.name)
+                        output.delete()
                         it.copyTo(output, true)
                         return@map output
                     }
