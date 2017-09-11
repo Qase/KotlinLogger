@@ -1,38 +1,59 @@
 [![](https://jitpack.io/v/kidal5/KotlinLogger.svg)](https://jitpack.io/#kidal5/KotlinLogger)
 
-## KotlinLogger
+## KotlinLogger2
 
-Basic android logger written in kotlin language using reactive style of programming.
+Smart android logger written in kotlin language.
 
 Mostly used in Prague based android develpoment company - [Quanti](https://www.quanti.cz/) for everything.
+
+## Features
+* Very easy to use
+* No more TAGs
+* Easy to extend using your own logger
+* Lot of optional parameters
+* Lightweight
+* Sample [app](github/sampleApp.png) is ready to build 
 
 ## Code Example
 
 Usage is simple
 
-1) To your app class add all logers that you want to log on
-```java
-Log.addLogger(new FileLogger(this));
-Log.addLogger(new BaseAndroidLog());
+1) Add all needed logers to your mainActivity
+
+```kotlin
+Log.addLogger(BaseAndroidLog()); //forwards all log to android logcat
+Log.addLogger(FileLoggerAsync(applicationContext)); 
 ```
 
-2) Then log as you would normally do - just using another dependency
-
-```java
-Log.v("Text");
-Log.i("Text");
-Log.w("Text");
-Log.d("Text");
-Log.e("Text");
-Log.e("Text", new Exception());
+2) (Optionally) Enable unchecked crash handling
+```kotlin
+Log.useUncheckedErrorHandler()
 ```
+
+3) Then log as you would normally do - just using another dependency
+
+```kotlin
+Log.v("This");
+Log.d("is");
+Log.i("sample");
+Log.i("text");
+Log.i("that");
+Log.i("will");
+Log.i("be");
+Log.w("logged.");
+Log.e("wi", Exception()); //throwable
+```
+
+4) (Optionally) Use of SendLogDialogFragment
+
+```kotlin
+SendLogDialogFragment.newInstance("your@email.com").show(supportFragmentManager, "TAG")
+```
+![dialog](github/dialog.png "dialog")
 
 ## Installation
 
 Project si hosted on [Jitpack](https://jitpack.io) so the basic installation is found [here](https://jitpack.io/#kidal5/KotlinLogger/v1.9).
-
-## dev
-https://stackoverflow.com/questions/21271246/install-failed-conflicting-provider-in-android
 
 ## License
 
