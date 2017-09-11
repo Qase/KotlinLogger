@@ -18,19 +18,36 @@ Mostly used in Prague based android develpoment company - [Quanti](https://www.q
 
 Usage is simple
 
-1) Add all needed logers to your mainActivity
+1) Make sure you have set your applicationId in gradle 
+```
+android{
+  defaultConfig{
+    applicationId = "your.cool.app"
+    ...
+  }
+  ...
+}
+```
+
+2) Add all needed logers to your mainActivity
 
 ```kotlin
 Log.addLogger(BaseAndroidLog()); //forwards all log to android logcat
 Log.addLogger(FileLoggerAsync(applicationContext)); 
 ```
 
-2) (Optionally) Enable unchecked crash handling
+For usage of FileLoggerAsync is necesarry this permission in manifest file
+```
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+```
+
+
+3) (Optionally) Enable unchecked crash handling
 ```kotlin
 Log.useUncheckedErrorHandler()
 ```
 
-3) Then log as you would normally do - just using another dependency
+4) Then log as you would normally do - just using another dependency
 
 ```kotlin
 Log.v("This");
@@ -44,7 +61,7 @@ Log.w("logged.");
 Log.e("wi", Exception()); //throwable
 ```
 
-4) (Optionally) Use of SendLogDialogFragment
+5) (Optionally) Use of SendLogDialogFragment
 
 ```kotlin
 SendLogDialogFragment.newInstance("your@email.com").show(supportFragmentManager, "TAG")
