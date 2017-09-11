@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/kidal5/KotlinLogger.svg)](https://jitpack.io/#kidal5/KotlinLogger)
+[![Release](https://jitpack.io/v/kidal5/KotlinLogger2.svg)](https://jitpack.io/#kidal5/KotlinLogger2)
 
 ## KotlinLogger2
 
@@ -53,7 +53,7 @@ SendLogDialogFragment.newInstance("your@email.com").show(supportFragmentManager,
 
 ## Installation
 
-Project si hosted on [Jitpack](https://jitpack.io) so the basic installation is found [here](https://jitpack.io/#kidal5/KotlinLogger/v1.9).
+Project si hosted on [Jitpack](https://jitpack.io) so the basic installation is found [here](https://jitpack.io/#kidal5/KotlinLogger2).
 
 ## License
 
