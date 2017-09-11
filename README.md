@@ -31,9 +31,12 @@ Log.e("Text", new Exception());
 
 Project si hosted on [Jitpack](https://jitpack.io) so the basic installation is found [here](https://jitpack.io/#kidal5/KotlinLogger/v1.9).
 
+## dev
+https://stackoverflow.com/questions/21271246/install-failed-conflicting-provider-in-android
+
 ## License
 
-Copyright 2016 Quanti s.r.o
+Copyright 2018 Quanti s.r.o
 
 Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at 
 
