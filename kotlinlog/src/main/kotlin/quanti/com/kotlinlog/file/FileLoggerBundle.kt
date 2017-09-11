@@ -16,6 +16,6 @@ import quanti.com.kotlinlog.base.LogLevel
 data class FileLoggerBundle @JvmOverloads constructor(
         var minimalLogLevel: Int = LogLevel.VERBOSE,
         val maxDaysSaved: Int = 7,
-        val maxLogsPerOneFile: Int = 20
+        val maxLogsPerOneFile: Int = 500
 )
 

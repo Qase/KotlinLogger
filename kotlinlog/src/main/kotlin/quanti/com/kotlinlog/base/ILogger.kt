@@ -15,6 +15,6 @@ interface ILogger {
     /**
      * Log error
      */
-    fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable)
+    fun logThrowable(tag: String, methodName: String, text: String, t: Throwable)
 
 }

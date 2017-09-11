@@ -9,18 +9,20 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.file.FileLogger
+import quanti.com.kotlinlog.file.FileLoggerAsync
 import quanti.com.kotlinlog.file.SendLogDialogFragment
 
 
 class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
+
 
     internal var checked = 3
     internal var MY_PERMISSIONS_REQUEST = 98
@@ -39,14 +41,13 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     MY_PERMISSIONS_REQUEST)
         } else {
-            Log.addLogger(FileLogger(applicationContext))
+            Log.addLogger(FileLoggerAsync(applicationContext))
         }
-
-
 
         Log.addLogger(AndroidLogger())
 
         (findViewById(R.id.radio_group) as RadioGroup).setOnCheckedChangeListener(this)
+
 
     }
 
@@ -61,6 +62,10 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         }
     }
 
+    fun button_clicked_throw(view: View) {
+        Log.e("Something bad happened", ArrayIndexOutOfBoundsException("Message in exception"))
+    }
+
     override fun onCheckedChanged(group: RadioGroup, @IdRes checkedId: Int) {
         val text = (group.findViewById(checkedId) as RadioButton).text
         checked = Integer.parseInt(text[text.length - 1] + "")
@@ -68,14 +73,26 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     fun burst_clicked(view: View) {
 
-        val editText = findViewById(R.id.burst_number) as EditText
-
-        val end = editText.text.toString().toInt()
+        val end = 50
 
         Flowable
                 .range(0, end)
                 .map { it.toString() }
                 .subscribe { Log.i(it) }
+    }
+
+    fun burst_thread_clicked(view: View) {
+
+        val threads = 5
+        val end = 1000
+        (0..threads)
+                .onEach {
+                    val thread = it
+                    Flowable.range(0, end)
+                            .subscribeOn(Schedulers.newThread())
+                            .subscribe { Log.i("Thread $thread\t Log: $it") }
+                }
+
     }
 
     fun cz_clicked(view: View) {
@@ -104,6 +121,74 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                     .show()
         }
     }
+
+    fun test_1(view: View) {
+        //first log to sync logger
+
+        Log.removeAllLoggers()
+        Log.addLogger(FileLogger(applicationContext))
+
+        val startTime1 = System.currentTimeMillis()
+        Flowable.range(0, 10000).subscribe { Log.i(it.toString()) }
+        val endTime1 = System.currentTimeMillis()
+
+        Log.removeAllLoggers()
+        Log.addLogger(FileLoggerAsync(applicationContext))
+
+        val startTime2 = System.currentTimeMillis()
+        Flowable.range(0, 10000).subscribe { Log.i(it.toString()) }
+        val endTime2 = System.currentTimeMillis()
+
+        Log.removeAllLoggers()
+        Log.addLogger(AndroidLogger())
+
+        Log.i("Sync: ${endTime1 - startTime1}\tAsync: ${endTime2 - startTime2}")
+    }
+
+    fun test_2(view: View) {
+        Flowable.range(0, 10000)
+                .subscribe {
+                    if (it % 1000 == 0){
+                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
+                    }
+                    Log.i(it.toString())
+                }
+
+    }
+
+    fun test_3(view: View) {
+        //first log to sync logger
+
+        Flowable.range(0, 10000)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe {
+                    if (it % 1000 == 0){
+                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
+                    }
+                    Log.i(it.toString())
+                }
+
+        Flowable.range(0, 10000)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe {
+                    if (it % 1000 == 0){
+                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
+                    }
+                    Log.i(it.toString())
+                }
+
+        Flowable.range(0, 10000)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe {
+                    if (it % 1000 == 0){
+                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
+                    }
+                    Log.i(it.toString())
+                }
+
+    }
+
+
 }
 
 

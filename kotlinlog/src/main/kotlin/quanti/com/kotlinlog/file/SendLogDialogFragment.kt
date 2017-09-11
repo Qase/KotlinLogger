@@ -72,7 +72,7 @@ class SendLogDialogFragment : DialogFragment() {
      * Creates zip of all logs and opens email client to send
      */
     private fun positiveButtonClick() {
-        FileLogger
+        FileLoggerBase
                 .getZipOfLogsUri(activity.applicationContext)
                 .map {
                     val i = Intent(Intent.ACTION_SEND)
@@ -104,7 +104,7 @@ class SendLogDialogFragment : DialogFragment() {
      * Copies ZIP of all logs to sd card
      */
     private fun neutralButtonClick() {
-        FileLogger
+        FileLoggerBase
                 .copyLogsToSDCard(activity.applicationContext)
                 .subscribe({
                     Toast.makeText(

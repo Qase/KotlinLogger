@@ -20,9 +20,7 @@ class AndroidLogger constructor(
         }
     }
 
-    override fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable) {
-        if (androidLogLevel >= bun.minimalLogLevel) {
-            android.util.Log.e(tag, text, t)
-        }
+    override fun logThrowable(tag: String, methodName: String, text: String, t: Throwable) {
+        android.util.Log.e(tag, text, t)
     }
 }

@@ -3,6 +3,7 @@ package quanti.com.kotlinlog.file
 import android.content.Context
 import quanti.com.kotlinlog.utils.fileAge
 import quanti.com.kotlinlog.utils.getFormatedFileNameDayNow
+import quanti.com.kotlinlog.utils.getFormatedFileNameDayNowWithSeconds
 import java.io.File
 import java.io.FileOutputStream
 
@@ -13,15 +14,19 @@ import java.io.FileOutputStream
 
 class LogFile(
         ctx: Context,
-        val bundle: FileLoggerBundle
+        val bundle: FileLoggerBundle,
+        crash: Boolean = false,
+        crashReason: String = ""
 ) {
 
     private var logsWritten = 0
     private val file: File
-    private val name = getNewTempFile()
+    private val name: String
     private val fos: FileOutputStream
 
     init {
+        name = if (crash) getNewCrashFile(crashReason) else getNewTempFile()
+
         file = File(ctx.filesDir, name)
         fos = ctx.openFileOutput(name, Context.MODE_PRIVATE)
 
@@ -55,6 +60,9 @@ class LogFile(
          */
         private fun getNewTempFile() =
                 File.createTempFile(getFormatedFileNameDayNow() + "_temp", ".log").name
+
+        private fun getNewCrashFile(crashReason: String) =
+                getFormatedFileNameDayNowWithSeconds() + "_crash_$crashReason.log"
 
         fun removeAllOldTemps(ctx: Context, maxDaysSaved: Int) {
             //check old files and remove them

@@ -13,7 +13,7 @@ import quanti.com.kotlinlog.base.ILogger
 class Log {
 
     companion object {
-        private val loggers = java.util.ArrayList<ILogger>()
+        private val loggers = arrayListOf<ILogger>()
 
         @JvmStatic
         fun v(text: String) = allLog(Log.VERBOSE, text)
@@ -31,7 +31,7 @@ class Log {
         fun e(text: String) = allLog(Log.ERROR, text)
 
         @JvmStatic
-        fun e(text: String, e: Throwable) = allLog(Log.ERROR, text, e)
+        fun e(text: String, e: Throwable) = allLogThrowable(text, e)
 
         /**
          * Adds new logger
@@ -39,6 +39,14 @@ class Log {
         @JvmStatic
         fun addLogger(logger: ILogger) {
             loggers.add(logger)
+        }
+
+        /**
+         * Removes all loggers
+         */
+        @JvmStatic
+        fun removeAllLoggers() {
+            loggers.clear()
         }
 
         /**
@@ -61,7 +69,7 @@ class Log {
         /**
          * @param androidLogLevel [android.util.Log] int values
          */
-        private fun allLog(androidLogLevel: Int, text: String, t: Throwable? = null) {
+        private fun allLog(androidLogLevel: Int, text: String) {
 
             if (loggers.size == 0) {
                 android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
@@ -70,15 +78,21 @@ class Log {
 
             val element = getMethodStackTraceElement()
 
-            if (t == null) {
-                loggers.forEach {
-                    it.log(androidLogLevel, element.className, element.methodName, text)
-                }
+            loggers.forEach {
+                it.log(androidLogLevel, element.className, element.methodName, text)
+            }
+        }
+
+        private fun allLogThrowable(text: String, t: Throwable){
+            if (loggers.size == 0) {
+                android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
                 return
             }
 
+            val element = getMethodStackTraceElement()
+
             loggers.forEach {
-                it.logThrowable(androidLogLevel, element.className, element.methodName, text, t)
+                it.logThrowable(element.className, element.methodName, text, t)
             }
         }
     }

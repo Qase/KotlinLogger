@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:orientation="horizontal"
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical"
 
     >
 
@@ -58,11 +58,21 @@
         android:id="@+id/clickme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/radio_group"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:onClick="button_clicked"
-        android:padding="50dp"
-        android:text="HIT ME!" android:layout_alignParentRight="true"/>
+        android:text="hit me!"/>
+
+    <Button
+        android:id="@+id/clickmeT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/clickme"
+        android:onClick="button_clicked_throw"
+        android:text="throw!"/>
+
 
     <Button
         android:id="@+id/burst"
@@ -70,31 +80,66 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/clickme"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:onClick="burst_clicked"
-        android:text="burst" android:layout_alignParentRight="true"/>
+        android:text="burst"/>
+
+    <Button
+        android:id="@+id/burstThreads"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/clickme"
+        android:layout_alignLeft="@id/clickmeT"
+        android:layout_toLeftOf="@id/burst"
+        android:onClick="burst_thread_clicked"
+        android:text="burst threads"/>
 
     <Button
         android:id="@+id/copyZip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_above="@id/burst"
         android:layout_alignLeft="@id/clickme"
-
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:onClick="cz_clicked"
-        android:text="Show logs" android:layout_alignParentRight="true"/>
+        android:text="Show logs"/>
 
-    <EditText
-        android:id="@+id/burst_number"
+    <Button
+        android:id="@+id/testn1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:layout_below="@id/copyZip"
+        android:layout_above="@id/copyZip"
         android:layout_alignLeft="@id/clickme"
-        android:layout_toLeftOf="@id/burst"
-        android:text="50"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
 
+        android:onClick="test_1"
+        android:text="test #1"
     />
+
+    <Button
+        android:id="@+id/testn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/testn1"
+        android:layout_alignLeft="@id/clickme"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+
+        android:onClick="test_2"
+        android:text="test #2"/>
+
+    <Button
+        android:id="@+id/testn3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/testn2"
+        android:layout_alignLeft="@id/clickme"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+
+        android:onClick="test_3"
+        android:text="test #3"/>
 
 </RelativeLayout>
