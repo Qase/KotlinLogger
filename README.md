@@ -7,6 +7,7 @@ Smart android logger written in kotlin language.
 Mostly used in Prague based android develpoment company - [Quanti](https://www.quanti.cz/) for everything.
 
 ## Features
+* Usable in every JVM language including Java/Kotlin/Scala ...
 * Very easy to use
 * No more TAGs
 * Easy to extend using your own logger
