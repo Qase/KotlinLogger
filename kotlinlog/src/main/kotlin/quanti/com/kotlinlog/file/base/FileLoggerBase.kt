@@ -88,7 +88,6 @@ abstract class FileLoggerBase @JvmOverloads constructor(
                         val dir = File(Environment.getExternalStorageDirectory(), sdCardFolderName)
                         dir.mkdirs()
                         val output = File(dir, it.name)
-                        output.delete()
                         it.copyTo(output, true)
                         return@map output
                     }
@@ -108,7 +107,8 @@ abstract class FileLoggerBase @JvmOverloads constructor(
                 return Observable.error { FileNotFoundException("No files were found") }
             }
 
-            val zipFile = File(appCtx.filesDir, "${getFormattedFileNameForDayTemp()}.zip")
+            val zipFileName = "Logs_${getFormattedFileNameForDayTemp()}_${appCtx.getApplicationName()}.zip"
+            val zipFile = File(appCtx.filesDir, zipFileName)
             zipFile.createNewFile()  //create file if not exists
 
             return Observable.just(zipFile).map { listFiles.zip(it) }.observeOn(AndroidSchedulers.mainThread())

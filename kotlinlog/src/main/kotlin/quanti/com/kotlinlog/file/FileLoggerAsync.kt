@@ -42,13 +42,13 @@ class FileLoggerAsync @JvmOverloads constructor(
     init {
         threadExecutor.scheduleAtFixedRate(
                 {
-                    val fl = blockingQueue.size
+                    //val fl = blockingQueue.size
                     while (blockingQueue.isNotEmpty()) {
                             dayLock.withLock {
                                 dayFile.write(blockingQueue.poll())
                             }
                     }
-                    android.util.Log.i("Tag", "Flushed: $fl")
+                    //android.util.Log.i("Tag", "Flushed: $fl")
                 }, 1, 5, TimeUnit.SECONDS
         )
     }

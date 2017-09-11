@@ -1,10 +1,20 @@
 package quanti.com.kotlinlog.utils
 
+import android.content.Context
+
+
+
 /**
  * Created by Trnka Vladislav on 11.09.2017.
  *
  * TODO: description
  */
+
+
+fun Context.getApplicationName(): String {
+    val stringId = applicationInfo.labelRes
+    return if (stringId == 0) applicationInfo.nonLocalizedLabel.toString() else getString(stringId)
+}
 
 fun Throwable.convertToLogCatString(): String { //todo add surpressed and other shiots ???
 
