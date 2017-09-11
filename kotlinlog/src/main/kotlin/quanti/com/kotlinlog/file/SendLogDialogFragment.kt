@@ -25,7 +25,7 @@ class SendLogDialogFragment : DialogFragment() {
         const val FILE_BUTTON_TEXT = "file_button"
         const val SEND_EMAIL_ADDRESSES = "send_address"
 
-        @JvmOverloads
+        @JvmOverloads @JvmStatic
         fun newInstance(
                 sendEmailAddress: String,
                 message: String = "Would you like to send logs by email or save them to SD card?",
@@ -34,7 +34,7 @@ class SendLogDialogFragment : DialogFragment() {
                 fileButtonText: String = "Save"
         ) = newInstance(arrayOf(sendEmailAddress), message, title, emailButtonText, fileButtonText)
 
-        @JvmOverloads
+        @JvmOverloads @JvmStatic
         fun newInstance(
                 sendEmailAddress: Array<String>,
                 message: String = "Would you like to send logs by email or save them to SD card?",
