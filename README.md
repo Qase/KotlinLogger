@@ -1,38 +1,83 @@
-[![](https://jitpack.io/v/kidal5/KotlinLogger.svg)](https://jitpack.io/#kidal5/KotlinLogger)
+[![Release](https://jitpack.io/v/kidal5/KotlinLogger2.svg)](https://jitpack.io/#kidal5/KotlinLogger2)
 
-## KotlinLogger
+## KotlinLogger2
 
-Basic android logger written in kotlin language using reactive style of programming.
+Smart android logger written in kotlin language.
 
 Mostly used in Prague based android develpoment company - [Quanti](https://www.quanti.cz/) for everything.
+
+## Features
+* Usable in every JVM language including Java/Kotlin/Scala ...
+* Very easy to use
+* No more TAGs
+* Easy to extend using your own logger
+* Lot of optional parameters
+* Lightweight
+* Sample [app](github/sampleApp.png) is ready to build 
 
 ## Code Example
 
 Usage is simple
 
-1) To your app class add all logers that you want to log on
-```java
-Log.addLogger(new FileLogger(this));
-Log.addLogger(new BaseAndroidLog());
+1) Make sure you have set your applicationId in gradle 
+```
+android{
+  defaultConfig{
+    applicationId = "your.cool.app"
+    ...
+  }
+  ...
+}
 ```
 
-2) Then log as you would normally do - just using another dependency
+2) Add all needed logers to your mainActivity
 
-```java
-Log.v("Text");
-Log.i("Text");
-Log.w("Text");
-Log.d("Text");
-Log.e("Text");
-Log.e("Text", new Exception());
+```kotlin
+Log.addLogger(BaseAndroidLog()); //forwards all log to android logcat
+Log.addLogger(FileLoggerAsync(applicationContext)); 
 ```
+
+For usage of FileLoggerAsync is necesarry this permission in manifest file
+```
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+```
+
+
+3) (Optionally) Enable unchecked crash handling
+```kotlin
+Log.useUncheckedErrorHandler()
+```
+
+4) Then log as you would normally do - just using another dependency
+
+```kotlin
+Log.v("This");
+Log.d("is");
+Log.i("sample");
+Log.i("text");
+Log.i("that");
+Log.i("will");
+Log.i("be");
+Log.w("logged.");
+Log.e("wi", Exception()); //throwable
+```
+
+5) (Optionally) Use of SendLogDialogFragment
+
+```kotlin
+SendLogDialogFragment.newInstance("your@email.com").show(supportFragmentManager, "TAG")
+```
+
+<img src="github/dialog.png" width="250">
+
 
 ## Installation
 
-Project si hosted on [Jitpack](https://jitpack.io) so the basic installation is found [here](https://jitpack.io/#kidal5/KotlinLogger/v1.9).
+Project si hosted on [Jitpack](https://jitpack.io) so the basic installation is found [HERE](https://jitpack.io/#kidal5/KotlinLogger2).
 
-## dev
-https://stackoverflow.com/questions/21271246/install-failed-conflicting-provider-in-android
+## Future development
+* add Crashlytics connection
+* send your requests
 
 ## License
 
