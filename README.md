@@ -66,7 +66,9 @@ Log.e("wi", Exception()); //throwable
 ```kotlin
 SendLogDialogFragment.newInstance("your@email.com").show(supportFragmentManager, "TAG")
 ```
-![dialog](github/dialog.png "dialog")
+
+<img src="github/dialog.png" width="250">
+
 
 ## Installation
 
