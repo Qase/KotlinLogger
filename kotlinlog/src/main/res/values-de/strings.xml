@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logs_email_text">_Hier schreiben Sie bitte Zusatzinformationen über den Sturz_</string>
+    <string name="logs_email_no_client_installed">Kein E-Mailclient wurde installiert.</string>
+    <string name="logs_email_subject">Logs from</string>
+</resources>

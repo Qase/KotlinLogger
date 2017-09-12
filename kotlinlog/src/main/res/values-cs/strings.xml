@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logs_email_text">_Zde můžeš napsat další informace o pádu._</string>
+    <string name="logs_email_subject">Logs from</string>
+    <string name="logs_email_no_client_installed">Žádný emailový client není nainstalovaný.</string>
+</resources>

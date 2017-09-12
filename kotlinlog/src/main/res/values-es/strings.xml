@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logs_email_text">_Por favor, introduzca aquí la información adicional sobre la
+        caída_
+    </string>
+    <string name="logs_email_subject">Logs from</string>
+    <string name="logs_email_no_client_installed">No está instalado ningún cliente de e-mail.
+    </string>
+</resources>

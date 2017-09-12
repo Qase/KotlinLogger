@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logs_email_text">_Сюда, пожалуйста, введите дополнительную информацию о сбое_</string>
+    <string name="logs_email_subject">Logs from</string>
+    <string name="logs_email_no_client_installed">Не установлен почтовый клиент</string>
+</resources>

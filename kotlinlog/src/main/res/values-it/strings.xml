@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logs_email_text">_Inserire qui le informazioni supplementari sul crash_</string>
+    <string name="logs_email_subject">Logs from</string>
+    <string name="logs_email_no_client_installed">Non è installato alcun cliente e-mail.</string>
+</resources>
