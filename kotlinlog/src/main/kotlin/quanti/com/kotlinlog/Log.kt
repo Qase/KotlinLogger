@@ -31,8 +31,8 @@ class Log {
         @JvmStatic
         fun e(text: String) = allLog(Log.ERROR, text)
 
-        @JvmStatic
-        fun e(text: String, e: Throwable) = allLogThrowable(text, e)
+        @JvmStatic @JvmOverloads
+        fun e(text: String = "", e: Throwable) = allLogThrowable(text, e)
 
         @JvmStatic
         fun useUncheckedErrorHandler() {
