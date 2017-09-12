@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.widget.Toast
+import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.R
 import quanti.com.kotlinlog.file.base.FileLoggerBase
 import quanti.com.kotlinlog.utils.getFormatedFileNameDayNow
@@ -82,7 +83,7 @@ class SendLogDialogFragment : DialogFragment() {
                     i.putExtra(Intent.EXTRA_EMAIL, arguments.getStringArray(SEND_EMAIL_ADDRESSES))
                     i.putExtra(
                             Intent.EXTRA_SUBJECT,
-                            String.format(getString(R.string.logs_email_subject) + " " + getFormatedFileNameDayNow())
+                            getString(R.string.logs_email_subject) + " " + getFormatedFileNameDayNow()
                     )
 
                     i.putExtra(Intent.EXTRA_TEXT, getString(R.string.logs_email_text))
@@ -96,6 +97,7 @@ class SendLogDialogFragment : DialogFragment() {
                         Toast.makeText(context, getString(R.string.logs_email_no_client_installed), Toast.LENGTH_LONG).show()
                     }
                 }, {
+                    Log.e("Err here", it)
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 })
     }
