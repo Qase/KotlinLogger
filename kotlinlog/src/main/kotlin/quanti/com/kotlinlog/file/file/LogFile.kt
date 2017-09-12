@@ -12,16 +12,21 @@ import quanti.com.kotlinlog.utils.getFormatedFileNameDayNowWithSeconds
 class CrashLogFile(
         ctx: Context,
         bun: FileLoggerBundle,
-        crashReason: String
+        crashReason: String,
+        wasFatal: Boolean = false
 ) : BaseLogFile(
         ctx,
-        getNewCrashFileName(crashReason),
+        getNewCrashFileName(crashReason, wasFatal),
         bun.maxDaysSaved
 ) {
 
     companion object {
-        private fun getNewCrashFileName(crashReason: String) =
-                getFormatedFileNameDayNowWithSeconds() + "_crash_$crashReason.log"
+        private fun getNewCrashFileName(crashReason: String, wasFatal: Boolean): String {
+            if (wasFatal) {
+                return getFormatedFileNameDayNowWithSeconds() + "_unhandled_exception_$crashReason.log"
+            }
+            return getFormatedFileNameDayNowWithSeconds() + "handled_exception_$crashReason.log"
+        }
     }
 
 

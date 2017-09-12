@@ -1,6 +1,7 @@
 package quanti.com.kotlinlog.file
 
 import android.content.Context
+import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.file.base.FileLoggerBase
 import quanti.com.kotlinlog.file.base.FileLoggerBundle
@@ -65,7 +66,12 @@ class FileLoggerAsync @JvmOverloads constructor(
     }
 
     override fun logThrowable(tag: String, methodName: String, text: String, t: Throwable) {
-        val errorFile = CrashLogFile(ctx, bun, t.javaClass.simpleName)
+        val errorFile = CrashLogFile(
+                ctx,
+                bun,
+                t.javaClass.simpleName,
+                text.equals(Log.SECRET_CODE_UNHANDLED)
+        )
 
         val formattedString = getFormatedString(LogLevel.ERROR, tag, methodName, text)
 

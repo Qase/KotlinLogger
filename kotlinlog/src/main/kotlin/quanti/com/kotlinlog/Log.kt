@@ -14,6 +14,7 @@ import quanti.com.kotlinlog.base.ILogger
 class Log {
 
     companion object {
+        val SECRET_CODE_UNHANDLED = "LOL"
         private val loggers = arrayListOf<ILogger>()
 
         @JvmStatic
@@ -40,7 +41,7 @@ class Log {
             val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
 
             Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-                e("", paramThrowable)
+                e(SECRET_CODE_UNHANDLED, paramThrowable)
 
                 if (oldHandler != null)
                     oldHandler.uncaughtException( paramThread, paramThrowable) //Delegates to Android's error handling
