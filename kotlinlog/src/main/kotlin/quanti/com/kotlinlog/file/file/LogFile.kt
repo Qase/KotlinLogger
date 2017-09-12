@@ -25,7 +25,7 @@ class CrashLogFile(
             if (wasFatal) {
                 return getFormatedFileNameDayNowWithSeconds() + "_unhandled_exception_$crashReason.log"
             }
-            return getFormatedFileNameDayNowWithSeconds() + "handled_exception_$crashReason.log"
+            return getFormatedFileNameDayNowWithSeconds() + "_handled_exception_$crashReason.log"
         }
     }
 
