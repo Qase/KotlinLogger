@@ -78,7 +78,6 @@ SendLogDialogFragment.newInstance("your@email.com").show(supportFragmentManager,
 Project si hosted on [Jitpack](https://jitpack.io) so the basic installation is found [HERE](https://jitpack.io/#kidal5/KotlinLogger2).
 
 ## Future development
-* add Crashlytics connection
 * send your requests
 
 ## License
