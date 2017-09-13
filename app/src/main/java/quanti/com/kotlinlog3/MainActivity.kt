@@ -12,11 +12,14 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
+import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
 import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.SendLogDialogFragment
 
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         Log.useUncheckedErrorHandler()
         Log.addLogger(AndroidLogger())
+
+        Fabric.with(this, Crashlytics())
+        Log.addLogger(CrashlyticsLogger())
 
         (findViewById(R.id.radio_group) as RadioGroup).setOnCheckedChangeListener(this)
 
