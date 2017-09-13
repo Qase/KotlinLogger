@@ -23,4 +23,6 @@ class AndroidLogger constructor(
     override fun logThrowable(tag: String, methodName: String, text: String, t: Throwable) {
         android.util.Log.e(tag, text, t)
     }
+
+    override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) = log(androidLogLevel, tag, methodName, text)
 }

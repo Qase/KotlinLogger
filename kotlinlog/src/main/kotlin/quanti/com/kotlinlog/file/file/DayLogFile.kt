@@ -12,10 +12,10 @@ import quanti.com.kotlinlog.utils.getFormattedFileNameForDayTemp
 class DayLogFile(
         ctx: Context,
         bun: FileLoggerBundle
-) : BaseLogFile(
+) : ConcurrentLogFile(
         ctx,
         DayLogFile.getNewFileName(),
-        bun.maxDaysSaved
+        bun
 ) {
 
     companion object {

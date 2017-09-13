@@ -36,6 +36,21 @@ class Log {
         fun e(text: String = "", e: Throwable) = allLogThrowable(text, e)
 
         @JvmStatic
+        fun vSync(text: String) = allLogSync(Log.VERBOSE, text)
+
+        @JvmStatic
+        fun iSync(text: String) = allLogSync(Log.INFO, text)
+
+        @JvmStatic
+        fun wSync(text: String) = allLogSync(Log.WARN, text)
+
+        @JvmStatic
+        fun dSync(text: String) = allLogSync(Log.DEBUG, text)
+
+        @JvmStatic
+        fun eSync(text: String) = allLogSync(Log.ERROR, text)
+
+        @JvmStatic
         fun useUncheckedErrorHandler() {
 
             val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
@@ -99,6 +114,24 @@ class Log {
                 it.log(androidLogLevel, element.className, element.methodName, text)
             }
         }
+
+        /**
+         * @param androidLogLevel [android.util.Log] int values
+         */
+        private fun allLogSync(androidLogLevel: Int, text: String) {
+
+            if (loggers.size == 0) {
+                android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
+                return
+            }
+
+            val element = getMethodStackTraceElement()
+
+            loggers.forEach {
+                it.logSync(androidLogLevel, element.className, element.methodName, text)
+            }
+        }
+
 
         private fun allLogThrowable(text: String, t: Throwable) {
             if (loggers.size == 0) {

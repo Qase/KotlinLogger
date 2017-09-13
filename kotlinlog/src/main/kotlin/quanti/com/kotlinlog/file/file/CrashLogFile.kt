@@ -23,9 +23,9 @@ class CrashLogFile(
     companion object {
         private fun getNewCrashFileName(crashReason: String, wasFatal: Boolean): String {
             if (wasFatal) {
-                return getFormatedFileNameDayNowWithSeconds() + "_unhandled_exception_$crashReason.log"
+                return getFormatedFileNameDayNowWithSeconds() + "_unhandled_$crashReason.log"
             }
-            return getFormatedFileNameDayNowWithSeconds() + "_handled_exception_$crashReason.log"
+            return getFormatedFileNameDayNowWithSeconds() + "_handled_$crashReason.log"
         }
     }
 

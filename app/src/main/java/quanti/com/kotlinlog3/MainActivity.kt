@@ -11,14 +11,14 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
-import quanti.com.kotlinlog.file.FileLoggerAsync
+import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.SendLogDialogFragment
-import quanti.com.kotlinlog.file.deprecated.FileLogger
 
 
 class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     MY_PERMISSIONS_REQUEST)
         } else {
-            Log.addLogger(FileLoggerAsync(applicationContext))
+            Log.addLogger(FileLogger(applicationContext))
         }
 
         Log.useUncheckedErrorHandler()
@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         if (requestCode == MY_PERMISSIONS_REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.i("Diky za permission")
-            Log.addLogger(FileLoggerAsync(applicationContext))
+            Log.addLogger(FileLogger(applicationContext))
         } else {
             //show some shit
             AlertDialog.Builder(this)
@@ -124,33 +124,14 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     fun test_1(view: View) {
-        //first log to sync logger
-
-        Log.removeAllLoggers()
-        Log.addLogger(FileLogger(applicationContext))
-
-        val startTime1 = System.currentTimeMillis()
-        Flowable.range(0, 10000).subscribe { Log.i(it.toString()) }
-        val endTime1 = System.currentTimeMillis()
-
-        Log.removeAllLoggers()
-        Log.addLogger(FileLoggerAsync(applicationContext))
-
-        val startTime2 = System.currentTimeMillis()
-        Flowable.range(0, 10000).subscribe { Log.i(it.toString()) }
-        val endTime2 = System.currentTimeMillis()
-
-        Log.removeAllLoggers()
-        Log.addLogger(AndroidLogger())
-
-
-        Log.i("Sync: ${endTime1 - startTime1}\tAsync: ${endTime2 - startTime2}")
+        Toast.makeText(this, "Does nothing", Toast.LENGTH_SHORT).show()
     }
+
 
     fun test_2(view: View) {
         Flowable.range(0, 10000)
                 .subscribe {
-                    if (it % 1000 == 0){
+                    if (it % 1000 == 0) {
                         Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
                     Log.i(it.toString())
@@ -164,7 +145,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         Flowable.range(0, 10000)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe {
-                    if (it % 1000 == 0){
+                    if (it % 1000 == 0) {
                         Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
                     Log.i(it.toString())
@@ -173,7 +154,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         Flowable.range(0, 10000)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe {
-                    if (it % 1000 == 0){
+                    if (it % 1000 == 0) {
                         Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
                     Log.i(it.toString())
@@ -182,7 +163,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         Flowable.range(0, 10000)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe {
-                    if (it % 1000 == 0){
+                    if (it % 1000 == 0) {
                         Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
                     Log.i(it.toString())
@@ -193,7 +174,6 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     fun test_4(view: View) {
         throw ArrayIndexOutOfBoundsException("unchecked exception")
     }
-
 
 
 }
