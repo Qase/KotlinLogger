@@ -35,6 +35,7 @@ android{
 ```kotlin
 Log.addLogger(BaseAndroidLog()); //forwards all log to android logcat
 Log.addLogger(FileLoggerAsync(applicationContext)); 
+Log.addLogger(CrashlyticsLogger()) //defualt logging level is warn
 ```
 
 For usage of FileLoggerAsync is necesarry this permission in manifest file
@@ -49,6 +50,7 @@ Log.useUncheckedErrorHandler()
 ```
 
 4) Then log as you would normally do - just using another dependency
+(or log sync using Log.xSync methods)
 
 ```kotlin
 Log.v("This");
@@ -57,7 +59,7 @@ Log.i("sample");
 Log.i("text");
 Log.i("that");
 Log.i("will");
-Log.i("be");
+Log.iSync("be");
 Log.w("logged.");
 Log.e("wi", Exception()); //throwable
 ```
@@ -76,7 +78,6 @@ SendLogDialogFragment.newInstance("your@email.com").show(supportFragmentManager,
 Project si hosted on [Jitpack](https://jitpack.io) so the basic installation is found [HERE](https://jitpack.io/#kidal5/KotlinLogger2).
 
 ## Future development
-* add Crashlytics connection
 * send your requests
 
 ## License
