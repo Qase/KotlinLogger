@@ -60,8 +60,13 @@ class FileLogger @JvmOverloads constructor(
     }
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) {
+        if (androidLogLevel < bun.minimalLogLevel) {
+            return
+        }
 
+        val formattedString = getFormatedString(androidLogLevel, tag, methodName, text)
 
+        dayFile.write(formattedString)
     }
 
 
