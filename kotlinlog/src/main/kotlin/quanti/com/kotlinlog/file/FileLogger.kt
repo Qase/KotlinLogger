@@ -8,6 +8,7 @@ import quanti.com.kotlinlog.file.base.FileLoggerBundle
 import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.DayLogFile
 import quanti.com.kotlinlog.utils.convertToLogCatString
+import quanti.com.kotlinlog.utils.getApplicationName
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ScheduledExecutorService
@@ -18,8 +19,6 @@ import java.util.concurrent.TimeUnit
  * Created by Trnka Vladislav on 30.05.2017.
  *
  * Implementation of async file logger
- *
- * Does not have temp file as backing
  *
  *
  * @param appCtx application (!) context
@@ -35,6 +34,7 @@ class FileLogger @JvmOverloads constructor(
 
     val blockingQueue = LinkedBlockingQueue<String>()
     val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
+    val appName: String
 
     init {
         threadExecutor.scheduleAtFixedRate(
@@ -46,6 +46,8 @@ class FileLogger @JvmOverloads constructor(
                     //android.util.Log.i("Tag", "Flushed: $fl")
                 }, 1, 5, TimeUnit.SECONDS
         )
+
+        appName = ctx.getApplicationName()
     }
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
@@ -54,7 +56,7 @@ class FileLogger @JvmOverloads constructor(
             return
         }
 
-        val formattedString = getFormatedString(androidLogLevel, tag, methodName, text)
+        val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
 
         blockingQueue.add(formattedString)
     }
@@ -64,7 +66,7 @@ class FileLogger @JvmOverloads constructor(
             return
         }
 
-        val formattedString = getFormatedString(androidLogLevel, tag, methodName, text)
+        val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
 
         dayFile.write(formattedString)
     }
@@ -78,7 +80,7 @@ class FileLogger @JvmOverloads constructor(
                 text.equals(Log.SECRET_CODE_UNHANDLED)
         )
 
-        val formattedString =getFormatedString(LogLevel.ERROR, tag, methodName, text)
+        val formattedString = getFormatedString(appName, LogLevel.ERROR, tag, methodName, text)
 
         val sb = StringBuilder()
         sb.append(formattedString)

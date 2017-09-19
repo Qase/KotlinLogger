@@ -24,7 +24,7 @@ import java.io.FileNotFoundException
 abstract class FileLoggerBase @JvmOverloads constructor(
         protected var ctx: Context,
         protected var bun: FileLoggerBundle = FileLoggerBundle()
-): ILogger {
+) : ILogger {
 
 
     init {
@@ -43,16 +43,8 @@ abstract class FileLoggerBase @JvmOverloads constructor(
     /**
      * Returns android-log like formatted string
      */
-    protected fun getFormatedString(logLevel: Int, tag: String, methodName: String, text: String): String {
-        val s = "%s/%s %s/%s:\t%s\n" //date/class  LOG_TYPE/method name: text
-        return String.format(
-                s,
-                getFormatedNow(),
-                tag,
-                logLevel.getLogLevelString(),
-                methodName,
-                text
-        )
+    protected fun getFormatedString(appName: String, logLevel: Int, className: String, methodName: String, text: String): String {
+        return "${getFormatedNow()}/$appName ${logLevel.getLogLevelString()}/${className}_$methodName: $text\n"
     }
 
     /**
@@ -114,7 +106,6 @@ abstract class FileLoggerBase @JvmOverloads constructor(
             return Observable.just(zipFile).map { listFiles.zip(it) }.observeOn(AndroidSchedulers.mainThread())
         }
     }
-
 
 
 }

@@ -45,7 +45,7 @@ abstract class BaseLogFile(
         fun removeAllOldTemps(ctx: Context, maxDaysSaved: Int) {
             //check old files and remove them
             ctx.filesDir.listFiles().filter {
-                it.name.contains("_temp") || it.fileAge() > maxDaysSaved
+                it.fileAge() > maxDaysSaved
             }.forEach {
                 android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + it.delete())
             }

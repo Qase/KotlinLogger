@@ -2,6 +2,7 @@ package quanti.com.kotlinlog
 
 import android.util.Log
 import quanti.com.kotlinlog.base.ILogger
+import quanti.com.kotlinlog.utils.getClassNameWithoutPackage
 
 
 /**
@@ -111,8 +112,10 @@ class Log {
             val element = getMethodStackTraceElement()
 
             loggers.forEach {
-                it.log(androidLogLevel, element.className, element.methodName, text)
+                it.log(androidLogLevel, element.getClassNameWithoutPackage(), element.methodName, text)
             }
+
+
         }
 
         /**
