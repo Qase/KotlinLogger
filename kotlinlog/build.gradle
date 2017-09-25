@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'io.fabric'
 
-group = 'com.qithub.kidal5'
+group = 'com.qithub.qase'
 
 android {
     compileSdkVersion 25
