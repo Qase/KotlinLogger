@@ -1,4 +1,4 @@
-[![Release](https://jitpack.io/v/kidal5/KotlinLogger2.svg)](https://jitpack.io/#kidal5/KotlinLogger2)
+[![Release](https://jitpack.io/v/Qase/KotlinLogger.svg)](https://jitpack.io/#Qase/KotlinLogger)
 
 ## KotlinLogger2
 
