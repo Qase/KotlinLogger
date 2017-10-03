@@ -14,11 +14,11 @@ import java.io.FileOutputStream
 abstract class BaseLogFile(
         ctx: Context,
         val name: String,
-        maxDaysSaved: Int = 7
+        maxDaysSaved: Int = 3
 ) {
 
     private val file: File = File(ctx.filesDir, name)
-    internal val fos: FileOutputStream = ctx.openFileOutput(name, Context.MODE_PRIVATE)
+    internal val fos: FileOutputStream = ctx.openFileOutput(name, Context.MODE_APPEND)
 
     init {
         android.util.Log.i(TAG, "Creating new text file: " + file.absolutePath)

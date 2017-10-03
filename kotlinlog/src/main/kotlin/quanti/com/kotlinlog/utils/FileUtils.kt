@@ -48,7 +48,7 @@ fun File.fileAge(): Int {
 
     val diff = today.time - fDate.time
     val days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toInt()
-    android.util.Log.i("FileUtils", this.name + "\t" + this.lastModified() + "\t" + days)
+    //android.util.Log.i("FileUtils", this.name + "\t" + this.lastModified() + "\t" + days)
     return days
 }
 
