@@ -1,6 +1,7 @@
-[![Release](https://jitpack.io/v/kidal5/KotlinLogger2.svg)](https://jitpack.io/#kidal5/KotlinLogger2)
+[![Release](https://jitpack.io/v/Qase/KotlinLogger.svg)](https://jitpack.io/#Qase/KotlinLogger)
+[![codebeat badge](https://codebeat.co/badges/d7306f5e-9328-45a0-bbed-1abab3e8b5b2)](https://codebeat.co/projects/github-com-qase-kotlinlogger-master)
 
-## KotlinLogger2
+## KotlinLogger
 
 Smart android logger written in kotlin language.
 
