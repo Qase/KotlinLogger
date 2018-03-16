@@ -21,7 +21,9 @@ abstract class BaseLogFile(
     internal val fos: FileOutputStream = ctx.openFileOutput(name, Context.MODE_APPEND)
 
     init {
-        android.util.Log.i(TAG, "Creating new text file: " + file.absolutePath)
+        if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY){
+            android.util.Log.i(TAG, "Creating new text file: " + file.absolutePath)
+        }
         removeAllOldTemps(ctx, maxDaysSaved)
     }
 
@@ -35,7 +37,9 @@ abstract class BaseLogFile(
 
     fun delete() {
         val del = file.delete()
-        android.util.Log.i(TAG, "File ${file.absolutePath} was deleted: $del")
+        if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY){
+            android.util.Log.i(TAG, "File ${file.absolutePath} was deleted: $del")
+        }
     }
 
     companion object {
@@ -47,7 +51,9 @@ abstract class BaseLogFile(
             ctx.filesDir.listFiles().filter {
                 it.fileAge() > maxDaysSaved
             }.forEach {
-                android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + it.delete())
+                if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY){
+                    android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + it.delete())
+                }
             }
         }
     }

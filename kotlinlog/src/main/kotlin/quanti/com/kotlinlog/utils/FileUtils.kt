@@ -84,11 +84,15 @@ fun mergeToFile(from: String, to: String, ctx: Context): Boolean {
     val fromFile = File(ctx.filesDir, from)
 
     if (!fromFile.existsAndIsFile()) {
-        android.util.Log.i("FileLogger", "Cannot merge files - this file does not exists " + fromFile.absoluteFile)
+        if (Log.DEBUG_LIBRARY){
+            android.util.Log.i("FileLogger", "Cannot merge files - this file does not exists " + fromFile.absoluteFile)
+        }
         return false
     }
 
-    android.util.Log.i("Tek", "MERGE")
+    if (Log.DEBUG_LIBRARY){
+        android.util.Log.i("Tek", "MERGE")
+    }
 
     val fis = ctx.openFileInput(from)
     val fos = ctx.openFileOutput(to, android.content.Context.MODE_APPEND)
