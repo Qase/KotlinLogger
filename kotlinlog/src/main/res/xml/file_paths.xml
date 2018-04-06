@@ -1,4 +1,6 @@
 <paths>
     <files-path name="files" path="/" />
     <files-path name="files2" path="path" />
+    <files-path name="files3" path="." />
+    <files-path name="files4" path="path/" />
 </paths>
