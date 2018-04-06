@@ -23,12 +23,11 @@ import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
 import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.SendLogDialogFragment
 
-
 class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
 
-    internal var checked = 3
-    internal var MY_PERMISSIONS_REQUEST = 98
+    private var checked = 3
+    private var MY_PERMISSIONS_REQUEST = 98
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +52,8 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         Fabric.with(this, Crashlytics())
         Log.addLogger(CrashlyticsLogger())
 
-        (findViewById(R.id.radio_group) as RadioGroup).setOnCheckedChangeListener(this)
+
+        (findViewById<RadioGroup>(R.id.radio_group)).setOnCheckedChangeListener(this)
 
 
     }
@@ -74,7 +74,8 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     override fun onCheckedChanged(group: RadioGroup, @IdRes checkedId: Int) {
-        val text = (group.findViewById(checkedId) as RadioButton).text
+
+        val text = group.findViewById<RadioButton>(checkedId).text
         checked = Integer.parseInt(text[text.length - 1] + "")
     }
 

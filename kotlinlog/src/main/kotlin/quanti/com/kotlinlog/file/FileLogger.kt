@@ -30,11 +30,11 @@ class FileLogger @JvmOverloads constructor(
         bun: FileLoggerBundle = FileLoggerBundle()
 ) : FileLoggerBase(appCtx, bun) {
 
-    val dayFile = DayLogFile(appCtx, bun)
+    private val dayFile = DayLogFile(appCtx, bun)
 
-    val blockingQueue = LinkedBlockingQueue<String>()
-    val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
-    val appName: String
+    private val blockingQueue = LinkedBlockingQueue<String>()
+    private val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
+    private val appName: String
 
     init {
         threadExecutor.scheduleAtFixedRate(
@@ -77,7 +77,7 @@ class FileLogger @JvmOverloads constructor(
                 ctx,
                 bun,
                 t.javaClass.simpleName,
-                text.equals(Log.SECRET_CODE_UNHANDLED)
+                text == Log.SECRET_CODE_UNHANDLED
         )
 
         val formattedString = getFormatedString(appName, LogLevel.ERROR, tag, methodName, text)
