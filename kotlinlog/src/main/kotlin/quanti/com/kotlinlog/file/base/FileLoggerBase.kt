@@ -105,19 +105,27 @@ abstract class FileLoggerBase @JvmOverloads constructor(
             return Observable.just(zipFile).map { listFiles.zip(it) }.observeOn(AndroidSchedulers.mainThread())
         }
 
-        fun removeAllOldTemps(ctx: Context, maxDaysSaved: Int) {
+        fun removeAllOldTemps(ctx: Context, maxDaysSaved: Int, excludeDayLogs: Boolean = false, excludeZips: Boolean = false) {
             //check old files and remove them
             ctx.filesDir.listFiles().filter {
+
+                if (excludeDayLogs && it.name.contains("day")) {
+                    return@filter false
+                }
+                if (excludeZips && it.name.contains(".zip")) {
+                    return@filter false
+                }
+
                 it.fileAge() > maxDaysSaved
+
+
             }.forEach {
-                if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY){
+                if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY) {
                     android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + it.delete())
                 }
             }
         }
     }
-
-
 
 
 }

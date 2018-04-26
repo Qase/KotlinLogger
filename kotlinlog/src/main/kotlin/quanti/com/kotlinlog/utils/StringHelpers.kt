@@ -13,10 +13,12 @@ import android.content.Context
 
 fun Context.getApplicationName(): String {
     val stringId = applicationInfo.labelRes
-    return if (stringId == 0) applicationInfo.nonLocalizedLabel.toString() else getString(stringId)
+    val str = if (stringId == 0) applicationInfo.nonLocalizedLabel.toString() else getString(stringId)
+
+    return str.replace(' ', '_')
 }
 
-fun Throwable.convertToLogCatString(): String { //todo add surpressed and other shiots ???
+fun Throwable.convertToLogCatString(): String {
 
     val sb = StringBuilder()
 

@@ -99,9 +99,14 @@ class FileLogger @JvmOverloads constructor(
      */
     companion object {
 
+
+        /**
+         * @param appCtx        application context
+         * @param excludeZips   do not delete zipped files
+         */
         @JvmStatic
-        public fun deleteAllLogs(appCtx: Context){
-            FileLoggerBase.removeAllOldTemps(appCtx, -1)
+        public fun deleteAllLogs(appCtx: Context, excludeZips: Boolean = false){
+            FileLoggerBase.removeAllOldTemps(appCtx, -1, true, excludeZips)
         }
     }
 

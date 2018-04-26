@@ -25,6 +25,7 @@ class SendLogDialogFragment : DialogFragment() {
         const val EMAIL_BUTTON_TEXT = "email_button"
         const val FILE_BUTTON_TEXT = "file_button"
         const val SEND_EMAIL_ADDRESSES = "send_address"
+        const val DELETE_LOGS = "delete_logs"
 
         @JvmOverloads @JvmStatic
         fun newInstance(
@@ -32,8 +33,9 @@ class SendLogDialogFragment : DialogFragment() {
                 message: String = "Would you like to send logs by email or save them to SD card?",
                 title: String = "Send logs",
                 emailButtonText: String = "Email",
-                fileButtonText: String = "Save"
-        ) = newInstance(arrayOf(sendEmailAddress), message, title, emailButtonText, fileButtonText)
+                fileButtonText: String = "Save",
+                deleteLogs: Boolean = true
+        ) = newInstance(arrayOf(sendEmailAddress), message, title, emailButtonText, fileButtonText, deleteLogs)
 
         @JvmOverloads @JvmStatic
         fun newInstance(
@@ -41,7 +43,8 @@ class SendLogDialogFragment : DialogFragment() {
                 message: String = "Would you like to send logs by email or save them to SD card?",
                 title: String = "Send logs",
                 emailButtonText: String = "Email",
-                fileButtonText: String = "Save"
+                fileButtonText: String = "Save",
+                deleteLogs: Boolean = true
         ): SendLogDialogFragment {
             val myFragment = SendLogDialogFragment()
 
@@ -51,6 +54,7 @@ class SendLogDialogFragment : DialogFragment() {
             args.putString(EMAIL_BUTTON_TEXT, emailButtonText)
             args.putString(FILE_BUTTON_TEXT, fileButtonText)
             args.putStringArray(SEND_EMAIL_ADDRESSES, sendEmailAddress)
+            args.putBoolean(DELETE_LOGS, deleteLogs)
 
             myFragment.arguments = args
 
@@ -64,8 +68,8 @@ class SendLogDialogFragment : DialogFragment() {
 
         b.setMessage(arguments!!.getString(MESSAGE))
         b.setTitle(arguments!!.getString(TITLE))
-        b.setPositiveButton(arguments!!.getString(EMAIL_BUTTON_TEXT)) { _, _ -> this.positiveButtonClick() }
-        b.setNeutralButton(arguments!!.getString(FILE_BUTTON_TEXT)) { _, _ -> this.neutralButtonClick() }
+        b.setPositiveButton(arguments!!.getString(EMAIL_BUTTON_TEXT)) { _, _ -> this.positiveButtonClick(arguments!!.getBoolean(DELETE_LOGS)) }
+        b.setNeutralButton(arguments!!.getString(FILE_BUTTON_TEXT)) { _, _ -> this.neutralButtonClick(arguments!!.getBoolean(DELETE_LOGS)) }
         return b.create()
     }
 
@@ -73,7 +77,7 @@ class SendLogDialogFragment : DialogFragment() {
      * On positive button click
      * Creates zip of all logs and opens email client to send
      */
-    private fun positiveButtonClick() {
+    private fun positiveButtonClick(deleteLogs: Boolean) {
         FileLoggerBase
                 .getZipOfLogsUri(activity!!.applicationContext)
                 .map {
@@ -96,6 +100,10 @@ class SendLogDialogFragment : DialogFragment() {
                     } catch (ex: android.content.ActivityNotFoundException) {
                         Toast.makeText(context, getString(R.string.logs_email_no_client_installed), Toast.LENGTH_LONG).show()
                     }
+                    if (deleteLogs){
+                        FileLogger.deleteAllLogs(activity!!.applicationContext, true)
+                    }
+
                 }, {
                     Log.e("Err here", it)
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
@@ -106,7 +114,7 @@ class SendLogDialogFragment : DialogFragment() {
      * On neutral button click
      * Copies ZIP of all logs to sd card
      */
-    private fun neutralButtonClick() {
+    private fun neutralButtonClick(deleteLogs: Boolean) {
         FileLoggerBase
                 .copyLogsToSDCard(activity!!.applicationContext)
                 .subscribe({
@@ -117,6 +125,9 @@ class SendLogDialogFragment : DialogFragment() {
                     ).show()
                 }, {
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                    if (deleteLogs){
+                        FileLogger.deleteAllLogs(activity!!.applicationContext, true)
+                    }
                 })
     }
 }
