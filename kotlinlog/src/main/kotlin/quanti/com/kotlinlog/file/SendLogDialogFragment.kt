@@ -123,11 +123,11 @@ class SendLogDialogFragment : DialogFragment() {
                             "File successfully copied" + "\n" + it.absolutePath,
                             Toast.LENGTH_LONG
                     ).show()
-                }, {
-                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                     if (deleteLogs){
                         FileLogger.deleteAllLogs(activity!!.applicationContext, true)
                     }
+                }, {
+                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 })
     }
 }

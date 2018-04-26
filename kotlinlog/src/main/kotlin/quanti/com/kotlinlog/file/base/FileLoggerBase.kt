@@ -1,3 +1,5 @@
+@file:Suppress("ConstantConditionIf")
+
 package quanti.com.kotlinlog.file.base
 
 import android.Manifest
@@ -108,33 +110,60 @@ abstract class FileLoggerBase @JvmOverloads constructor(
         fun removeAllOldTemps(ctx: Context, maxDaysSaved: Int, excludeLastDayLog: Boolean = false, excludeLastZip: Boolean = false) {
             //check old files and remove them
 
-            var foundLastDayLog = excludeLastDayLog
-            var foundLastZip = excludeLastZip
-
-            ctx.filesDir.listFiles().sortedArrayWith(Comparator { o1, o2 ->
-                val firstTime = Date(o1.lastModified()).time
-                val secondTime = Date(o2.lastModified()).time
-
-                return@Comparator (firstTime - secondTime).toInt()
-            }).filter {
-                if (foundLastDayLog && it.name.contains("day")) {
-                    foundLastDayLog = false
+            //delete standard logs
+            ctx.filesDir.listFiles().filter {
+                if (!it.name.contains("log", true)) {
                     return@filter false
                 }
-                if (foundLastZip && it.name.contains(".zip")) {
-                    foundLastZip = false
+                if (excludeLastDayLog && it.name.contains("day") ) {
                     return@filter false
                 }
-
+                if (excludeLastZip && it.name.contains(".zip")) {
+                    return@filter false
+                }
                 it.fileAge() > maxDaysSaved
-
-
             }.forEach {
                 val res = it.delete()
                 if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY) {
                     android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + res)
                 }
             }
+
+            //delete day logs
+            if (excludeLastDayLog) {
+                ctx.filesDir.listFiles()
+                        .filter { it.name.contains("day") }
+                        .sortedWith(comparator)
+                        .drop(1) //do not delete the first one
+                        .forEach {
+                            val res = it.delete()
+                            if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY) {
+                                android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + res)
+                            }
+                        }
+            }
+
+            if (excludeLastZip) {
+                ctx.filesDir.listFiles()
+                        .filter { it.name.contains(".zip") }
+                        .sortedWith(comparator)
+                        .drop(1) //do not delete the first one
+                        .forEach {
+                            val res = it.delete()
+                            if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY) {
+                                android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + res)
+                            }
+                        }
+            }
+
+        }
+
+
+        private val comparator = Comparator<File> { o1, o2 ->
+            val firstTime = Date(o1.lastModified()).time
+            val secondTime = Date(o2.lastModified()).time
+
+            return@Comparator (secondTime - firstTime).toInt()
         }
     }
 
