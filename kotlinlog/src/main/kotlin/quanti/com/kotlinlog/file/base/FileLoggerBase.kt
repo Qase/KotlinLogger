@@ -34,8 +34,7 @@ abstract class FileLoggerBase @JvmOverloads constructor(
             throw SecurityException("Give me ${Manifest.permission.WRITE_EXTERNAL_STORAGE}")
         }
 
-        BaseLogFile.removeAllOldTemps(ctx, bun.maxDaysSaved)
-
+        removeAllOldTemps(ctx, bun.maxDaysSaved)
     }
 
     protected fun getDayTemp() = "${getFormattedFileNameForDayTemp()}_daytemp.log"
@@ -105,7 +104,20 @@ abstract class FileLoggerBase @JvmOverloads constructor(
 
             return Observable.just(zipFile).map { listFiles.zip(it) }.observeOn(AndroidSchedulers.mainThread())
         }
+
+        fun removeAllOldTemps(ctx: Context, maxDaysSaved: Int) {
+            //check old files and remove them
+            ctx.filesDir.listFiles().filter {
+                it.fileAge() > maxDaysSaved
+            }.forEach {
+                if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY){
+                    android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + it.delete())
+                }
+            }
+        }
     }
+
+
 
 
 }

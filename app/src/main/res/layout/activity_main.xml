@@ -109,7 +109,7 @@
         android:layout_alignParentRight="true"
 
         android:onClick="test_1"
-        android:text="test #1"
+        android:text="Delete logs"
     />
 
     <Button

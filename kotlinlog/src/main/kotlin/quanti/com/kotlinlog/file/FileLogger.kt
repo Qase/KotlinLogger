@@ -97,7 +97,9 @@ class FileLogger @JvmOverloads constructor(
     /**
      * Deletes all logs from application
      */
-    public fun deleteAllLogs(){
-        BaseLogFile.removeAllOldTemps(ctx, -1)
+    public fun deleteAllLogs(appCtx: Context){
+        FileLoggerBase.removeAllOldTemps(appCtx, -1)
     }
+
+
 }

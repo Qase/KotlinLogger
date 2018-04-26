@@ -1,7 +1,7 @@
 package quanti.com.kotlinlog.file.file
 
 import android.content.Context
-import quanti.com.kotlinlog.utils.fileAge
+import quanti.com.kotlinlog.file.base.FileLoggerBase
 import java.io.File
 import java.io.FileOutputStream
 
@@ -10,6 +10,8 @@ import java.io.FileOutputStream
  *
  * Base file for log files
  */
+
+val TAG = "LogFile"
 
 abstract class BaseLogFile(
         ctx: Context,
@@ -24,7 +26,7 @@ abstract class BaseLogFile(
         if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY){
             android.util.Log.i(TAG, "Creating new text file: " + file.absolutePath)
         }
-        removeAllOldTemps(ctx, maxDaysSaved)
+        FileLoggerBase.removeAllOldTemps(ctx, maxDaysSaved)
     }
 
     fun getFileName() = name
@@ -39,22 +41,6 @@ abstract class BaseLogFile(
         val del = file.delete()
         if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY){
             android.util.Log.i(TAG, "File ${file.absolutePath} was deleted: $del")
-        }
-    }
-
-    companion object {
-
-        val TAG = "LogFile"
-
-        fun removeAllOldTemps(ctx: Context, maxDaysSaved: Int) {
-            //check old files and remove them
-            ctx.filesDir.listFiles().filter {
-                it.fileAge() > maxDaysSaved
-            }.forEach {
-                if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY){
-                    android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + it.delete())
-                }
-            }
         }
     }
 
