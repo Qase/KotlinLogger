@@ -76,7 +76,7 @@ SendLogDialogFragment.newInstance("your@email.com").show(supportFragmentManager,
 
 ## Installation
 
-Click [HERE](https://jitpack.io/#kidal5/KotlinLogger2).
+Click [HERE](https://jitpack.io/#Qase/KotlinLogger).
 
 ## Future development
 * send your requests
