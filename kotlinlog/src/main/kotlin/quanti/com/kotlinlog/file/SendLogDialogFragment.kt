@@ -60,12 +60,12 @@ class SendLogDialogFragment : DialogFragment() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val b = AlertDialog.Builder(context)
+        val b = AlertDialog.Builder(context!!)
 
-        b.setMessage(arguments.getString(MESSAGE))
-        b.setTitle(arguments.getString(TITLE))
-        b.setPositiveButton(arguments.getString(EMAIL_BUTTON_TEXT)) { _, _ -> this.positiveButtonClick() }
-        b.setNeutralButton(arguments.getString(FILE_BUTTON_TEXT)) { _, _ -> this.neutralButtonClick() }
+        b.setMessage(arguments!!.getString(MESSAGE))
+        b.setTitle(arguments!!.getString(TITLE))
+        b.setPositiveButton(arguments!!.getString(EMAIL_BUTTON_TEXT)) { _, _ -> this.positiveButtonClick() }
+        b.setNeutralButton(arguments!!.getString(FILE_BUTTON_TEXT)) { _, _ -> this.neutralButtonClick() }
         return b.create()
     }
 
@@ -75,12 +75,12 @@ class SendLogDialogFragment : DialogFragment() {
      */
     private fun positiveButtonClick() {
         FileLoggerBase
-                .getZipOfLogsUri(activity.applicationContext)
+                .getZipOfLogsUri(activity!!.applicationContext)
                 .map {
                     val i = Intent(Intent.ACTION_SEND)
                     i.type = "message/rfc822"
                     i.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    i.putExtra(Intent.EXTRA_EMAIL, arguments.getStringArray(SEND_EMAIL_ADDRESSES))
+                    i.putExtra(Intent.EXTRA_EMAIL, arguments!!.getStringArray(SEND_EMAIL_ADDRESSES))
                     i.putExtra(
                             Intent.EXTRA_SUBJECT,
                             getString(R.string.logs_email_subject) + " " + getFormatedFileNameDayNow()
@@ -108,7 +108,7 @@ class SendLogDialogFragment : DialogFragment() {
      */
     private fun neutralButtonClick() {
         FileLoggerBase
-                .copyLogsToSDCard(activity.applicationContext)
+                .copyLogsToSDCard(activity!!.applicationContext)
                 .subscribe({
                     Toast.makeText(
                             context,
