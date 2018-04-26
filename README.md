@@ -68,7 +68,13 @@ Log.e("wi", Exception()); //throwable
 5) (Optionally) Use of SendLogDialogFragment
 
 ```kotlin
-SendLogDialogFragment.newInstance("your@email.com").show(supportFragmentManager, "TAG")
+SendLogDialogFragment.newInstance("your@email.com", deleteLogs = true).show(supportFragmentManager, "TAG")
+```
+
+6) (Optionally) Delete all logs
+
+```kotlin
+FileLogger.deleteAllLogs(applicationContext)
 ```
 
 <img src="github/dialog.png" width="250">
