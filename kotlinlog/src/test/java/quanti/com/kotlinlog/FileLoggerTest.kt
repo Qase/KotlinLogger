@@ -11,8 +11,8 @@ import org.robolectric.shadows.ShadowApplication
 import org.robolectric.shadows.ShadowLog
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.base.LogLevel
+import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.base.FileLoggerBundle
-import quanti.com.kotlinlog.file.deprecated.FileLogger
 import quanti.com.kotlinlog.utils.ActualTime
 import quanti.com.kotlinlog.utils.getFormatedFileNameDayNow
 
