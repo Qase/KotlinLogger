@@ -9,11 +9,11 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.getLogLevelString
-import quanti.com.kotlinlog.file.file.BaseLogFile
 import quanti.com.kotlinlog.utils.*
 import java.io.File
 import java.io.FileFilter
 import java.io.FileNotFoundException
+import java.util.*
 
 /**
  * Created by Trnka Vladislav on 11.09.2017.
@@ -105,14 +105,24 @@ abstract class FileLoggerBase @JvmOverloads constructor(
             return Observable.just(zipFile).map { listFiles.zip(it) }.observeOn(AndroidSchedulers.mainThread())
         }
 
-        fun removeAllOldTemps(ctx: Context, maxDaysSaved: Int, excludeDayLogs: Boolean = false, excludeZips: Boolean = false) {
+        fun removeAllOldTemps(ctx: Context, maxDaysSaved: Int, excludeLastDayLog: Boolean = false, excludeLastZip: Boolean = false) {
             //check old files and remove them
-            ctx.filesDir.listFiles().filter {
 
-                if (excludeDayLogs && it.name.contains("day")) {
+            var foundLastDayLog = excludeLastDayLog
+            var foundLastZip = excludeLastZip
+
+            ctx.filesDir.listFiles().sortedArrayWith(Comparator { o1, o2 ->
+                val firstTime = Date(o1.lastModified()).time
+                val secondTime = Date(o2.lastModified()).time
+
+                return@Comparator (firstTime - secondTime).toInt()
+            }).filter {
+                if (foundLastDayLog && it.name.contains("day")) {
+                    foundLastDayLog = false
                     return@filter false
                 }
-                if (excludeZips && it.name.contains(".zip")) {
+                if (foundLastZip && it.name.contains(".zip")) {
+                    foundLastZip = false
                     return@filter false
                 }
 
@@ -120,8 +130,9 @@ abstract class FileLoggerBase @JvmOverloads constructor(
 
 
             }.forEach {
+                val res = it.delete()
                 if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY) {
-                    android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + it.delete())
+                    android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + res)
                 }
             }
         }
