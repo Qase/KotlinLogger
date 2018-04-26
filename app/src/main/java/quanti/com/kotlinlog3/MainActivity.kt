@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     fun cz_clicked(view: View) {
-        SendLogDialogFragment.newInstance("kidal5@centrum.cz").show(supportFragmentManager, "OMG")
+        SendLogDialogFragment.newInstance("kidal5@centrum.cz", deleteLogs = true).show(supportFragmentManager, "OMG")
     }
 
 
@@ -133,7 +133,8 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     fun test_1(view: View) {
-        Toast.makeText(this, "Does nothing", Toast.LENGTH_SHORT).show()
+        FileLogger.deleteAllLogs(applicationContext)
+        Toast.makeText(this, "Logs deleted", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -145,7 +146,6 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                     }
                     Log.i(it.toString())
                 }
-
     }
 
     fun test_3(view: View) {

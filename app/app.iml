@@ -177,5 +177,6 @@
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.crashlytics.sdk.android:answers-1.4.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.1.0" level="project" />
+    <orderEntry type="module" module-name="kotlinlog" />
   </component>
 </module>
