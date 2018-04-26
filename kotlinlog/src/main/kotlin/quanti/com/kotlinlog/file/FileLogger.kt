@@ -5,6 +5,7 @@ import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.file.base.FileLoggerBase
 import quanti.com.kotlinlog.file.base.FileLoggerBundle
+import quanti.com.kotlinlog.file.file.BaseLogFile
 import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.DayLogFile
 import quanti.com.kotlinlog.utils.convertToLogCatString
@@ -91,5 +92,12 @@ class FileLogger @JvmOverloads constructor(
         errorFile.closeOutputStream()
 
         dayFile.write(str)
+    }
+
+    /**
+     * Deletes all logs from application
+     */
+    public fun deleteAllLogs(){
+        BaseLogFile.removeAllOldTemps(ctx, -1)
     }
 }

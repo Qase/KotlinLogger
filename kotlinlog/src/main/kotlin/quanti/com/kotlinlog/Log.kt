@@ -15,7 +15,7 @@ import quanti.com.kotlinlog.utils.getClassNameWithoutPackage
 class Log {
 
     companion object {
-        const val DEBUG_LIBRARY = false
+        const val DEBUG_LIBRARY = true
 
         const val SECRET_CODE_UNHANDLED = "LOL"
         private val loggers = arrayListOf<ILogger>()

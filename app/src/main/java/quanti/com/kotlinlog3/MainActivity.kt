@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_PARAMETER", "FunctionName")
+
 package quanti.com.kotlinlog3
 
 import android.Manifest
