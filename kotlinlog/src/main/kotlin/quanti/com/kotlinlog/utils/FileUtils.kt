@@ -2,6 +2,7 @@ package quanti.com.kotlinlog.utils
 
 import android.content.Context
 import android.media.MediaScannerConnection
+import quanti.com.kotlinlog.DEBUG_LIBRARY
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.Log.Companion.i
 import java.io.*
@@ -80,18 +81,19 @@ fun Array<File>.zip(zipFile: File): File {
 
 fun File.existsAndIsFile() = exists() && isFile
 
+@Suppress("ConstantConditionIf")
 fun mergeToFile(from: String, to: String, ctx: Context): Boolean {
 
     val fromFile = File(ctx.filesDir, from)
 
     if (!fromFile.existsAndIsFile()) {
-        if (Log.DEBUG_LIBRARY){
+        if (DEBUG_LIBRARY){
             android.util.Log.i("FileLogger", "Cannot merge files - this file does not exists " + fromFile.absoluteFile)
         }
         return false
     }
 
-    if (Log.DEBUG_LIBRARY){
+    if (DEBUG_LIBRARY){
         android.util.Log.i("Tek", "MERGE")
     }
 

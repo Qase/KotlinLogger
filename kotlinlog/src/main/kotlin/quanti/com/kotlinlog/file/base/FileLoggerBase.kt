@@ -9,10 +9,9 @@ import android.os.Environment
 import android.support.v4.content.FileProvider
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import quanti.com.kotlinlog.DEBUG_LIBRARY
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.getLogLevelString
-import quanti.com.kotlinlog.file.FileLogger
-import quanti.com.kotlinlog.file.base.FileLoggerBase.Companion.removeAllOldTemps
 import quanti.com.kotlinlog.utils.*
 import java.io.File
 import java.io.FileFilter
@@ -129,7 +128,7 @@ abstract class FileLoggerBase : ILogger {
                 it.fileAge() > maxDaysSaved
             }.forEach {
                 val res = it.delete()
-                if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY) {
+                if (DEBUG_LIBRARY) {
                     android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + res)
                 }
             }
@@ -142,7 +141,7 @@ abstract class FileLoggerBase : ILogger {
                         .drop(1) //do not delete the first one
                         .forEach {
                             val res = it.delete()
-                            if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY) {
+                            if (DEBUG_LIBRARY) {
                                 android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + res)
                             }
                         }
@@ -155,7 +154,7 @@ abstract class FileLoggerBase : ILogger {
                         .drop(1) //do not delete the first one
                         .forEach {
                             val res = it.delete()
-                            if (quanti.com.kotlinlog.Log.DEBUG_LIBRARY) {
+                            if (DEBUG_LIBRARY) {
                                 android.util.Log.i("FileLogger", "Deleting old temp file" + it.absolutePath + "\tSuccess: " + res)
                             }
                         }

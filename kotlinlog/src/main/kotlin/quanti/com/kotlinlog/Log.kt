@@ -1,11 +1,9 @@
 package quanti.com.kotlinlog
 
 import android.content.Context
-import android.util.Log
 import quanti.com.kotlinlog.android.MetadataLogger
 import quanti.com.kotlinlog.base.ILogger
-import quanti.com.kotlinlog.utils.getClassNameWithoutPackage
-
+import quanti.com.kotlinlog.base.LogLevel
 
 /**
  * Created by Trnka Vladislav on 30.05.2017.
@@ -13,57 +11,82 @@ import quanti.com.kotlinlog.utils.getClassNameWithoutPackage
  * Main logger to all subloggers
  */
 
-
 class Log {
 
     companion object {
-        const val DEBUG_LIBRARY = true
-
-        const val SECRET_CODE_UNHANDLED = "UNHANDLED"
-
-        var loggerNotAdded = true
-
-
-        private val loggers = arrayListOf<ILogger>()
 
         @JvmStatic
-        fun v(text: String) = allLog(Log.VERBOSE, text)
+        fun v(text: String) = allLog(LogLevel.VERBOSE, text)
 
         @JvmStatic
-        fun i(text: String) = allLog(Log.INFO, text)
+        fun i(text: String) = allLog(LogLevel.INFO, text)
 
         @JvmStatic
-        fun w(text: String) = allLog(Log.WARN, text)
+        fun w(text: String) = allLog(LogLevel.WARN, text)
 
         @JvmStatic
-        fun d(text: String) = allLog(Log.DEBUG, text)
+        fun d(text: String) = allLog(LogLevel.DEBUG, text)
 
         @JvmStatic
-        fun e(text: String) = allLog(Log.ERROR, text)
+        fun e(text: String) = allLog(LogLevel.ERROR, text)
+
+        @JvmStatic
+        fun v(tag: String, text: String) = allLog(LogLevel.VERBOSE, tag, "", text)
+
+        @JvmStatic
+        fun i(tag: String, text: String) = allLog(LogLevel.INFO, tag, "", text)
+
+        @JvmStatic
+        fun w(tag: String, text: String) = allLog(LogLevel.WARN, tag, "", text)
+
+        @JvmStatic
+        fun d(tag: String, text: String) = allLog(LogLevel.DEBUG, tag, "", text)
+
+        @JvmStatic
+        fun e(tag: String, text: String) = allLog(LogLevel.ERROR, tag, "", text)
 
         @JvmStatic
         fun e(text: String = "", e: Throwable) = allLogThrowable(text, e)
 
         @JvmStatic
-        fun vSync(text: String) = allLogSync(Log.VERBOSE, text)
+        fun e(tag: String, text: String = "", e: Throwable) = allLogThrowable(tag, "", text, e)
+
 
         @JvmStatic
-        fun iSync(text: String) = allLogSync(Log.INFO, text)
+        fun vSync(text: String) = allLogSync(LogLevel.VERBOSE, text)
 
         @JvmStatic
-        fun wSync(text: String) = allLogSync(Log.WARN, text)
+        fun iSync(text: String) = allLogSync(LogLevel.INFO, text)
 
         @JvmStatic
-        fun dSync(text: String) = allLogSync(Log.DEBUG, text)
+        fun wSync(text: String) = allLogSync(LogLevel.WARN, text)
 
         @JvmStatic
-        fun eSync(text: String) = allLogSync(Log.ERROR, text)
+        fun dSync(text: String) = allLogSync(LogLevel.DEBUG, text)
 
+        @JvmStatic
+        fun vSync(tag: String, text: String) = allLogSync(LogLevel.VERBOSE, tag, "", text)
+
+        @JvmStatic
+        fun iSync(tag: String, text: String) = allLogSync(LogLevel.INFO, tag, "", text)
+
+        @JvmStatic
+        fun wSync(tag: String, text: String) = allLogSync(LogLevel.WARN, tag, "", text)
+
+        @JvmStatic
+        fun dSync(tag: String, text: String) = allLogSync(LogLevel.DEBUG, tag, "", text)
+
+        /**
+         * Logs some useful system data to all connected loggers
+         */
         @JvmStatic
         fun logMetadata(context: Context) {
             d(MetadataLogger.getLogStrings(context))
         }
 
+        /**
+         * Activate to log even unchecked system errors
+         */
         @JvmStatic
         fun useUncheckedErrorHandler() {
 
@@ -96,72 +119,8 @@ class Log {
             loggers.clear()
         }
 
-        /**
-         * @return Returns method name by reflexion
-         */
-        @Suppress("UNREACHABLE_CODE")
-        private fun getMethodStackTraceElement(): StackTraceElement {
-            val ste = Thread.currentThread().stackTrace
-            var found = false
-            ste.forEach {
-                if (it.className.contains("log.Log")) {
-                    found = true
-                } else if (found) {
-                    return it
-                }
-            }
-
-            return null!!
-        }
-
-        /**
-         * @param androidLogLevel [android.util.Log] int values
-         */
-        private fun allLog(androidLogLevel: Int, text: String) {
-
-            if (loggerNotAdded) {
-                android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
-                return
-            }
-
-            val element = getMethodStackTraceElement()
-
-            loggers.forEach {
-                it.log(androidLogLevel, element.getClassNameWithoutPackage(), element.methodName, text)
-            }
-
-
-        }
-
-        /**
-         * @param androidLogLevel [android.util.Log] int values
-         */
-        private fun allLogSync(androidLogLevel: Int, text: String) {
-
-            if (loggerNotAdded) {
-                android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
-                return
-            }
-
-            val element = getMethodStackTraceElement()
-
-            loggers.forEach {
-                it.logSync(androidLogLevel, element.className, element.methodName, text)
-            }
-        }
-
-
-        private fun allLogThrowable(text: String, t: Throwable) {
-            if (loggerNotAdded) {
-                android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
-                return
-            }
-
-            val element = getMethodStackTraceElement()
-
-            loggers.forEach {
-                it.logThrowable(element.className, element.methodName, text, t)
-            }
-        }
     }
+
 }
+
+

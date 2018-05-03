@@ -3,6 +3,7 @@ package quanti.com.kotlinlog.file
 import android.annotation.SuppressLint
 import android.content.Context
 import quanti.com.kotlinlog.Log
+import quanti.com.kotlinlog.SECRET_CODE_UNHANDLED
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.file.base.FileLoggerBase
 import quanti.com.kotlinlog.file.base.FileLoggerBundle
@@ -68,7 +69,7 @@ object FileLogger : FileLoggerBase() {
                 ctx,
                 bun,
                 t.javaClass.simpleName,
-                text == Log.SECRET_CODE_UNHANDLED
+                text == SECRET_CODE_UNHANDLED
         )
 
         val formattedString = getFormatedString(appName, LogLevel.ERROR, tag, methodName, text)
