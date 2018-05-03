@@ -18,6 +18,7 @@ import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
+import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
@@ -46,16 +47,15 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                     REQUEST)
         } else {
             FileLogger.init(applicationContext, FileLoggerBundle())
+            Log.addLogger(FileLogger)
         }
 
 
-
-
-        quanti.com.kotlinlog.Log.useUncheckedErrorHandler()
-        quanti.com.kotlinlog.Log.addLogger(AndroidLogger)
+        Log.useUncheckedErrorHandler()
+        Log.addLogger(AndroidLogger)
 
         Fabric.with(this, Crashlytics())
-        quanti.com.kotlinlog.Log.addLogger(CrashlyticsLogger)
+        Log.addLogger(CrashlyticsLogger)
 
 
         (findViewById<RadioGroup>(R.id.radio_group)).setOnCheckedChangeListener(this)
@@ -67,16 +67,16 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     fun button_clicked(view: View) {
         when (checked) {
-            LogLevel.DEBUG -> quanti.com.kotlinlog.Log.d("laisdjlakdj")
-            LogLevel.ERROR -> quanti.com.kotlinlog.Log.e("laisdjlakdj")
-            LogLevel.INFO -> quanti.com.kotlinlog.Log.i("laisdjlakdj")
-            LogLevel.VERBOSE -> quanti.com.kotlinlog.Log.v("laisdjlakdj")
-            LogLevel.WARN -> quanti.com.kotlinlog.Log.w("laisdjlakdj")
+            LogLevel.DEBUG -> Log.d("laisdjlakdj")
+            LogLevel.ERROR -> Log.e("laisdjlakdj")
+            LogLevel.INFO -> Log.i("laisdjlakdj")
+            LogLevel.VERBOSE -> Log.v("laisdjlakdj")
+            LogLevel.WARN -> Log.w("laisdjlakdj")
         }
     }
 
     fun button_clicked_throw(view: View) {
-        quanti.com.kotlinlog.Log.e("Something bad happened", ArrayIndexOutOfBoundsException("Message in exception"))
+        Log.e("Something bad happened", ArrayIndexOutOfBoundsException("Message in exception"))
     }
 
     override fun onCheckedChanged(group: RadioGroup, @IdRes checkedId: Int) {
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         Flowable
                 .range(0, end)
                 .map { it.toString() }
-                .subscribe { quanti.com.kotlinlog.Log.i(it) }
+                .subscribe { Log.i(it) }
     }
 
     fun burst_thread_clicked(view: View) {
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                     val thread = it
                     Flowable.range(0, end)
                             .subscribeOn(Schedulers.newThread())
-                            .subscribe { quanti.com.kotlinlog.Log.i("Thread $thread\t Log: $it") }
+                            .subscribe { Log.i("MY TAG", "Thread $thread\t Log: $it") }
                 }
 
     }
@@ -117,8 +117,8 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 
         if (requestCode == REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            quanti.com.kotlinlog.Log.i("Diky za permission")
-            quanti.com.kotlinlog.Log.addLogger(FileLogger)
+            Log.i("Diky za permission")
+            Log.addLogger(FileLogger)
             FileLogger.init(applicationContext)
         } else {
             //show some shit
@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                     .setTitle("</3")
                     .setMessage("Give me permission omg")
                     .setOnDismissListener {
-                        quanti.com.kotlinlog.Log.i("After dialog")
+                        Log.i("After dialog")
                         ActivityCompat.requestPermissions(
                                 this,
                                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -147,9 +147,9 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         Flowable.range(0, 10000)
                 .subscribe {
                     if (it % 1000 == 0) {
-                        quanti.com.kotlinlog.Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
+                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
-                    quanti.com.kotlinlog.Log.i(it.toString())
+                    Log.i(it.toString())
                 }
     }
 
@@ -160,27 +160,27 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                 .subscribeOn(Schedulers.newThread())
                 .subscribe {
                     if (it % 1000 == 0) {
-                        quanti.com.kotlinlog.Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
+                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
-                    quanti.com.kotlinlog.Log.i(it.toString())
+                    Log.i(it.toString())
                 }
 
         Flowable.range(0, 10000)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe {
                     if (it % 1000 == 0) {
-                        quanti.com.kotlinlog.Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
+                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
-                    quanti.com.kotlinlog.Log.i(it.toString())
+                    Log.i(it.toString())
                 }
 
         Flowable.range(0, 10000)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe {
                     if (it % 1000 == 0) {
-                        quanti.com.kotlinlog.Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
+                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
-                    quanti.com.kotlinlog.Log.i(it.toString())
+                    Log.i(it.toString())
                 }
 
     }
@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     fun test_5(view: View) {
-        quanti.com.kotlinlog.Log.logMetadata(applicationContext)
+        Log.logMetadata(applicationContext)
     }
 
 }
