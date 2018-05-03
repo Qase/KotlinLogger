@@ -31,15 +31,21 @@ android{
 }
 ```
 
-2) Add all needed logers to your mainActivity
+2) Add all needed logers to your mainActivity. Every logger is singleton and some of them needs to be initialized using init method.
 
 ```kotlin
-Log.addLogger(BaseAndroidLog()); //forwards all log to android logcat
-Log.addLogger(FileLoggerAsync(applicationContext)); 
-Log.addLogger(CrashlyticsLogger()) //defualt logging level is warn
+Log.addLogger(AndroidLogger)           //forwards all log to android logcat
+AndroidLogger.init(LoggerBundle())     //not necesarry
+
+Log.addLogger(CrashlyticsLogger)       //default logging level is warn
+CrashlyticsLogger.init(LoggerBundle()) //not necesarry
+
+Log.addLogger(FileLogger); 
+FileLogger.init(applicationContext)    //NECESARRY, need appContext for access to files
+
 ```
 
-For usage of FileLoggerAsync is necesarry this permission in manifest file
+For usage of FileLogger is necesarry this permission in manifest file
 ```
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 ```
@@ -74,7 +80,7 @@ SendLogDialogFragment.newInstance("your@email.com", deleteLogs = true).show(supp
 6) (Optionally) Delete all logs
 
 ```kotlin
-FileLogger.deleteAllLogs(applicationContext)
+FileLogger.deleteAllLogs()
 ```
 
 <img src="github/dialog.png" width="250">
