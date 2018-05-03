@@ -21,6 +21,7 @@ import io.reactivex.schedulers.Schedulers
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
+import quanti.com.kotlinlog.base.LoggerBundle
 import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
 import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.SendLogDialogFragment
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
 
         (findViewById<RadioGroup>(R.id.radio_group)).setOnCheckedChangeListener(this)
+
 
 
     }
@@ -187,6 +189,9 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         throw ArrayIndexOutOfBoundsException("unchecked exception")
     }
 
+    fun test_5(view: View) {
+        Log.logMetadata(applicationContext)
+    }
 
 }
 

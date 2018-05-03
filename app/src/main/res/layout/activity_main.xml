@@ -12,7 +12,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:orientation="vertical"
-
     >
 
         <RadioButton
@@ -144,5 +143,16 @@
         android:layout_alignParentRight="true"
         android:onClick="test_4"
         android:text="test #4 - crash"/>
+
+    <Button
+        android:id="@+id/testn5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/testn4"
+        android:layout_alignLeft="@id/clickme"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:onClick="test_5"
+        android:text="metadata"/>
 
 </RelativeLayout>

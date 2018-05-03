@@ -32,7 +32,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 //    library - select one - either local or maven
-//        implementation 'com.github.Qase:KotlinLogger:1.1.9'
+//    implementation 'com.github.Qase:KotlinLogger:1.2'
     implementation project(':kotlinlog')
 
     // RxJava

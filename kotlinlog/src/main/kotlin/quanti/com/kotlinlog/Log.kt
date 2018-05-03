@@ -1,8 +1,9 @@
 package quanti.com.kotlinlog
 
+import android.content.Context
 import android.util.Log
+import quanti.com.kotlinlog.android.MetadataLogger
 import quanti.com.kotlinlog.base.ILogger
-import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.utils.getClassNameWithoutPackage
 
 
@@ -59,6 +60,11 @@ class Log {
         fun eSync(text: String) = allLogSync(Log.ERROR, text)
 
         @JvmStatic
+        fun logMetadata(context: Context) {
+            d(MetadataLogger.getLogStrings(context))
+        }
+
+        @JvmStatic
         fun useUncheckedErrorHandler() {
 
             val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
@@ -67,7 +73,7 @@ class Log {
                 e(SECRET_CODE_UNHANDLED, paramThrowable)
 
                 if (oldHandler != null)
-                    oldHandler.uncaughtException( paramThread, paramThrowable) //Delegates to Android's error handling
+                    oldHandler.uncaughtException(paramThread, paramThrowable) //Delegates to Android's error handling
                 else
                     System.exit(2) //Prevents the service/app from freezing
             }
