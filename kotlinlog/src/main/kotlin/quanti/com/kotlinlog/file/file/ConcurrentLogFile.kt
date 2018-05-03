@@ -2,6 +2,7 @@ package quanti.com.kotlinlog.file.file
 
 import android.content.Context
 import quanti.com.kotlinlog.file.base.FileLoggerBundle
+import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -21,11 +22,29 @@ open class ConcurrentLogFile(
         bun.maxDaysSaved
 ) {
 
-    val dayLock = ReentrantLock()
+    private val dayLock = ReentrantLock()
 
     override fun write(string: String) {
         dayLock.withLock {
             super.write(string)
+        }
+    }
+
+    override fun writeBatch(queue: LinkedBlockingQueue<String>) {
+        dayLock.withLock {
+            super.writeBatch(queue)
+        }
+    }
+
+    override fun delete() {
+        dayLock.withLock {
+            super.delete()
+        }
+    }
+
+    override fun emptyFile() {
+        dayLock.withLock {
+            super.emptyFile()
         }
     }
 }

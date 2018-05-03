@@ -101,7 +101,7 @@ class SendLogDialogFragment : DialogFragment() {
                         Toast.makeText(context, getString(R.string.logs_email_no_client_installed), Toast.LENGTH_LONG).show()
                     }
                     if (deleteLogs){
-                        FileLogger.deleteAllLogs(activity!!.applicationContext, true)
+                        FileLogger.deleteAllLogs( true)
                     }
 
                 }, {
@@ -124,7 +124,7 @@ class SendLogDialogFragment : DialogFragment() {
                             Toast.LENGTH_LONG
                     ).show()
                     if (deleteLogs){
-                        FileLogger.deleteAllLogs(activity!!.applicationContext, true)
+                        FileLogger.deleteAllLogs(true)
                     }
                 }, {
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()

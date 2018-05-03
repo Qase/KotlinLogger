@@ -11,6 +11,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.getLogLevelString
+import quanti.com.kotlinlog.file.FileLogger
+import quanti.com.kotlinlog.file.base.FileLoggerBase.Companion.removeAllOldTemps
 import quanti.com.kotlinlog.utils.*
 import java.io.File
 import java.io.FileFilter
@@ -23,13 +25,15 @@ import java.util.*
  * Base class for file loggers
  */
 
-abstract class FileLoggerBase @JvmOverloads constructor(
-        protected var ctx: Context,
-        protected var bun: FileLoggerBundle = FileLoggerBundle()
-) : ILogger {
+abstract class FileLoggerBase : ILogger {
 
+    protected lateinit var ctx: Context
+    protected lateinit var bun: FileLoggerBundle
 
-    init {
+    protected open fun init(appCtx: Context, bundle: FileLoggerBundle = FileLoggerBundle()){
+        ctx = appCtx
+        bun = bundle
+
         //check permission
         if (!ctx.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             android.util.Log.e("FileLogger", "Give me write external storage permission to use this logger")
@@ -37,6 +41,7 @@ abstract class FileLoggerBase @JvmOverloads constructor(
         }
 
         removeAllOldTemps(ctx, bun.maxDaysSaved)
+
     }
 
     protected fun getDayTemp() = "${getFormattedFileNameForDayTemp()}_daytemp.log"
@@ -157,6 +162,8 @@ abstract class FileLoggerBase @JvmOverloads constructor(
             }
 
         }
+
+
 
 
         private val comparator = Comparator<File> { o1, o2 ->

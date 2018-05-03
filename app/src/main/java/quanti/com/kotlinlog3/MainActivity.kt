@@ -24,12 +24,13 @@ import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
 import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.SendLogDialogFragment
+import quanti.com.kotlinlog.file.base.FileLoggerBundle
+
+const val REQUEST = 98
 
 class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
-
     private var checked = 3
-    private var MY_PERMISSIONS_REQUEST = 98
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,16 +44,17 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
             ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    MY_PERMISSIONS_REQUEST)
+                    REQUEST)
         } else {
-            Log.addLogger(FileLogger(applicationContext))
+            Log.addLogger(FileLogger)
+            FileLogger.init(applicationContext, FileLoggerBundle())
         }
 
         Log.useUncheckedErrorHandler()
-        Log.addLogger(AndroidLogger())
+        Log.addLogger(AndroidLogger)
 
         Fabric.with(this, Crashlytics())
-        Log.addLogger(CrashlyticsLogger())
+        Log.addLogger(CrashlyticsLogger)
 
 
         (findViewById<RadioGroup>(R.id.radio_group)).setOnCheckedChangeListener(this)
@@ -112,9 +114,10 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 
-        if (requestCode == MY_PERMISSIONS_REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.i("Diky za permission")
-            Log.addLogger(FileLogger(applicationContext))
+            Log.addLogger(FileLogger)
+            FileLogger.init(applicationContext)
         } else {
             //show some shit
             AlertDialog.Builder(this)
@@ -125,7 +128,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                         ActivityCompat.requestPermissions(
                                 this,
                                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                MY_PERMISSIONS_REQUEST)
+                                REQUEST)
                     }
                     .create()
                     .show()
@@ -133,7 +136,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     fun test_1(view: View) {
-        FileLogger.deleteAllLogs(applicationContext)
+        FileLogger.deleteAllLogs()
         Toast.makeText(this, "Logs deleted", Toast.LENGTH_SHORT).show()
     }
 

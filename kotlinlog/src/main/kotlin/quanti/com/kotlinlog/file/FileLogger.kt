@@ -1,11 +1,11 @@
 package quanti.com.kotlinlog.file
 
+import android.annotation.SuppressLint
 import android.content.Context
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.file.base.FileLoggerBase
 import quanti.com.kotlinlog.file.base.FileLoggerBundle
-import quanti.com.kotlinlog.file.file.BaseLogFile
 import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.DayLogFile
 import quanti.com.kotlinlog.utils.convertToLogCatString
@@ -16,37 +16,27 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 
+@SuppressLint("StaticFieldLeak") //it is ok since it is app context
 /**
  * Created by Trnka Vladislav on 30.05.2017.
  *
  * Implementation of async file logger
- *
- *
- * @param appCtx application (!) context
- * @param bun file logger settings
  */
 
-class FileLogger @JvmOverloads constructor(
-        appCtx: Context,
-        bun: FileLoggerBundle = FileLoggerBundle()
-) : FileLoggerBase(appCtx, bun) {
+object FileLogger : FileLoggerBase() {
 
-    private val dayFile = DayLogFile(appCtx, bun)
+    private lateinit var dayFile: DayLogFile
 
     private val blockingQueue = LinkedBlockingQueue<String>()
     private val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
-    private val appName: String
+    private lateinit var appName: String
 
-    init {
-        threadExecutor.scheduleAtFixedRate(
-                {
-                    //val fl = blockingQueue.size
-                    while (blockingQueue.isNotEmpty()) {
-                        dayFile.write(blockingQueue.poll())
-                    }
-                    //android.util.Log.i("Tag", "Flushed: $fl")
-                }, 1, 5, TimeUnit.SECONDS
-        )
+    public override fun init(appCtx: Context, bundle: FileLoggerBundle) {
+        //idiot proof solution :D
+        super.init(appCtx.applicationContext, bundle)
+        dayFile = DayLogFile(ctx, bun)
+
+        threadExecutor.scheduleAtFixedRate({dayFile.writeBatch(blockingQueue)}, 1, 5, TimeUnit.SECONDS)
 
         appName = ctx.getApplicationName()
     }
@@ -95,21 +85,12 @@ class FileLogger @JvmOverloads constructor(
     }
 
     /**
-     * Deletes all logs from application
+     * @param excludeZips   do not delete zipped files
      */
-    companion object {
-
-
-        /**
-         * @param appCtx        application context
-         * @param excludeZips   do not delete zipped files
-         */
-        @JvmStatic
-        public fun deleteAllLogs(appCtx: Context, excludeZips: Boolean = false){
-            FileLoggerBase.removeAllOldTemps(appCtx, -1, true, excludeZips)
-        }
+    fun deleteAllLogs(excludeZips: Boolean = false) {
+        removeAllOldTemps(FileLogger.ctx, -1, true, excludeZips)
+        dayFile.emptyFile()
     }
-
 
 
 }

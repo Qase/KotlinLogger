@@ -2,6 +2,7 @@ package quanti.com.kotlinlog
 
 import android.util.Log
 import quanti.com.kotlinlog.base.ILogger
+import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.utils.getClassNameWithoutPackage
 
 
@@ -17,7 +18,11 @@ class Log {
     companion object {
         const val DEBUG_LIBRARY = true
 
-        const val SECRET_CODE_UNHANDLED = "LOL"
+        const val SECRET_CODE_UNHANDLED = "UNHANDLED"
+
+        var loggerNotAdded = true
+
+
         private val loggers = arrayListOf<ILogger>()
 
         @JvmStatic
@@ -74,6 +79,7 @@ class Log {
         @JvmStatic
         fun addLogger(logger: ILogger) {
             loggers.add(logger)
+            loggerNotAdded = false
         }
 
         /**
@@ -87,6 +93,7 @@ class Log {
         /**
          * @return Returns method name by reflexion
          */
+        @Suppress("UNREACHABLE_CODE")
         private fun getMethodStackTraceElement(): StackTraceElement {
             val ste = Thread.currentThread().stackTrace
             var found = false
@@ -106,7 +113,7 @@ class Log {
          */
         private fun allLog(androidLogLevel: Int, text: String) {
 
-            if (loggers.size == 0) {
+            if (loggerNotAdded) {
                 android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
                 return
             }
@@ -125,7 +132,7 @@ class Log {
          */
         private fun allLogSync(androidLogLevel: Int, text: String) {
 
-            if (loggers.size == 0) {
+            if (loggerNotAdded) {
                 android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
                 return
             }
@@ -139,7 +146,7 @@ class Log {
 
 
         private fun allLogThrowable(text: String, t: Throwable) {
-            if (loggers.size == 0) {
+            if (loggerNotAdded) {
                 android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
                 return
             }

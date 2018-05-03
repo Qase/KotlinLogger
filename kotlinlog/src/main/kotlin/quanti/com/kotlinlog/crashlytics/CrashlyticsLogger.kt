@@ -1,6 +1,7 @@
 package quanti.com.kotlinlog.crashlytics
 
 import com.crashlytics.android.Crashlytics
+import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.base.LoggerBundle
@@ -12,9 +13,13 @@ import quanti.com.kotlinlog.base.LoggerBundle
  *
  * Default log is from Warn since crashlytics is strict to file size
  */
-class CrashlyticsLogger(
-        private val bun: LoggerBundle = LoggerBundle(LogLevel.WARN)
-) : ILogger {
+object CrashlyticsLogger : ILogger {
+
+    private var bun: LoggerBundle = LoggerBundle(LogLevel.WARN)
+
+    fun init(bundle: LoggerBundle = LoggerBundle()){
+        bun = bundle
+    }
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
         if (androidLogLevel >= bun.minimalLogLevel) {
