@@ -5,16 +5,17 @@
 
 Smart android logger written in kotlin language.
 
-Mostly used in Prague based android develpoment company - [Quanti](https://www.quanti.cz/) for everything.
+Mostly used in Prague based android develpoment company - [Quanti](https://www.quanti.cz/) for everything. Product is still being actively developed.
 
 ## Features
 * Usable in every JVM language including Java/Kotlin/Scala ...
 * Very easy to use
-* No more TAGs
+* No more TAGs, but you can still use them
 * Easy to extend using your own logger
 * Lot of optional parameters
 * Lightweight
-* Sample [app](github/sampleApp.png) is ready to build 
+* Possibility to print system info
+* Sample [app](github/sampleApp.png) is ready to build
 
 ## Code Example
 
@@ -50,13 +51,7 @@ For usage of FileLogger is necesarry this permission in manifest file
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 ```
 
-
-3) (Optionally) Enable unchecked crash handling
-```kotlin
-Log.useUncheckedErrorHandler()
-```
-
-4) Then log as you would normally do - just using another dependency
+3) Then log as you would normally do - just using another dependency
 (or log sync using Log.xSync methods)
 
 ```kotlin
@@ -71,27 +66,26 @@ Log.w("logged.");
 Log.e("wi", Exception()); //throwable
 ```
 
-5) (Optionally) Use of SendLogDialogFragment
-
+4) Other possibilities 
 ```kotlin
+//Enable unchecked crash handling
+Log.useUncheckedErrorHandler()
+
+//Delete all logs
+FileLogger.deleteAllLogs()
+
+//Print system logs
+Log.logMetadata(appContext)
+
+//Use of SendLogDialogFragment
 SendLogDialogFragment.newInstance("your@email.com", deleteLogs = true).show(supportFragmentManager, "TAG")
 ```
-
-6) (Optionally) Delete all logs
-
-```kotlin
-FileLogger.deleteAllLogs()
-```
-
 <img src="github/dialog.png" width="250">
 
 
 ## Installation
 
 Click [HERE](https://jitpack.io/#Qase/KotlinLogger).
-
-## Future development
-* send your requests
 
 ## License
 
