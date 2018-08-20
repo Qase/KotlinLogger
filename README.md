@@ -1,9 +1,15 @@
 [![Release](https://jitpack.io/v/Qase/KotlinLogger.svg)](https://jitpack.io/#Qase/KotlinLogger)
 [![codebeat badge](https://codebeat.co/badges/d7306f5e-9328-45a0-bbed-1abab3e8b5b2)](https://codebeat.co/projects/github-com-qase-kotlinlogger-master)
+[![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Maintainer: kidal5](https://img.shields.io/badge/Maintainer-kidal5-blue.svg)](vladislav.trnka@quanti.cz)
+[![Qase: KotlinLogger](https://img.shields.io/badge/Qase-KotlinLogger-ff69b4.svg)](https://github.com/Qase/KotlinLogger)
+
+
 
 ## KotlinLogger
 
-Smart android logger written in kotlin language.
+Smart android logger written in Kotlin language.
 
 Mostly used in Prague based android develpoment company - [Quanti](https://www.quanti.cz/) for everything. Product is still being actively developed.
 
@@ -17,7 +23,11 @@ Mostly used in Prague based android develpoment company - [Quanti](https://www.q
 * Possibility to print system info
 * Sample [app](github/sampleApp.png) is ready to build
 
-## Code Example
+## Installation
+
+Click [HERE](https://jitpack.io/#Qase/KotlinLogger).
+
+## Code example
 
 Usage is simple
 
@@ -82,10 +92,6 @@ SendLogDialogFragment.newInstance("your@email.com", deleteLogs = true).show(supp
 ```
 <img src="github/dialog.png" width="250">
 
-
-## Installation
-
-Click [HERE](https://jitpack.io/#Qase/KotlinLogger).
 
 ## License
 
