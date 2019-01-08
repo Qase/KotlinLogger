@@ -40,7 +40,8 @@ class FileLoggerTest {
 
         //add logger
         //Log.addLogger(AndroidLogger())
-        Log.addLogger(FileLogger(ctx))
+        Log.addLogger(FileLogger)
+        FileLogger.init(ctx)
 
     }
 
