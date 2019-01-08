@@ -1,0 +1,26 @@
+language: android
+android:
+  components:
+  - tools
+  - platform-tools
+  - extra
+  - extra-google-google_play_services
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - sys-img-x86-android-26
+  - sys-img-armeabi-v7a-android-17
+  licenses:
+  - android-sdk-preview-license-.+
+  - android-sdk-license-.+
+  - google-gdk-license-.+
+before_install:
+- chmod +x gradlew
+- yes | sdkmanager "platforms;android-28"
+script:
+- "./gradlew build check -p kotlinlog"
+notifications:
+  email: false
+  slack:
+    on_success: always
+    on_failure: always
+    rooms: quantiteam:5cgN9eeINDyZcQYVZxPXMlXy
