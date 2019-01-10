@@ -1,158 +1,340 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:padding="20dp"
+    tools:layout_editor_absoluteY="81dp">
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Five threads, each 1000 messages"
+        app:layout_constraintBottom_toBottomOf="@+id/burstThreads"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/burstThreads"
+        app:layout_constraintTop_toTopOf="@+id/burstThreads" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="One thread, 50 messages"
+        app:layout_constraintBottom_toBottomOf="@+id/burst"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/burst"
+        app:layout_constraintTop_toTopOf="@+id/burst" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="One thread, 10000 messages, sometimes exception"
+        app:layout_constraintBottom_toBottomOf="@+id/testn2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/testn2"
+        app:layout_constraintTop_toTopOf="@+id/testn2" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Three threads, each 10000 messages, sometimes exception"
+        app:layout_constraintBottom_toBottomOf="@+id/testn4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/testn4"
+        app:layout_constraintTop_toTopOf="@+id/testn4" />
 
     <RadioGroup
-        android:id="@+id/radio_group"
-        android:layout_width="wrap_content"
+        android:id="@+id/radioGroup"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:orientation="vertical"
-    >
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <RadioButton
             android:id="@+id/verbose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Verbose: 2"/>
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="V" />
 
         <RadioButton
             android:id="@+id/debug"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Debug: 3"/>
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="D" />
 
         <RadioButton
             android:id="@+id/info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Info: 4"/>
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="I" />
 
         <RadioButton
             android:id="@+id/warn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Warn: 5"/>
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="W" />
 
         <RadioButton
             android:id="@+id/error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Error: 6"/>
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="E" />
+
 
     </RadioGroup>
+
 
     <Button
         android:id="@+id/clickme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="button_clicked"
-        android:text="hit me!"/>
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="8dp"
+        android:onClick="hitme_clicked"
+        android:text="Hit me"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/clickmeT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@id/clickme"
-        android:onClick="button_clicked_throw"
-        android:text="throw!"/>
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="throwException_clicked"
+        android:text="Throw!"
+        app:layout_constraintBottom_toTopOf="@+id/testn4"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
         android:id="@+id/burst"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/clickme"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="burst_clicked"
-        android:text="burst"/>
+        android:layout_height="48dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="testone_clicked"
+        android:text="Test #1"
+        app:layout_constraintBottom_toTopOf="@+id/clickme"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/burstThreads"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/clickme"
-        android:layout_alignLeft="@id/clickmeT"
-        android:layout_toLeftOf="@id/burst"
-        android:onClick="burst_thread_clicked"
-        android:text="burst threads"/>
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="testtwo_clicked"
+        android:text="Test #2"
+        app:layout_constraintBottom_toTopOf="@+id/burst"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/copyZip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/burst"
-        android:layout_alignLeft="@id/clickme"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="cz_clicked"
-        android:text="Show logs"/>
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="send_clicked"
+        android:text="Send"
+        app:layout_constraintBottom_toTopOf="@+id/testn5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/testn1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/copyZip"
-        android:layout_alignLeft="@id/clickme"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
 
-        android:onClick="test_1"
-        android:text="Delete logs"
-    />
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="deleteLogs_clicked"
+        android:text="Delete"
+        app:layout_constraintBottom_toTopOf="@+id/copyZip"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/testn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/testn1"
-        android:layout_alignLeft="@id/clickme"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="test_2"
-        android:text="test #2"/>
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="testthree_clicked"
+        android:text="test #3"
+        app:layout_constraintBottom_toTopOf="@+id/burstThreads"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/testn3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/testn2"
-        android:layout_alignLeft="@id/clickme"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="test_3"
-        android:text="test #3"/>
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="throwUncheckedException_clicked"
+        android:text="Throw U"
+        app:layout_constraintBottom_toTopOf="@+id/clickmeT"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/testn4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/testn3"
-        android:layout_alignLeft="@id/clickme"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="test_4"
-        android:text="test #4 - crash"/>
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="testfour_clicked"
+        android:text="test #4"
+        app:layout_constraintBottom_toTopOf="@+id/testn2"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/testn5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/testn4"
-        android:layout_alignLeft="@id/clickme"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="test_5"
-        android:text="metadata"/>
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="logMetadata_clicked"
+        android:text="Meta"
+        app:layout_constraintBottom_toTopOf="@+id/testn3"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="One log line based on selected radio button"
+        app:layout_constraintBottom_toBottomOf="@+id/clickme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/clickme"
+        app:layout_constraintTop_toTopOf="@+id/clickme" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Throw excpetion"
+        app:layout_constraintBottom_toBottomOf="@+id/clickmeT"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/clickmeT"
+        app:layout_constraintTop_toTopOf="@+id/clickmeT" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Throw unchecked exception"
+        app:layout_constraintBottom_toBottomOf="@+id/testn3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/testn3"
+        app:layout_constraintTop_toTopOf="@+id/testn3" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Send logs to email or save to sdcard"
+        app:layout_constraintBottom_toTopOf="@+id/testn5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/testn3"
+        app:layout_constraintTop_toBottomOf="@+id/testn1" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Logs metadata about phone"
+        app:layout_constraintBottom_toBottomOf="@+id/testn5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/testn5"
+        app:layout_constraintTop_toTopOf="@+id/testn5" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Delete everything in folder"
+        app:layout_constraintBottom_toBottomOf="@+id/testn1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/testn1"
+        app:layout_constraintTop_toTopOf="@+id/testn1" />
+
+</android.support.constraint.ConstraintLayout>
