@@ -11,24 +11,27 @@ import java.util.*
 
 object ActualTime {
 
-    const val ONE_DAY_IN_MILLIS = 86400000L
-    private var setTime = 0L
+    private const val ONE_DAY_IN_MILLIS = 86400000L
+    private var timeShift = 0L
 
     fun currentDate() = Date(currentTimeMillis())
 
     fun shiftByOneDay() = shift(ONE_DAY_IN_MILLIS)
     fun shiftByOneDayBackward() = shift(-ONE_DAY_IN_MILLIS)
 
-    fun currentTimeMillis(): Long {
-        return System.currentTimeMillis() + setTime
-    }
+    fun currentTimeMillis(): Long = System.currentTimeMillis() + timeShift
 
 
     /**
      * Moves current time by offset
      * Forward or backward
      */
-    fun shift(timeShift: Long){
-        setTime += timeShift
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun shift(timeShift: Long) {
+        this.timeShift += timeShift
+    }
+
+    fun reset() {
+        timeShift = 0
     }
 }

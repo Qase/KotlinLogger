@@ -17,13 +17,13 @@ import java.io.File
 @RunWith(RobolectricTestRunner::class)
 class TimeFileTest {
 
-    lateinit var appCtx: Context
+    private lateinit var appCtx: Context
 
     @Before
     fun init() {
         RuntimeEnvironment.application.applicationInfo.nonLocalizedLabel = "FAKE APP NAME"
         appCtx = RuntimeEnvironment.application.applicationContext
-
+        ActualTime.reset()
     }
 
 
@@ -39,15 +39,15 @@ class TimeFileTest {
     fun fileAgeToday() {
         val file = File(appCtx.filesDir, "temp.txt")
         file.createNewFile()
-        assert(file.fileAge() == 0)
+        Assert.assertEquals(0, file.fileAge())
     }
 
     @Test
-    fun fileAgeTomorrow() {
+    fun fileAgeYesterday() {
         val file = File(appCtx.filesDir, "temp.txt")
         file.createNewFile()
         ActualTime.shiftByOneDay()
-        assert(file.fileAge() == 1)
+        Assert.assertEquals(1, file.fileAge())
     }
 
     @Test
@@ -57,6 +57,14 @@ class TimeFileTest {
         file.createNewFile()
         file.setLastModified(ActualTime.currentTimeMillis())
         Assert.assertEquals(0, file.fileAge())
+    }
+
+    @Test
+    fun fileAgeTomorrow() {
+        val file = File(appCtx.filesDir, "temp.txt")
+        file.createNewFile()
+        ActualTime.shiftByOneDayBackward()
+        Assert.assertEquals(-1, file.fileAge())
     }
 
 }

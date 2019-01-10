@@ -40,13 +40,10 @@ private fun scanFiles(ctx: Context, vararg args: String) {
 
 /**
  * Returns how old is this file
- * 0 --> created today
- * 1 --> created yesterday
+ * -1 --> created tomorrow
+ * 0  --> created today
+ * 1  --> created yesterday
  * and so on
- *
- * Doesn't work backwards
- * 0 --> created yesterday
- * 0 --> created yesterday
  */
 fun File.fileAge(): Int {
     if (!exists()) {
@@ -54,12 +51,14 @@ fun File.fileAge(): Int {
         throw FileNotFoundException("File does not exists $absolutePath")
     }
 
-    val today = ActualTime.currentDate()
-    val fDate = Date(this.lastModified())
+    //i do not want the basic difference
+    //i want
+    val todayMillis = ActualTime.currentDate().time
+    val fileMillis = lastModified()
 
-    val diff = today.time - fDate.time
-    val days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toInt()
-    return days
+    val todayDay = TimeUnit.DAYS.convert(todayMillis, TimeUnit.MILLISECONDS)
+    val fileDay = TimeUnit.DAYS.convert(fileMillis, TimeUnit.MILLISECONDS)
+    return (todayDay - fileDay).toInt()
 }
 
 

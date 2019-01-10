@@ -85,7 +85,7 @@ class DayLogFile(
         fileName = getFormattedFileNameForDayTemp() + "_day.log"
         loga("fileAge: $fileName")
         file = File(ctx.filesDir, fileName)
-        file.setLastModified(ActualTime.currentTimeMillis()) //needed for testing
+//        file.setLastModified(ActualTime.currentTimeMillis()) //needed for testing
         fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
     }
 
