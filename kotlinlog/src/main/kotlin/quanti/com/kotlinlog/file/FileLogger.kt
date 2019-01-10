@@ -3,12 +3,16 @@ package quanti.com.kotlinlog.file
 import android.annotation.SuppressLint
 import android.content.Context
 import quanti.com.kotlinlog.R
+import quanti.com.kotlinlog.SECRET_CODE_UNHANDLED
 import quanti.com.kotlinlog.TAG
 import quanti.com.kotlinlog.base.ILogger
+import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.base.getLogLevelString
 import quanti.com.kotlinlog.file.base.FileLoggerBundle
+import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.DayLogFile
 import quanti.com.kotlinlog.file.file.ILogFile
+import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.getApplicationName
 import quanti.com.kotlinlog.utils.getFormattedNow
 import java.util.concurrent.Executors
@@ -25,7 +29,7 @@ import java.util.concurrent.TimeUnit
  */
 //todo java annotation
 class FileLogger(
-        appCtx: Context,
+        private val appCtx: Context,
         private val bun: FileLoggerBundle = FileLoggerBundle(),
         useDayLog: Boolean = true
 ) : ILogger{
@@ -73,24 +77,24 @@ class FileLogger(
 
 
     override fun logThrowable(tag: String, methodName: String, text: String, t: Throwable) {
-//        val errorFile = CrashLogFile(
-//                appCtx,
-//                bun,
-//                t.javaClass.simpleName,
-//                text == SECRET_CODE_UNHANDLED
-//        )
-//
-//        val formattedString = getFormatedString(appName, LogLevel.ERROR, tag, methodName, text)
-//
-//        val sb = StringBuilder()
-//        sb.append(formattedString)
-//        sb.append(t.convertToLogCatString())
+        val errorFile = CrashLogFile(
+                appCtx,
+                t.javaClass.simpleName,
+                text == SECRET_CODE_UNHANDLED
+        )
 
-//        val str = sb.toString()
-//        errorFile.write(str)
-//        errorFile.closeOutputStream()
-//
-//        dayFile.write(str)
+        val formattedString = getFormatedString(appName, LogLevel.ERROR, tag, methodName, text)
+
+        val sb = StringBuilder()
+        sb.append(formattedString)
+        sb.append(t.convertToLogCatString())
+
+        val str = sb.toString()
+        errorFile.write(str)
+        errorFile.closeOutputStream()
+
+        //we want errors to be sync
+        logFile.write(str)
     }
 
     /**
