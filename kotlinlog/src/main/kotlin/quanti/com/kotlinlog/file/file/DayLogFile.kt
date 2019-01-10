@@ -68,7 +68,7 @@ class DayLogFile(
     override fun cleanFolder() {
         //switch to new file if needed
         loga("fileAge: " + file.fileAge())
-        if (file.fileAge() != 0){
+        if (file.fileAge() > 0 || ! file.name!!.contains(getFormattedFileNameDayNow())){
             createNewFile()
         }
 
