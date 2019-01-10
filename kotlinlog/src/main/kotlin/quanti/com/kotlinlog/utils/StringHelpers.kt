@@ -43,3 +43,11 @@ fun Throwable.convertToLogCatString(): String {
     return sb.toString()
 
 }
+
+private val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+fun getRandomString(length: Int = 10): String {
+    return (1..length)
+            .map { kotlin.random.Random.nextInt(0, charPool.size) }
+            .map(charPool::get)
+            .joinToString("")
+}

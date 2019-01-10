@@ -6,7 +6,7 @@ import quanti.com.kotlinlog.base.LogLevel
 /**
  * Created by Trnka Vladislav on 27.06.2017.
  *
- * FileLoggerBundle specifies settings for fiel logger
+ * FileLoggerBundle specifies settings for file logger
  *
  * @param maxDaysSaved max days of logging - default 7
  * @param minimalLogLevel minimalLogLevel - default LogLevel.Verbose
@@ -14,8 +14,8 @@ import quanti.com.kotlinlog.base.LogLevel
  */
 
 data class FileLoggerBundle @JvmOverloads constructor(
-        var minimalLogLevel: Int = LogLevel.VERBOSE,
-        val maxDaysSaved: Int = 7,
-        val maxLogsPerOneFile: Int = 500
+        val minimalLogLevel: Int = LogLevel.VERBOSE,
+        val maxDaysSaved: Int = 1
+//todo add which loger to use enum
 )
 

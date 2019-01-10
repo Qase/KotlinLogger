@@ -2,15 +2,15 @@ package quanti.com.kotlinlog.file
 
 import android.annotation.SuppressLint
 import android.content.Context
-import quanti.com.kotlinlog.Log
-import quanti.com.kotlinlog.SECRET_CODE_UNHANDLED
-import quanti.com.kotlinlog.base.LogLevel
-import quanti.com.kotlinlog.file.base.FileLoggerBase
+import quanti.com.kotlinlog.R
+import quanti.com.kotlinlog.TAG
+import quanti.com.kotlinlog.base.ILogger
+import quanti.com.kotlinlog.base.getLogLevelString
 import quanti.com.kotlinlog.file.base.FileLoggerBundle
-import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.DayLogFile
-import quanti.com.kotlinlog.utils.convertToLogCatString
+import quanti.com.kotlinlog.file.file.ILogFile
 import quanti.com.kotlinlog.utils.getApplicationName
+import quanti.com.kotlinlog.utils.getFormattedNow
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ScheduledExecutorService
@@ -23,23 +23,31 @@ import java.util.concurrent.TimeUnit
  *
  * Implementation of async file logger
  */
+//todo java annotation
+class FileLogger(
+        appCtx: Context,
+        private val bun: FileLoggerBundle = FileLoggerBundle(),
+        useDayLog: Boolean = true
+) : ILogger{
 
-object FileLogger : FileLoggerBase() {
-
-    private lateinit var dayFile: DayLogFile
+    private var logFile: ILogFile = if (useDayLog) DayLogFile(appCtx, bun.maxDaysSaved) else DayLogFile(appCtx, bun.maxDaysSaved)
 
     private val blockingQueue = LinkedBlockingQueue<String>()
     private val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
-    private lateinit var appName: String
+    private var appName: String = appCtx.getApplicationName()
 
-    public override fun init(appCtx: Context, bundle: FileLoggerBundle) {
-        //idiot proof solution :D
-        super.init(appCtx.applicationContext, bundle)
-        dayFile = DayLogFile(ctx, bun)
 
-        threadExecutor.scheduleAtFixedRate({dayFile.writeBatch(blockingQueue)}, 1, 5, TimeUnit.SECONDS)
+    init {
+        val func = Runnable {
+            //first write everything form queue to file
+            android.util.Log.i(TAG, "TASK: Writing data from queue: ${blockingQueue.size}")
+            logFile.writeBatch(blockingQueue)
 
-        appName = ctx.getApplicationName()
+            //perform cleaning
+            android.util.Log.i(TAG, "TASK: Cleaning folder")
+            logFile.cleanFolder()
+        }
+        threadExecutor.scheduleAtFixedRate(func, 1, 5, TimeUnit.SECONDS)
     }
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
@@ -60,38 +68,45 @@ object FileLogger : FileLoggerBase() {
 
         val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
 
-        dayFile.write(formattedString)
+        logFile.write(formattedString)
     }
 
 
     override fun logThrowable(tag: String, methodName: String, text: String, t: Throwable) {
-        val errorFile = CrashLogFile(
-                ctx,
-                bun,
-                t.javaClass.simpleName,
-                text == SECRET_CODE_UNHANDLED
-        )
+//        val errorFile = CrashLogFile(
+//                appCtx,
+//                bun,
+//                t.javaClass.simpleName,
+//                text == SECRET_CODE_UNHANDLED
+//        )
+//
+//        val formattedString = getFormatedString(appName, LogLevel.ERROR, tag, methodName, text)
+//
+//        val sb = StringBuilder()
+//        sb.append(formattedString)
+//        sb.append(t.convertToLogCatString())
 
-        val formattedString = getFormatedString(appName, LogLevel.ERROR, tag, methodName, text)
-
-        val sb = StringBuilder()
-        sb.append(formattedString)
-        sb.append(t.convertToLogCatString())
-
-        val str = sb.toString()
-        errorFile.write(str)
-        errorFile.closeOutputStream()
-
-        dayFile.write(str)
+//        val str = sb.toString()
+//        errorFile.write(str)
+//        errorFile.closeOutputStream()
+//
+//        dayFile.write(str)
     }
 
     /**
-     * @param excludeZips   do not delete zipped files
+     * Returns android-log like formatted string
      */
-    fun deleteAllLogs(excludeZips: Boolean = false) {
-        removeAllOldTemps(FileLogger.ctx, -1, true, excludeZips)
-        dayFile.emptyFile()
+    private fun getFormatedString(appName: String, logLevel: Int, className: String, methodName: String, text: String): String {
+        return "${getFormattedNow()}/$appName ${logLevel.getLogLevelString()}/${className}_$methodName: $text\n"
     }
+
+    companion object {
+        fun deleteAllLogs(appCtx: Context){
+            appCtx.filesDir.listFiles().forEach { it.delete() }
+        }
+    }
+
+
 
 
 }

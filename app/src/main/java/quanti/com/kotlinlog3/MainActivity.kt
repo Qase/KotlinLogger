@@ -2,13 +2,8 @@
 
 package quanti.com.kotlinlog3
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.IdRes
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.RadioButton
@@ -23,8 +18,6 @@ import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
 import quanti.com.kotlinlog.file.FileLogger
-import quanti.com.kotlinlog.file.SendLogDialogFragment
-import quanti.com.kotlinlog.file.base.FileLoggerBundle
 
 const val REQUEST = 98
 
@@ -36,20 +29,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //resolve permission
-        val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-        // Here, thisActivity is the current activity
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    REQUEST)
-        } else {
-            FileLogger.init(applicationContext, FileLoggerBundle())
-            Log.addLogger(FileLogger)
-        }
-
+        Log.addLogger(FileLogger(applicationContext))
 
         Log.useUncheckedErrorHandler()
         Log.addLogger(AndroidLogger)
@@ -59,7 +39,6 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
 
         (findViewById<RadioGroup>(R.id.radio_group)).setOnCheckedChangeListener(this)
-
 
 
     }
@@ -110,35 +89,35 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     fun cz_clicked(view: View) {
-        SendLogDialogFragment.newInstance("kidal5@centrum.cz", deleteLogs = true).show(supportFragmentManager, "OMG")
+//        SendLogDialogFragment.newInstance("kidal5@centrum.cz", deleteLogs = true).show(supportFragmentManager, "OMG")
     }
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 
-        if (requestCode == REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.i("Diky za permission")
-            Log.addLogger(FileLogger)
-            FileLogger.init(applicationContext)
-        } else {
-            //show some shit
-            AlertDialog.Builder(this)
-                    .setTitle("</3")
-                    .setMessage("Give me permission omg")
-                    .setOnDismissListener {
-                        Log.i("After dialog")
-                        ActivityCompat.requestPermissions(
-                                this,
-                                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                REQUEST)
-                    }
-                    .create()
-                    .show()
-        }
+//        if (requestCode == REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//            Log.i("Diky za permission")
+//            Log.addLogger(FileLogger)
+//            FileLogger.init(applicationContext)
+//        } else {
+//            //show some shit
+//            AlertDialog.Builder(this)
+//                    .setTitle("</3")
+//                    .setMessage("Give me permission omg")
+//                    .setOnDismissListener {
+//                        Log.i("After dialog")
+//                        ActivityCompat.requestPermissions(
+//                                this,
+//                                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+//                                REQUEST)
+//                    }
+//                    .create()
+//                    .show()
+//        }
     }
 
     fun test_1(view: View) {
-        FileLogger.deleteAllLogs()
+        FileLogger.deleteAllLogs(applicationContext)
         Toast.makeText(this, "Logs deleted", Toast.LENGTH_SHORT).show()
     }
 

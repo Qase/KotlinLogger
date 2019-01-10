@@ -38,8 +38,18 @@ private fun scanFiles(ctx: Context, vararg args: String) {
     MediaScannerConnection.scanFile(ctx, args, null) { path, _ -> i("Scanned $path:") }
 }
 
+/**
+ * Returns how old is this file
+ * 0 --> created today
+ * 1 --> created yesterday
+ * and so on
+ *
+ * Doesn't work backwards
+ * 0 --> created yesterday
+ * 0 --> created yesterday
+ */
 fun File.fileAge(): Int {
-    if (!exists()){
+    if (!exists()) {
         //file does not exists
         throw FileNotFoundException("File does not exists $absolutePath")
     }
@@ -49,13 +59,12 @@ fun File.fileAge(): Int {
 
     val diff = today.time - fDate.time
     val days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toInt()
-    //android.util.Log.i("FileUtils", this.name + "\t" + this.lastModified() + "\t" + days)
     return days
 }
 
 
 fun Array<File>.zip(zipFile: File): File {
-    if (isEmpty()){
+    if (isEmpty()) {
         return zipFile
     }
     try {
@@ -87,13 +96,13 @@ fun mergeToFile(from: String, to: String, ctx: Context): Boolean {
     val fromFile = File(ctx.filesDir, from)
 
     if (!fromFile.existsAndIsFile()) {
-        if (DEBUG_LIBRARY){
+        if (DEBUG_LIBRARY) {
             android.util.Log.i("FileLogger", "Cannot merge files - this file does not exists " + fromFile.absoluteFile)
         }
         return false
     }
 
-    if (DEBUG_LIBRARY){
+    if (DEBUG_LIBRARY) {
         android.util.Log.i("Tek", "MERGE")
     }
 
@@ -106,4 +115,36 @@ fun mergeToFile(from: String, to: String, ctx: Context): Boolean {
     fos.close()
 
     return true
+}
+
+
+/**
+ * Removes all files that are older than specified number of days inclusive
+ */
+fun Array<File>.removeAllOldFiles(maxDaysOld: Int) = removeAll { it.fileAge() > maxDaysOld }
+
+/**
+ * Removes all zip files
+ */
+fun Array<File>.removeAllZips() = removeAll { it.name.contains(".zip") }
+
+fun Array<File>.removeAll(filter: (File) -> Boolean): Array<File> {
+    this.filter(filter)
+            .forEach {
+                val del = it.delete()
+                loga("File deleted: " + del + "/t" + it.absolutePath)
+            }
+    return this
+}
+
+fun Array<File>.sortByAge(): Array<File> {
+    this.sortWith(comparator)
+    return this
+}
+
+private val comparator = Comparator<File> { o1, o2 ->
+    val firstTime = Date(o1.lastModified()).time
+    val secondTime = Date(o2.lastModified()).time
+
+    return@Comparator (secondTime - firstTime).toInt()
 }

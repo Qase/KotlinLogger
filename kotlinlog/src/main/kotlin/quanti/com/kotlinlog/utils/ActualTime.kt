@@ -11,7 +11,7 @@ import java.util.*
 
 object ActualTime {
 
-    val ONE_DAY_IN_MILLIS = 86400000L
+    const val ONE_DAY_IN_MILLIS = 86400000L
     private var setTime = 0L
 
     fun currentDate() = Date(currentTimeMillis())

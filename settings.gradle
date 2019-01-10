@@ -1,1 +1,1 @@
-include ':kotlinlog', ':app'
+include ':kotlinlog', ':app', ':testappxd'

@@ -13,27 +13,21 @@ val sdf4 = SimpleDateFormat("yyyy_MMdd", Locale.ENGLISH)
 /**
  * MM-dd HH:mm:ss.SS
  */
-fun getFormatedNow(): String {
-    return sdf1.format(ActualTime.currentDate())
-}
+fun getFormattedNow() = sdf1.formatActualTime()
 
 /**
  * yyyy_MMdd_HHmm_ss
  */
-fun getFormatedFileNameDayNowWithSeconds() : String{
-    return sdf2.format(ActualTime.currentDate())
-}
+fun getFormattedFileNameDayNowWithSeconds() = sdf2.formatActualTime()
 
 /**
  * yyyy_MMdd_HHmm
  */
-fun getFormatedFileNameDayNow() : String{
-    return sdf3.format(ActualTime.currentDate())
-}
+fun getFormattedFileNameDayNow() = sdf3.formatActualTime()
 
 /**
  * yyyy_MMdd
  */
-fun getFormattedFileNameForDayTemp() : String{
-    return sdf4.format(ActualTime.currentDate())
-}
+fun getFormattedFileNameForDayTemp() = sdf4.formatActualTime()
+
+fun SimpleDateFormat.formatActualTime(): String = this.format(ActualTime.currentDate())
