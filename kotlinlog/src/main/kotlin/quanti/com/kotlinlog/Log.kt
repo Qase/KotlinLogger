@@ -81,7 +81,7 @@ class Log {
          */
         @JvmStatic
         fun logMetadata(context: Context) {
-            d(MetadataLogger.getLogStrings(context))
+            d(MetadataLogger.getLogStrings(context.applicationContext))
         }
 
         /**
