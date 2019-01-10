@@ -68,7 +68,7 @@ class DayLogFile(
     override fun cleanFolder() {
         //switch to new file if needed
         loga("fileAge: " + file.fileAge())
-        if (file.fileAge() > 0 || ! file.name!!.contains(getFormattedFileNameDayNow())){
+        if (file.fileAge() > 0 || !file.name!!.contains(getFormattedFileNameDayNow())) {
             createNewFile()
         }
 
@@ -77,18 +77,15 @@ class DayLogFile(
 
         //remove all files older than x days
         ctx.filesDir.listFiles().removeAllOldFiles(maxDays)
-
     }
 
-    private fun createNewFile(){
+    private fun createNewFile() {
         fos.close()
         fileName = getFormattedFileNameForDayTemp() + "_day.log"
         loga("fileAge: $fileName")
         file = File(ctx.filesDir, fileName)
-//        file.setLastModified(ActualTime.currentTimeMillis()) //needed for testing
         fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
     }
-
 
 
 }
