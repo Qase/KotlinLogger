@@ -45,9 +45,7 @@ class DayLogFile(
     override fun delete() {
         lock.withLock {
             val del = file.delete()
-            if (DEBUG_LIBRARY) {
-                android.util.Log.i(TAG, "File ${file.absolutePath} was deleted: $del")
-            }
+            loga("File ${file.absolutePath} was deleted: $del")
         }
     }
 

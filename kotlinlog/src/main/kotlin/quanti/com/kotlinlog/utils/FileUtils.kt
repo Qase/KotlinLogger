@@ -2,7 +2,6 @@ package quanti.com.kotlinlog.utils
 
 import android.content.Context
 import android.media.MediaScannerConnection
-import quanti.com.kotlinlog.DEBUG_LIBRARY
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.Log.Companion.i
 import java.io.*
@@ -95,15 +94,10 @@ fun mergeToFile(from: String, to: String, ctx: Context): Boolean {
     val fromFile = File(ctx.filesDir, from)
 
     if (!fromFile.existsAndIsFile()) {
-        if (DEBUG_LIBRARY) {
-            android.util.Log.i("FileLogger", "Cannot merge files - this file does not exists " + fromFile.absoluteFile)
-        }
-        return false
+        loga("Cannot merge files - this file does not exists " + fromFile.absoluteFile)
     }
 
-    if (DEBUG_LIBRARY) {
-        android.util.Log.i("Tek", "MERGE")
-    }
+    loga("MERGE")
 
     val fis = ctx.openFileInput(from)
     val fos = ctx.openFileOutput(to, android.content.Context.MODE_APPEND)
