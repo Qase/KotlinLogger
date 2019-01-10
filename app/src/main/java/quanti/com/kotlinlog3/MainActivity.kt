@@ -63,6 +63,8 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                 .range(0, end)
                 .map { it.toString() }
                 .subscribe { Log.i(it) }
+                .dispose()
+
     }
 
     fun testtwo_clicked(view: View) {
@@ -70,11 +72,11 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         val threads = 5
         val end = 1000
         (0..threads)
-                .onEach {
-                    val thread = it
+                .onEach {thread ->
                     Flowable.range(0, end)
                             .subscribeOn(Schedulers.newThread())
-                            .subscribe { Log.i("MY TAG", "Thread $thread\t Log: $it") }
+                            .subscribe { Log.i("Thread $thread\t Log: $it") }
+                            .dispose()
                 }
 
     }
@@ -86,37 +88,20 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                         Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
                     Log.i(it.toString())
-                }
+                }.dispose()
     }
 
     fun testfour_clicked(view: View) {
-        Flowable.range(0, 10000)
-                .subscribeOn(Schedulers.newThread())
-                .subscribe {
-                    if (it % 1000 == 0) {
-                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
-                    }
-                    Log.i(it.toString())
-                }
-
-        Flowable.range(0, 10000)
-                .subscribeOn(Schedulers.newThread())
-                .subscribe {
-                    if (it % 1000 == 0) {
-                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
-                    }
-                    Log.i(it.toString())
-                }
-
-        Flowable.range(0, 10000)
-                .subscribeOn(Schedulers.newThread())
-                .subscribe {
-                    if (it % 1000 == 0) {
-                        Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
-                    }
-                    Log.i(it.toString())
-                }
-
+        (1..3).forEach{thread ->
+            Flowable.range(0, 10000)
+                    .subscribeOn(Schedulers.newThread())
+                    .subscribe {
+                        if (it % 1000 == 0) {
+                            Log.e("Something bad happened $thread $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
+                        }
+                        Log.i(it.toString())
+                    }.dispose()
+        }
     }
 
     fun throwException_clicked(view: View) {
@@ -140,16 +125,6 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         FileLogger.deleteAllLogs(applicationContext)
         Toast.makeText(this, "Logs deleted", Toast.LENGTH_SHORT).show()
     }
-
-
-
-
-
-
-
-
-
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 
