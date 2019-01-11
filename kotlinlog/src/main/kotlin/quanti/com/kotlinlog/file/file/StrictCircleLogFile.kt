@@ -15,11 +15,6 @@ import kotlin.concurrent.withLock
  * Works the same as @see CircleLogBundle but maximum file size is always guaranteed
  *
  */
-
-
-/**
- * it also starts new 5MB every day
- */
 class StrictCircleLogFile(
         ctx: Context,
         private val bundle: StrictCircleLogBundle
