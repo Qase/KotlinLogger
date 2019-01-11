@@ -110,18 +110,33 @@ fun mergeToFile(from: String, to: String, ctx: Context): Boolean {
     return true
 }
 
-
 /**
  * Removes all files that are older than specified number of days inclusive
  */
-fun Array<File>.removeAllOldFiles(maxDaysOld: Int) = removeAll { it.fileAge() > maxDaysOld }
+fun Array<File>.removeAllOldFiles(maxDaysOld: Int) = toList().removeAllOldFiles(maxDaysOld)
 
 /**
  * Removes all zip files
  */
-fun Array<File>.removeAllZips() = removeAll { it.name.contains(".zip") }
+fun Array<File>.removeAllZips() = toList().removeAllZips()
 
-fun Array<File>.removeAll(filter: (File) -> Boolean): Array<File> {
+fun Array<File>.removeAll(filter: (File) -> Boolean) = toList().removeAll(filter)
+
+fun Array<File>.sortByAge() = toList().sortByAge()
+
+
+
+/**
+ * Removes all files that are older than specified number of days inclusive
+ */
+fun List<File>.removeAllOldFiles(maxDaysOld: Int) = removeAll { it.fileAge() > maxDaysOld }
+
+/**
+ * Removes all zip files
+ */
+fun List<File>.removeAllZips() = removeAll { it.name.contains(".zip") }
+
+fun List<File>.removeAll(filter: (File) -> Boolean): List<File> {
     this.filter(filter)
             .forEach {
                 val del = it.delete()
@@ -130,9 +145,8 @@ fun Array<File>.removeAll(filter: (File) -> Boolean): Array<File> {
     return this
 }
 
-fun Array<File>.sortByAge(): Array<File> {
-    this.sortWith(comparator)
-    return this
+fun List<File>.sortByAge(): List<File> {
+    return sortedWith(comparator)
 }
 
 private val comparator = Comparator<File> { o1, o2 ->
