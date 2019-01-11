@@ -2,6 +2,7 @@ package quanti.com.kotlinlog.file.file
 
 import android.content.Context
 import quanti.com.kotlinlog.TAG
+import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.utils.*
 import java.io.File
 import java.io.FileOutputStream
@@ -10,27 +11,29 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 /**
- * Created by Trnka Vladislav on 13.09.2017.
+ * Created by Vladislav Trnka on 11.1.2019
  *
- * Implementation of ILogFile that works like this:
- * --every day creates new file for all logs
- * --deletes old files when their age exceeds 'maxDays' parameter
- *
- * Writing is thread safe using ReentrantLock
  *
  */
 
-class DayLogFile(
+const val FILE_IDENTIFIER = "circle"
+const val LOG_FILE_EXTENSION = ".log"
+
+/**
+ * it also starts new 5MB every day
+ */
+class CircleLogFile(
         private val ctx: Context,
-        private val maxDays: Int
+        private val bundle: CircleLogBundle
 ) : ILogFile {
+
     private val lock = ReentrantLock()
 
-    private var fileName = getFormattedFileNameForDayTemp() + "_day.log"
+    private var fileName = createNewName()
     private var file = File(ctx.filesDir, fileName)
 
-    //this writes to internal storage so no need for permissions
     private var fos: FileOutputStream = ctx.openFileOutput(fileName, Context.MODE_APPEND)
+
 
     override fun write(string: String) {
         lock.withLock {
@@ -67,27 +70,56 @@ class DayLogFile(
      */
     override fun closeOutputStream() = fos.close()
 
+
+
+    private fun createNewName(): String {
+        val arr = arrayOf(getFormattedFileNameDayNow(), FILE_IDENTIFIER, "", LOG_FILE_EXTENSION)
+
+        val fileName = arr.joinToString(separator = "_")
+
+        //now check if file exists
+        val file = File(ctx.filesDir, fileName)
+
+        val ret = if (file.exists()) {
+            //add random string to the end
+            arr[2] = getRandomString(4)
+            arr.joinToString(separator = "_")
+        } else {
+            fileName
+        }
+
+        loga("New filename $ret")
+        return ret
+    }
+
     override fun cleanFolder() {
-        //switch to new file if needed
-        loga("fileAge: " + file.fileAge())
-        if (file.fileAge() > 0 || !file.name!!.contains(getFormattedFileNameDayNow())) {
+        //find if my current file has more the fileSize MB
+        if (file.length() > bundle.maxFileSize) {
+            //create new file
             createNewFile()
         }
 
         //remove all zips
-        ctx.filesDir.listFiles().deleteAllZips()
+        ctx.filesDir.listFiles().filter { it.name.contains(FILE_IDENTIFIER) }.deleteAllZips()
 
-        //remove all files older than x days
-        ctx.filesDir.listFiles().deleteAllOldFiles(maxDays)
+        //remove all files that exceeds specified limit
+        ctx.filesDir.listFiles()
+                .filter { it.name.contains(FILE_IDENTIFIER) }
+                .sortByAge()
+                .drop(bundle.numOfFiles)
+                .deleteAll()
     }
 
+
+    //todo move to abstract class
     private fun createNewFile() {
         fos.close()
-        fileName = getFormattedFileNameForDayTemp() + "_day.log"
+        fileName = createNewName()
         loga("fileAge: $fileName")
         file = File(ctx.filesDir, fileName)
         fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
     }
+
 
 
 }
