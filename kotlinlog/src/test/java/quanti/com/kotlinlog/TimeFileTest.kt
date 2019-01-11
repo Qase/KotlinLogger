@@ -2,7 +2,6 @@ package quanti.com.kotlinlog
 
 import android.content.Context
 import junit.framework.Assert
-import junit.framework.AssertionFailedError
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,6 +10,7 @@ import org.robolectric.RuntimeEnvironment
 import quanti.com.kotlinlog.utils.ActualTime
 import quanti.com.kotlinlog.utils.fileAge
 import quanti.com.kotlinlog.utils.getFormattedFileNameForDayTemp
+import quanti.com.kotlinlog.utils.sortByAge
 import java.io.File
 
 
@@ -26,6 +26,11 @@ class TimeFileTest {
         ActualTime.reset()
     }
 
+    private fun createFile(filename: String = "temp.txt"): File {
+        val file = File(appCtx.filesDir, filename)
+        file.createNewFile()
+        return file
+    }
 
     @Test
     fun timeShift() {
@@ -37,15 +42,13 @@ class TimeFileTest {
 
     @Test
     fun fileAgeToday() {
-        val file = File(appCtx.filesDir, "temp.txt")
-        file.createNewFile()
+        val file = createFile()
         Assert.assertEquals(0, file.fileAge())
     }
 
     @Test
     fun fileAgeYesterday() {
-        val file = File(appCtx.filesDir, "temp.txt")
-        file.createNewFile()
+        val file = createFile()
         ActualTime.shiftByOneDay()
         Assert.assertEquals(1, file.fileAge())
     }
@@ -53,18 +56,48 @@ class TimeFileTest {
     @Test
     fun fileAgeTomorrowIsToday() {
         ActualTime.shiftByOneDay()
-        val file = File(appCtx.filesDir, "temp.txt")
-        file.createNewFile()
+        val file = createFile()
         file.setLastModified(ActualTime.currentTimeMillis())
         Assert.assertEquals(0, file.fileAge())
     }
 
     @Test
     fun fileAgeTomorrow() {
-        val file = File(appCtx.filesDir, "temp.txt")
-        file.createNewFile()
+        val file = createFile()
         ActualTime.shiftByOneDayBackward()
         Assert.assertEquals(-1, file.fileAge())
+    }
+
+    @Test
+    fun sortFiles() {
+        //since it was created sequentially, it must be sorted
+        val test = "text".toByteArray()
+        val list = (0..20).map {
+            val file = createFile("temp$it.txt")
+            file.writeBytes(test) //force file to be written to
+            return@map file
+        }.reversed()
+
+        //create copy and shuffle and sort again
+        val shuffle = list.toList().shuffled().sortByAge()
+
+        Assert.assertEquals(list, shuffle)
+    }
+
+    @Test
+    fun sortFilesOldest() {
+        //since it was created sequentially, it must be sorted
+        val test = "text".toByteArray()
+        val list = (0..20).map {
+            val file = createFile("temp$it.txt")
+            file.writeBytes(test) //force file to be written to
+            return@map file
+        }
+
+        //create copy and shuffle and sort again
+        val shuffle = list.toList().shuffled().sortByAge(false)
+
+        Assert.assertEquals(list, shuffle)
     }
 
 }

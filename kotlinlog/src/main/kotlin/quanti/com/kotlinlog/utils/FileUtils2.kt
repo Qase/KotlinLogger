@@ -6,7 +6,6 @@ import android.os.Environment
 import android.support.v4.content.FileProvider
 import java.io.File
 import java.io.FileNotFoundException
-import java.util.*
 
 /**
  * Get URI to zip of logs
@@ -21,8 +20,8 @@ fun getZipOfLogsUri(appCtx: Context, fileAge: Int = 4): Uri {
 
 private fun getZipOfLogs(appCtx: Context, fileAge: Int): File {
     //first perform clean of mess
-    appCtx.filesDir.listFiles().removeAllZips()
-    appCtx.filesDir.listFiles().removeAllOldFiles(fileAge)
+    appCtx.filesDir.listFiles().deleteAllZips()
+    appCtx.filesDir.listFiles().deleteAllOldFiles(fileAge)
 
     if (appCtx.filesDir.listFiles().isEmpty()) {
         throw FileNotFoundException("No files were found")

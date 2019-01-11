@@ -9,8 +9,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import quanti.com.kotlinlog.utils.ActualTime
 import quanti.com.kotlinlog.utils.getRandomString
-import quanti.com.kotlinlog.utils.removeAllOldFiles
-import quanti.com.kotlinlog.utils.removeAllZips
+import quanti.com.kotlinlog.utils.deleteAllOldFiles
+import quanti.com.kotlinlog.utils.deleteAllZips
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
@@ -39,7 +39,7 @@ class RemoveFileTest {
     fun createFileDoNotShift() {
         createFile()
 
-        appCtx.filesDir.listFiles().removeAllOldFiles(3)
+        appCtx.filesDir.listFiles().deleteAllOldFiles(3)
         assert(appCtx.filesDir.listFiles().size == 1)
     }
 
@@ -49,14 +49,14 @@ class RemoveFileTest {
 
         ActualTime.shiftByOneDay()
 
-        appCtx.filesDir.listFiles().removeAllOldFiles(0)
+        appCtx.filesDir.listFiles().deleteAllOldFiles(0)
         assert(appCtx.filesDir.listFiles().isEmpty())
     }
 
     @Test
     fun createZip() {
         createFile(".zip")
-        appCtx.filesDir.listFiles().removeAllZips()
+        appCtx.filesDir.listFiles().deleteAllZips()
         assert(appCtx.filesDir.listFiles().isEmpty())
     }
 
@@ -67,7 +67,7 @@ class RemoveFileTest {
         (1..zipCount).forEach { createFile(".zip") }
         (1..txtCount).forEach { createFile(".txt") }
 
-        appCtx.filesDir.listFiles().removeAllZips()
+        appCtx.filesDir.listFiles().deleteAllZips()
         assert(appCtx.filesDir.listFiles().count() == txtCount)
     }
 
@@ -79,7 +79,7 @@ class RemoveFileTest {
         (1..beforeCount).forEach { createFile() }
         ActualTime.shiftByOneDay()
         (1..afterCount).forEach { createFile() }
-        appCtx.filesDir.listFiles().removeAllOldFiles(0)
+        appCtx.filesDir.listFiles().deleteAllOldFiles(0)
         Assert.assertEquals(afterCount, appCtx.filesDir.listFiles().count())
     }
 
