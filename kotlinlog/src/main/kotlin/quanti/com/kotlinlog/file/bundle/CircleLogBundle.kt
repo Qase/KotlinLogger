@@ -21,8 +21,8 @@ data class CircleLogBundle @JvmOverloads constructor(
 
     constructor(minimalLogLevel: Int = LogLevel.VERBOSE,
                 maxFileSizeMegaBytes: Int,
-                numOfFiles: Int = 10,
-                javaSatisfier:Boolean = true):
+                numOfFiles: Int = 10
+                ):
             this(minimalLogLevel, maxFileSizeMegaBytes * ONE_MEGABYTE, numOfFiles)
 }
 
