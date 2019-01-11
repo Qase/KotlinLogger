@@ -18,6 +18,7 @@ import io.reactivex.schedulers.Schedulers
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
+import quanti.com.kotlinlog.base.getLogLevel
 import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
 import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.bundle.BaseBundle
@@ -60,8 +61,8 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     }
 
     override fun onCheckedChanged(group: RadioGroup, @IdRes checkedId: Int) {
-        val text = group.findViewById<RadioButton>(checkedId).text
-        checked = Integer.parseInt(text[text.length - 1] + "")
+        val text = group.findViewById<RadioButton>(checkedId).text.toString()
+        checked = text.getLogLevel()
     }
 
     fun hitme_clicked(view: View) {

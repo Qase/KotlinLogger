@@ -46,15 +46,27 @@ class LogLevel {
 }
 
 fun Int.getLogLevelString(): String {
-    when (this) {
-        android.util.Log.DEBUG -> return "D"
-        android.util.Log.ERROR -> return "E"
-        android.util.Log.VERBOSE -> return "V"
-        android.util.Log.INFO -> return "I"
-        android.util.Log.WARN -> return "W"
-        android.util.Log.ASSERT-> return "A"
+    return when (this) {
+        android.util.Log.DEBUG -> "D"
+        android.util.Log.ERROR -> "E"
+        android.util.Log.VERBOSE -> "V"
+        android.util.Log.INFO -> "I"
+        android.util.Log.WARN -> "W"
+        android.util.Log.ASSERT-> "A"
 
-        else -> return "?"
+        else -> "?"
+    }
+}
+
+fun String.getLogLevel(): Int {
+    return when (this[0]) {
+        'V' -> 2
+        'D' -> 3
+        'I' -> 4
+        'W' -> 5
+        'E' -> 6
+        'A' -> 7
+        else -> return 0
     }
 }
 
