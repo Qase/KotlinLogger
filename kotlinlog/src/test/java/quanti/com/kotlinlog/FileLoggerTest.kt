@@ -13,6 +13,8 @@ import org.robolectric.RuntimeEnvironment
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
+import quanti.com.kotlinlog.file.file.DayLogFile
+import quanti.com.kotlinlog.file.file.LOG_FILE_EXTENSION
 import quanti.com.kotlinlog.utils.ActualTime
 import quanti.com.kotlinlog.utils.getFormattedFileNameForDayTemp
 import quanti.com.kotlinlog.utils.getRandomString
@@ -35,7 +37,7 @@ class FileLoggerTest {
         logger = FileLogger(appCtx, flb, true)
         Log.addLogger(logger)
 
-        val fileName = getFormattedFileNameForDayTemp() + "_day.log"
+        val fileName = arrayOf(getFormattedFileNameForDayTemp(), "dayLog", LOG_FILE_EXTENSION).joinToString(separator = "_")
         file = File(appCtx.filesDir, fileName)
     }
 
@@ -184,12 +186,13 @@ class FileLoggerTest {
             repeat(threads) { thread ->
                 launch(Dispatchers.Default) {
                     repeat(strings) {
-                        Log.iSync("$thread TAG", getRandomString());
+                        Log.iSync("$thread TAG", getRandomString())
                     }
                 }
             }
         }
 
+        println("XDDDD")
         //wait 6 seconds, beacuse thread executor writes every 5 seconds
         Thread.sleep(6000L)
         //check if file contains

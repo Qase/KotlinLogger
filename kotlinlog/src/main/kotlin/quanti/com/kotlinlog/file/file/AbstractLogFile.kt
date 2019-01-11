@@ -28,18 +28,18 @@ abstract class AbstractLogFile(
     private val lock = ReentrantLock()
 
     protected abstract var fileName: String
-    protected abstract var file :File
+    protected abstract var file: File
 
     //this writes to internal storage so no need for permissions
     protected abstract var fos: FileOutputStream
 
-    protected abstract val logIdentfier:String
+    protected abstract val logIdentifier: String
 
 
     /**
      * Write string to associated file
      */
-    fun write(string: String){
+    fun write(string: String) {
         lock.withLock {
             fos.write(string.toByteArray())
         }
@@ -48,7 +48,7 @@ abstract class AbstractLogFile(
     /**
      * Write whole queue of strings to associated file
      */
-    fun writeBatch(queue: LinkedBlockingQueue<String>){
+    fun writeBatch(queue: LinkedBlockingQueue<String>) {
         lock.withLock {
             while (queue.isNotEmpty()) {
                 fos.write(queue.poll().toByteArray())
@@ -59,7 +59,7 @@ abstract class AbstractLogFile(
     /**
      * Delete file
      */
-    fun delete(){
+    fun delete() {
         lock.withLock {
             val del = file.delete()
             loga("File ${file.absolutePath} was deleted: $del")
@@ -69,7 +69,7 @@ abstract class AbstractLogFile(
     /**
      * Empty file, delete it and prepare new file for writing
      */
-    fun emptyFile(){
+    fun emptyFile() {
         lock.withLock {
             fos.close()
             val del = file.delete()
@@ -77,7 +77,6 @@ abstract class AbstractLogFile(
             fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
         }
     }
-
 
 
     /**
@@ -89,18 +88,20 @@ abstract class AbstractLogFile(
     /**
      * Returns all files that corresponds to this logger
      */
-    protected fun listOfLoggerFiles() = ctx.filesDir.listFiles().filter { it.name.contains(logIdentfier) }
+    protected fun listOfLoggerFiles() = ctx.filesDir.listFiles().filter { it.name.contains(logIdentifier) }
 
 
     /**
      * Close old file stream and create new empty file to be ready
      */
     protected fun createNewFile() {
-        fos.close()
-        fileName = createNewFileName()
-        loga("Creating new file $fileName")
-        file = File(ctx.filesDir, fileName)
-        fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
+        lock.withLock {
+            fos.close()
+            fileName = createNewFileName()
+            loga("Creating new file $fileName")
+            file = File(ctx.filesDir, fileName)
+            fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
+        }
     }
 
     /**
@@ -114,6 +115,6 @@ abstract class AbstractLogFile(
      * It has to end with ".log:
      * It has to include logger identificator Ex. "circle"
      */
-    protected abstract fun createNewFileName() : String
+    protected abstract fun createNewFileName(): String
 
 }

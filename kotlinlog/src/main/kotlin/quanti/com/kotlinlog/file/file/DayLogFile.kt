@@ -20,7 +20,7 @@ class DayLogFile(
         private val ctx: Context,
         private val maxDays: Int
 ) : AbstractLogFile(ctx) {
-    override val logIdentfier: String = "daylog"
+    override val logIdentifier: String = "daylog"
 
     override var fileName: String = createNewFileName()
     override var file: File = File(ctx.filesDir, fileName)
@@ -30,7 +30,8 @@ class DayLogFile(
     override fun cleanFolder() {
         //switch to new file if needed
         loga("fileAge: " + file.fileAge())
-        if (file.fileAge() > 0 || !file.name!!.contains(getFormattedFileNameDayNow())) {
+        loga("fileName: " + file.name)
+        if (file.fileAge() > 0 || !file.name!!.contains(getFormattedFileNameForDayTemp())) {
             createNewFile()
         }
 
@@ -43,7 +44,7 @@ class DayLogFile(
 
 
     override fun createNewFileName(): String {
-        val arr = arrayOf(getFormattedFileNameForDayTemp(), logIdentfier, LOG_FILE_EXTENSION)
+        val arr = arrayOf(getFormattedFileNameForDayTemp(), logIdentifier, LOG_FILE_EXTENSION)
         return arr.joinToString(separator = "_")
     }
 }

@@ -1,14 +1,10 @@
 package quanti.com.kotlinlog.file.file
 
 import android.content.Context
-import quanti.com.kotlinlog.TAG
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.utils.*
 import java.io.File
 import java.io.FileOutputStream
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 
 /**
  * Created by Vladislav Trnka on 11.1.2019
@@ -27,7 +23,7 @@ class CircleLogFile(
 ) : AbstractLogFile(ctx) {
 
 
-    override val logIdentfier: String = "circle"
+    override val logIdentifier: String = "circle"
 
     override var fileName: String = createNewFileName()
     override var file: File = File(ctx.filesDir, fileName)
@@ -35,7 +31,7 @@ class CircleLogFile(
 
 
     override fun createNewFileName(): String {
-        val arr = arrayOf(getFormattedFileNameDayNow(), logIdentfier, "", LOG_FILE_EXTENSION)
+        val arr = arrayOf(getFormattedFileNameDayNow(), logIdentifier, "", LOG_FILE_EXTENSION)
 
         val fileName = arr.joinToString(separator = "_")
 
