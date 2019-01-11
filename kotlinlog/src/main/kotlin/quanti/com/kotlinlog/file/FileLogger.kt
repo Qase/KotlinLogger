@@ -33,8 +33,7 @@ import java.util.concurrent.TimeUnit
 //todo java annotation
 class FileLogger(
         private val appCtx: Context,
-        private val bun: IBundle,
-        useDayLog: Boolean = true
+        private val bun: IBundle
 ) : ILogger{
 
     private var logFile: AbstractLogFile = when(bun){
