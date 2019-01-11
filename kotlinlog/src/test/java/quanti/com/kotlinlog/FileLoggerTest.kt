@@ -34,7 +34,7 @@ class FileLoggerTest {
         RuntimeEnvironment.application.applicationInfo.nonLocalizedLabel = "FAKE APP NAME"
 
         appCtx = RuntimeEnvironment.application.applicationContext
-        logger = FileLogger(appCtx, flb, true)
+        logger = FileLogger(appCtx, flb)
         Log.addLogger(logger)
 
         val fileName = arrayOf(getFormattedFileNameForDayTemp(), "dayLog", LOG_FILE_EXTENSION).joinToString(separator = "_")

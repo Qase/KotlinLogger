@@ -36,11 +36,11 @@ class DayLogFile(
         }
 
         //remove all zips
-        ctx.filesDir.listFiles().deleteAllZips()
+        listOfLoggerFiles().deleteAllZips()
 
         //remove all files older than x days
         loga("max days saved: $maxDays")
-        ctx.filesDir.listFiles().deleteAllOldFiles(maxDays)
+        listOfLoggerFiles().deleteAllOldFiles(maxDays)
     }
 
 
