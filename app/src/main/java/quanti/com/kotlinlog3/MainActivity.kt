@@ -20,16 +20,17 @@ import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
 import quanti.com.kotlinlog.file.FileLogger
+import quanti.com.kotlinlog.file.bundle.BaseBundle
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
-import quanti.com.kotlinlog.file.bundle.IBundle
+import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
 
 const val REQUEST = 98
 
 class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     private var checked = 3
-    private var bundle: IBundle = DayLogBundle()
+    private var bundle: BaseBundle = DayLogBundle()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,7 +148,8 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     fun switchLogger_clicked(view: View) {
         bundle = when (bundle) {
             is DayLogBundle -> CircleLogBundle(maxFileSizeMegaBytes = 1)
-            is CircleLogBundle -> DayLogBundle()
+            is CircleLogBundle -> StrictCircleLogBundle(maxFileSizeMegaBytes = 1)
+            is StrictCircleLogBundle -> DayLogBundle()
             else -> throw Exception("Unknown bundle, should not arise at all")
         }
 
