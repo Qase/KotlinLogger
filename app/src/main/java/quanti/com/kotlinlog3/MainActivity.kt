@@ -2,12 +2,14 @@
 
 package quanti.com.kotlinlog3
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.TextView
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
@@ -18,18 +20,31 @@ import quanti.com.kotlinlog.android.AndroidLogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
 import quanti.com.kotlinlog.file.FileLogger
+import quanti.com.kotlinlog.file.bundle.CircleLogBundle
+import quanti.com.kotlinlog.file.bundle.DayLogBundle
+import quanti.com.kotlinlog.file.bundle.IBundle
 
 const val REQUEST = 98
 
 class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     private var checked = 3
+    private var bundle: IBundle = DayLogBundle()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.addLogger(FileLogger(applicationContext))
+        initLog()
+
+        (findViewById<RadioGroup>(R.id.radioGroup)).setOnCheckedChangeListener(this)
+
+    }
+
+    private fun initLog() {
+        Log.removeAllLoggers()
+        Log.addLogger(FileLogger(applicationContext, bundle))
 
         Log.useUncheckedErrorHandler()
         Log.addLogger(AndroidLogger())
@@ -37,7 +52,9 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         Fabric.with(this, Crashlytics())
         Log.addLogger(CrashlyticsLogger())
 
-        (findViewById<RadioGroup>(R.id.radioGroup)).setOnCheckedChangeListener(this)
+        val text = bundle.javaClass.simpleName.replace("Bundle", "")
+
+        (findViewById<TextView>(R.id.loggerInUseTextView)).text = text
 
     }
 
@@ -56,6 +73,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         }
     }
 
+    @SuppressLint("CheckResult")
     fun testone_clicked(view: View) {
         val end = 50
 
@@ -63,7 +81,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
                 .range(0, end)
                 .map { it.toString() }
                 .subscribe { Log.i(it) }
-                .dispose()
+
 
     }
 
@@ -72,35 +90,35 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         val threads = 5
         val end = 1000
         (0..threads)
-                .onEach {thread ->
+                .onEach { thread ->
                     Flowable.range(0, end)
                             .subscribeOn(Schedulers.newThread())
                             .subscribe { Log.i("Thread $thread\t Log: $it") }
-                            .dispose()
                 }
 
     }
 
+    @SuppressLint("CheckResult")
     fun testthree_clicked(view: View) {
         Flowable.range(0, 10000)
                 .subscribe {
                     if (it % 1000 == 0) {
                         Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                     }
-                    Log.i(it.toString())
-                }.dispose()
+                    Log.i("Log: $it")
+                }
     }
 
     fun testfour_clicked(view: View) {
-        (1..3).forEach{thread ->
+        (1..3).forEach { thread ->
             Flowable.range(0, 10000)
                     .subscribeOn(Schedulers.newThread())
                     .subscribe {
                         if (it % 1000 == 0) {
                             Log.e("Something bad happened $thread $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
                         }
-                        Log.i(it.toString())
-                    }.dispose()
+                        Log.i("Thread $thread\t Log: $it")
+                    }
         }
     }
 
@@ -124,6 +142,17 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     fun deleteLogs_clicked(view: View) {
         FileLogger.deleteAllLogs(applicationContext)
         Toast.makeText(this, "Logs deleted", Toast.LENGTH_SHORT).show()
+    }
+
+    fun switchLogger_clicked(view: View) {
+        bundle = when (bundle) {
+            is DayLogBundle -> CircleLogBundle(maxFileSizeMegaBytes = 1)
+            is CircleLogBundle -> DayLogBundle()
+            else -> throw Exception("Unknown bundle, should not arise at all")
+        }
+
+        initLog()
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

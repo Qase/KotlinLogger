@@ -144,7 +144,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginBottom="2dp"
         android:onClick="throwException_clicked"
-        android:text="Throw!"
+        android:text="Throw"
         app:layout_constraintBottom_toTopOf="@+id/testn4"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -220,6 +220,18 @@
         android:onClick="throwUncheckedException_clicked"
         android:text="Throw U"
         app:layout_constraintBottom_toTopOf="@+id/clickmeT"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/testn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="switchLogger_clicked"
+        android:text="Switch"
+        app:layout_constraintBottom_toTopOf="@+id/testn1"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -304,7 +316,7 @@
         app:layout_constraintBottom_toTopOf="@+id/testn5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/testn3"
+        app:layout_constraintStart_toEndOf="@+id/copyZip"
         app:layout_constraintTop_toBottomOf="@+id/testn1" />
 
     <TextView
@@ -336,5 +348,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/testn1"
         app:layout_constraintTop_toTopOf="@+id/testn1" />
+
+    <TextView
+        android:id="@+id/loggerInUseTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/testn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/testn1"
+        app:layout_constraintTop_toTopOf="@+id/testn" />
 
 </android.support.constraint.ConstraintLayout>
