@@ -13,7 +13,12 @@ import kotlin.concurrent.withLock
 /**
  * Created by Trnka Vladislav on 13.09.2017.
  *
- * File that has thread lock on writing
+ * Implementation of ILogFile that works like this:
+ * --every day creates new file for all logs
+ * --deletes old files when their age exceeds 'maxDays' parameter
+ *
+ * Writing is thread safe using ReentrantLock
+ *
  */
 
 class DayLogFile(
