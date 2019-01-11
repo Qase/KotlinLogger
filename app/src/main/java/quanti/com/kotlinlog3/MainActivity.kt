@@ -2,9 +2,14 @@
 
 package quanti.com.kotlinlog3
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.IdRes
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.RadioButton
@@ -158,27 +163,48 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     }
 
+    fun askForPermission_clicked(view: View) {
+
+        val perm = Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+        val granted = ContextCompat.checkSelfPermission(this, perm) == PackageManager.PERMISSION_GRANTED
+
+
+        if (granted) {
+            showGoodPermission()
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(perm), REQUEST)
+        }
+
+    }
+
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 
-//        if (requestCode == REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//            Log.i("Diky za permission")
-//            Log.addLogger(FileLogger)
-//            FileLogger.init(applicationContext)
-//        } else {
-//            //show some shit
-//            AlertDialog.Builder(this)
-//                    .setTitle("</3")
-//                    .setMessage("Give me permission omg")
-//                    .setOnDismissListener {
-//                        Log.i("After dialog")
-//                        ActivityCompat.requestPermissions(
-//                                this,
-//                                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-//                                REQUEST)
-//                    }
-//                    .create()
-//                    .show()
-//        }
+        if (requestCode == REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            showGoodPermission()
+        } else {
+            showBadPermission()
+        }
+    }
+
+    private fun showGoodPermission() {
+        showDialog("<3", "Thanks for file write permission.")
+        Log.i("Thanks for permission")
+    }
+
+    private fun showBadPermission() {
+        showDialog("</3", "Give me permission omg")
+        Log.i("Give me permission. Xd")
+    }
+
+    private fun showDialog(title: String, message: String) {
+        AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .create()
+                .show()
+
     }
 
 }

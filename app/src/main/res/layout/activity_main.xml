@@ -235,6 +235,18 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        android:id="@+id/testn6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="8dp"
+        android:onClick="askForPermission_clicked"
+        android:text="Request"
+        app:layout_constraintBottom_toTopOf="@+id/testn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/testn4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -283,7 +295,6 @@
         android:text="Throw excpetion"
         app:layout_constraintBottom_toBottomOf="@+id/clickmeT"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/clickmeT"
         app:layout_constraintTop_toTopOf="@+id/clickmeT" />
 
@@ -298,7 +309,6 @@
         android:text="Throw unchecked exception"
         app:layout_constraintBottom_toBottomOf="@+id/testn3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/testn3"
         app:layout_constraintTop_toTopOf="@+id/testn3" />
 
@@ -315,7 +325,6 @@
         android:text="Send logs to email or save to sdcard"
         app:layout_constraintBottom_toTopOf="@+id/testn5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/copyZip"
         app:layout_constraintTop_toBottomOf="@+id/testn1" />
 
@@ -330,7 +339,6 @@
         android:text="Logs metadata about phone"
         app:layout_constraintBottom_toBottomOf="@+id/testn5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/testn5"
         app:layout_constraintTop_toTopOf="@+id/testn5" />
 
@@ -345,7 +353,6 @@
         android:text="Delete everything in folder"
         app:layout_constraintBottom_toBottomOf="@+id/testn1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/testn1"
         app:layout_constraintTop_toTopOf="@+id/testn1" />
 
@@ -359,8 +366,21 @@
         android:layout_marginRight="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/testn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/testn1"
         app:layout_constraintTop_toTopOf="@+id/testn" />
+
+    <TextView
+        android:id="@+id/loggerInUseTextView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Fire request for file permission"
+        app:layout_constraintBottom_toBottomOf="@+id/testn6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/testn6"
+        app:layout_constraintTop_toTopOf="@+id/testn6" />
 
 </android.support.constraint.ConstraintLayout>
