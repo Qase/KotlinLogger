@@ -23,7 +23,7 @@ abstract class AbstractLogFile(
         protected val ctx: Context
 ) {
 
-    private val lock = ReentrantLock()
+    protected val lock = ReentrantLock()
 
     protected abstract var fileName: String
     protected abstract var file: File
@@ -37,7 +37,7 @@ abstract class AbstractLogFile(
     /**
      * Write string to associated file
      */
-    fun write(string: String) {
+    open fun write(string: String) {
         lock.withLock {
             fos.write(string.toByteArray())
         }
@@ -46,7 +46,7 @@ abstract class AbstractLogFile(
     /**
      * Write whole queue of strings to associated file
      */
-    fun writeBatch(queue: LinkedBlockingQueue<String>) {
+    open fun writeBatch(queue: LinkedBlockingQueue<String>) {
         lock.withLock {
             while (queue.isNotEmpty()) {
                 fos.write(queue.poll().toByteArray())

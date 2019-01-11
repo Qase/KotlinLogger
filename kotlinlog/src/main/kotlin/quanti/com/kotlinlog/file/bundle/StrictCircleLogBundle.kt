@@ -6,7 +6,7 @@ import quanti.com.kotlinlog.base.LogLevel
 /**
  * Created by Trnka Vladislav on 27.06.2017.
  *
- * CircleLogBundle specifies settings for file logger
+ * StrictCircleLogBundle specifies settings for file logger
  *
  * @param minimalLogLevel minimalLogLevel - default LogLevel.Verbose
  * @param maxFileSize max size in bytes of one file - default 5242880 B -> 5 MB
@@ -14,7 +14,7 @@ import quanti.com.kotlinlog.base.LogLevel
  * @param maxDaysSavedThrowable max days of keeping exception logs
  */
 
-class CircleLogBundle(
+class StrictCircleLogBundle(
         minimalLogLevel: Int = LogLevel.VERBOSE,
         val maxFileSize: Long = 5242880L,
         val numOfFiles: Int = 10,
@@ -35,6 +35,3 @@ class CircleLogBundle(
     }
 
 }
-
-
-
