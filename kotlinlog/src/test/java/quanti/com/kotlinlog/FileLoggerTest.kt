@@ -4,7 +4,6 @@ import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,9 +12,6 @@ import org.robolectric.RuntimeEnvironment
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
-import quanti.com.kotlinlog.file.file.DayLogFile
-import quanti.com.kotlinlog.file.file.LOG_FILE_EXTENSION
-import quanti.com.kotlinlog.utils.ActualTime
 import quanti.com.kotlinlog.utils.getFormattedFileNameForDayTemp
 import quanti.com.kotlinlog.utils.getRandomString
 import java.io.File
@@ -37,7 +33,7 @@ class FileLoggerTest {
         logger = FileLogger(appCtx, flb)
         Log.addLogger(logger)
 
-        val fileName = arrayOf(getFormattedFileNameForDayTemp(), "dayLog", LOG_FILE_EXTENSION).joinToString(separator = "_")
+        val fileName = "${getFormattedFileNameForDayTemp()}_dayLog.log"
         file = File(appCtx.filesDir, fileName)
     }
 

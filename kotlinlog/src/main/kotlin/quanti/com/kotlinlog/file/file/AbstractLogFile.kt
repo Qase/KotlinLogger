@@ -11,9 +11,6 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-const val LOG_FILE_EXTENSION = ".log"
-
-
 /**
  * AbstractLogFile class
  * provides basic write and delete operations
@@ -23,7 +20,7 @@ const val LOG_FILE_EXTENSION = ".log"
  *
  */
 abstract class AbstractLogFile(
-        private val ctx: Context
+        protected val ctx: Context
 ) {
 
     private val lock = ReentrantLock()

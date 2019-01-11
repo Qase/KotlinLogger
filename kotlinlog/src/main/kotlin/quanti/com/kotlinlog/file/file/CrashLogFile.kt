@@ -28,5 +28,8 @@ class CrashLogFile(
 
     fun closeOutputStream() = fos.close()
 
+    //todo how to delete this files
+    //going to be filtered out
+
 
 }

@@ -18,7 +18,7 @@ import java.io.FileOutputStream
  * it also starts new 5MB every day
  */
 class CircleLogFile(
-        private val ctx: Context,
+        ctx: Context,
         private val bundle: CircleLogBundle
 ) : AbstractLogFile(ctx) {
 
@@ -31,23 +31,15 @@ class CircleLogFile(
 
 
     override fun createNewFileName(): String {
-        val arr = arrayOf(getFormattedFileNameDayNow(), logIdentifier, "", LOG_FILE_EXTENSION)
-
-        val fileName = arr.joinToString(separator = "_")
+        var fileName = "${getFormattedFileNameDayNow()}_$logIdentifier.log"
 
         //now check if file exists
-        val file = File(ctx.filesDir, fileName)
-
-        val ret = if (file.exists()) {
-            //add random string to the end
-            arr[2] = getRandomString(4)
-            arr.joinToString(separator = "_")
-        } else {
-            fileName
+        if (File(ctx.filesDir, fileName).exists()) {
+            fileName = "${getFormattedFileNameDayNow()}_${getRandomString(4)}_$logIdentifier.log"
         }
 
-        loga("New filename $ret")
-        return ret
+        loga("New filename $fileName")
+        return fileName
     }
 
     override fun cleanFolder() {

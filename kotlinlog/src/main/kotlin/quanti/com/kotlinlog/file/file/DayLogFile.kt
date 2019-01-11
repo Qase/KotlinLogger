@@ -17,7 +17,7 @@ import java.io.FileOutputStream
  */
 
 class DayLogFile(
-        private val ctx: Context,
+        ctx: Context,
         private val maxDays: Int
 ) : AbstractLogFile(ctx) {
     override val logIdentifier: String = "daylog"
@@ -45,7 +45,6 @@ class DayLogFile(
 
 
     override fun createNewFileName(): String {
-        val arr = arrayOf(getFormattedFileNameForDayTemp(), logIdentifier, LOG_FILE_EXTENSION)
-        return arr.joinToString(separator = "_")
+        return "${getFormattedFileNameForDayTemp()}_$logIdentifier.log"
     }
 }
