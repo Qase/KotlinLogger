@@ -2,13 +2,12 @@ package quanti.com.kotlinlog.file
 
 import android.annotation.SuppressLint
 import android.content.Context
-import quanti.com.kotlinlog.R
 import quanti.com.kotlinlog.SECRET_CODE_UNHANDLED
 import quanti.com.kotlinlog.TAG
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.base.getLogLevelString
-import quanti.com.kotlinlog.file.base.FileLoggerBundle
+import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.DayLogFile
 import quanti.com.kotlinlog.file.file.ILogFile
@@ -30,7 +29,7 @@ import java.util.concurrent.TimeUnit
 //todo java annotation
 class FileLogger(
         private val appCtx: Context,
-        private val bun: FileLoggerBundle = FileLoggerBundle(),
+        private val bun: DayLogBundle = DayLogBundle(),
         useDayLog: Boolean = true
 ) : ILogger{
 

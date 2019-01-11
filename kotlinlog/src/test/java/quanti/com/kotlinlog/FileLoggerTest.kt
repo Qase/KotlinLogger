@@ -12,7 +12,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.file.FileLogger
-import quanti.com.kotlinlog.file.base.FileLoggerBundle
+import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.utils.ActualTime
 import quanti.com.kotlinlog.utils.getFormattedFileNameForDayTemp
 import quanti.com.kotlinlog.utils.getRandomString
@@ -23,7 +23,7 @@ import java.io.File
 class FileLoggerTest {
 
     private lateinit var appCtx: Context
-    private val flb = FileLoggerBundle(LogLevel.VERBOSE, maxDaysSaved = 2)
+    private val flb = DayLogBundle(LogLevel.VERBOSE, maxDaysSaved = 2)
     private lateinit var logger: FileLogger
     private lateinit var file: File
 
