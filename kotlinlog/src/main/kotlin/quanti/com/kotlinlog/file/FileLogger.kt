@@ -7,13 +7,17 @@ import quanti.com.kotlinlog.TAG
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.base.getLogLevelString
+import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
+import quanti.com.kotlinlog.file.bundle.IBundle
 import quanti.com.kotlinlog.file.file.AbstractLogFile
+import quanti.com.kotlinlog.file.file.CircleLogFile
 import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.DayLogFile
 import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.getApplicationName
 import quanti.com.kotlinlog.utils.getFormattedNow
+import java.lang.Exception
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ScheduledExecutorService
@@ -29,11 +33,15 @@ import java.util.concurrent.TimeUnit
 //todo java annotation
 class FileLogger(
         private val appCtx: Context,
-        private val bun: DayLogBundle = DayLogBundle(),
+        private val bun: IBundle,
         useDayLog: Boolean = true
 ) : ILogger{
 
-    private var logFile: AbstractLogFile = if (useDayLog) DayLogFile(appCtx, bun.maxDaysSaved) else DayLogFile(appCtx, bun.maxDaysSaved)
+    private var logFile: AbstractLogFile = when(bun){
+        is DayLogBundle -> DayLogFile(appCtx, bun.maxDaysSaved)
+        is CircleLogBundle -> CircleLogFile(appCtx, bun)
+        else -> {throw Exception("Unknown file bundle.")}
+    }
 
     private val blockingQueue = LinkedBlockingQueue<String>()
     private val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
@@ -41,6 +49,7 @@ class FileLogger(
 
 
     init {
+
         val func = Runnable {
             //first write everything form queue to file
             android.util.Log.i(TAG, "TASK: Writing data from queue: ${blockingQueue.size}")
@@ -55,7 +64,7 @@ class FileLogger(
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
 
-        if (androidLogLevel < bun.minimalLogLevel) {
+        if (androidLogLevel < bun.getMinimalLogLevelInt()) {
             return
         }
 
@@ -65,7 +74,7 @@ class FileLogger(
     }
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) {
-        if (androidLogLevel < bun.minimalLogLevel) {
+        if (androidLogLevel < bun.getMinimalLogLevelInt()) {
             return
         }
 

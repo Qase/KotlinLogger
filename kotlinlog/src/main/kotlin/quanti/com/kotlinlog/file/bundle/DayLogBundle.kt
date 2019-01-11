@@ -16,5 +16,8 @@ import quanti.com.kotlinlog.base.LogLevel
 data class DayLogBundle @JvmOverloads constructor(
         val minimalLogLevel: Int = LogLevel.VERBOSE,
         val maxDaysSaved: Int = 7
-)
+) : IBundle {
+
+    override fun getMinimalLogLevelInt() = minimalLogLevel
+}
 

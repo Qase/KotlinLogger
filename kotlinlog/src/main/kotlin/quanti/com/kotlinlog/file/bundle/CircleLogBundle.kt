@@ -16,4 +16,6 @@ data class CircleLogBundle @JvmOverloads constructor(
         val minimalLogLevel: Int = LogLevel.VERBOSE,
         val maxFileSize: Long = 5242880L,
         val numOfFiles: Int = 10
-)
+) : IBundle {
+    override fun getMinimalLogLevelInt() = minimalLogLevel
+}
