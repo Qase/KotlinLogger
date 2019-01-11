@@ -62,11 +62,6 @@ class StrictCircleLogFile(
     }
 
     override fun cleanFolder() {
-        //find if my current file has more the fileSize MB
-        if (file.length() > bundle.maxFileSize) {
-            //create new file
-            createNewFile()
-        }
 
         //remove all zips
         listOfLoggerFiles().deleteAllZips()
