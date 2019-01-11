@@ -1,6 +1,5 @@
 package quanti.com.kotlinlog.file
 
-import android.annotation.SuppressLint
 import android.content.Context
 import quanti.com.kotlinlog.SECRET_CODE_UNHANDLED
 import quanti.com.kotlinlog.TAG
@@ -21,7 +20,6 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 
-@SuppressLint("StaticFieldLeak") //it is ok since it is app context
 /**
  * Created by Trnka Vladislav on 30.05.2017.
  *
