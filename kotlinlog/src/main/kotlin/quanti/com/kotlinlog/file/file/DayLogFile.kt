@@ -1,13 +1,9 @@
 package quanti.com.kotlinlog.file.file
 
 import android.content.Context
-import quanti.com.kotlinlog.TAG
 import quanti.com.kotlinlog.utils.*
 import java.io.File
 import java.io.FileOutputStream
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 
 /**
  * Created by Trnka Vladislav on 13.09.2017.
@@ -23,49 +19,13 @@ import kotlin.concurrent.withLock
 class DayLogFile(
         private val ctx: Context,
         private val maxDays: Int
-) : ILogFile {
-    private val lock = ReentrantLock()
+) : AbstractLogFile(ctx) {
+    override val logIdentfier: String = "daylog"
 
-    private var fileName = getFormattedFileNameForDayTemp() + "_day.log"
-    private var file = File(ctx.filesDir, fileName)
+    override var fileName: String = createNewFileName()
+    override var file: File = File(ctx.filesDir, fileName)
+    override var fos: FileOutputStream = ctx.openFileOutput(fileName, Context.MODE_APPEND)
 
-    //this writes to internal storage so no need for permissions
-    private var fos: FileOutputStream = ctx.openFileOutput(fileName, Context.MODE_APPEND)
-
-    override fun write(string: String) {
-        lock.withLock {
-            fos.write(string.toByteArray())
-        }
-    }
-
-    override fun writeBatch(queue: LinkedBlockingQueue<String>) {
-        lock.withLock {
-            while (queue.isNotEmpty()) {
-                fos.write(queue.poll().toByteArray())
-            }
-        }
-    }
-
-    override fun delete() {
-        lock.withLock {
-            val del = file.delete()
-            loga("File ${file.absolutePath} was deleted: $del")
-        }
-    }
-
-    override fun emptyFile() {
-        lock.withLock {
-            fos.close()
-            val del = file.delete()
-            android.util.Log.i(TAG, "Deleting file: $del")
-            fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
-        }
-    }
-
-    /**
-     * Closes associated file output stream
-     */
-    override fun closeOutputStream() = fos.close()
 
     override fun cleanFolder() {
         //switch to new file if needed
@@ -81,13 +41,9 @@ class DayLogFile(
         ctx.filesDir.listFiles().deleteAllOldFiles(maxDays)
     }
 
-    private fun createNewFile() {
-        fos.close()
-        fileName = getFormattedFileNameForDayTemp() + "_day.log"
-        loga("fileAge: $fileName")
-        file = File(ctx.filesDir, fileName)
-        fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
+
+    override fun createNewFileName(): String {
+        val arr = arrayOf(getFormattedFileNameForDayTemp(), logIdentfier, LOG_FILE_EXTENSION)
+        return arr.joinToString(separator = "_")
     }
-
-
 }

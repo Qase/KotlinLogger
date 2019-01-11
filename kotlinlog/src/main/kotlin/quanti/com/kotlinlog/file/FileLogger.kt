@@ -8,9 +8,9 @@ import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.base.getLogLevelString
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
+import quanti.com.kotlinlog.file.file.AbstractLogFile
 import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.DayLogFile
-import quanti.com.kotlinlog.file.file.ILogFile
 import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.getApplicationName
 import quanti.com.kotlinlog.utils.getFormattedNow
@@ -33,7 +33,7 @@ class FileLogger(
         useDayLog: Boolean = true
 ) : ILogger{
 
-    private var logFile: ILogFile = if (useDayLog) DayLogFile(appCtx, bun.maxDaysSaved) else DayLogFile(appCtx, bun.maxDaysSaved)
+    private var logFile: AbstractLogFile = if (useDayLog) DayLogFile(appCtx, bun.maxDaysSaved) else DayLogFile(appCtx, bun.maxDaysSaved)
 
     private val blockingQueue = LinkedBlockingQueue<String>()
     private val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()

@@ -16,8 +16,7 @@ import kotlin.concurrent.withLock
  *
  */
 
-const val FILE_IDENTIFIER = "circle"
-const val LOG_FILE_EXTENSION = ".log"
+
 
 /**
  * it also starts new 5MB every day
@@ -25,55 +24,18 @@ const val LOG_FILE_EXTENSION = ".log"
 class CircleLogFile(
         private val ctx: Context,
         private val bundle: CircleLogBundle
-) : ILogFile {
-
-    private val lock = ReentrantLock()
-
-    private var fileName = createNewName()
-    private var file = File(ctx.filesDir, fileName)
-
-    private var fos: FileOutputStream = ctx.openFileOutput(fileName, Context.MODE_APPEND)
+) : AbstractLogFile(ctx) {
 
 
-    override fun write(string: String) {
-        lock.withLock {
-            fos.write(string.toByteArray())
-        }
-    }
+    override val logIdentfier: String = "circle"
 
-    override fun writeBatch(queue: LinkedBlockingQueue<String>) {
-        lock.withLock {
-            while (queue.isNotEmpty()) {
-                fos.write(queue.poll().toByteArray())
-            }
-        }
-    }
-
-    override fun delete() {
-        lock.withLock {
-            val del = file.delete()
-            loga("File ${file.absolutePath} was deleted: $del")
-        }
-    }
-
-    override fun emptyFile() {
-        lock.withLock {
-            fos.close()
-            val del = file.delete()
-            android.util.Log.i(TAG, "Deleting file: $del")
-            fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
-        }
-    }
-
-    /**
-     * Closes associated file output stream
-     */
-    override fun closeOutputStream() = fos.close()
+    override var fileName: String = createNewFileName()
+    override var file: File = File(ctx.filesDir, fileName)
+    override var fos: FileOutputStream = ctx.openFileOutput(fileName, Context.MODE_APPEND)
 
 
-
-    private fun createNewName(): String {
-        val arr = arrayOf(getFormattedFileNameDayNow(), FILE_IDENTIFIER, "", LOG_FILE_EXTENSION)
+    override fun createNewFileName(): String {
+        val arr = arrayOf(getFormattedFileNameDayNow(), logIdentfier, "", LOG_FILE_EXTENSION)
 
         val fileName = arr.joinToString(separator = "_")
 
@@ -100,26 +62,13 @@ class CircleLogFile(
         }
 
         //remove all zips
-        ctx.filesDir.listFiles().filter { it.name.contains(FILE_IDENTIFIER) }.deleteAllZips()
+        listOfLoggerFiles().deleteAllZips()
 
         //remove all files that exceeds specified limit
-        ctx.filesDir.listFiles()
-                .filter { it.name.contains(FILE_IDENTIFIER) }
+        listOfLoggerFiles()
                 .sortByAge()
                 .drop(bundle.numOfFiles)
                 .deleteAll()
     }
-
-
-    //todo move to abstract class
-    private fun createNewFile() {
-        fos.close()
-        fileName = createNewName()
-        loga("fileAge: $fileName")
-        file = File(ctx.filesDir, fileName)
-        fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
-    }
-
-
 
 }
