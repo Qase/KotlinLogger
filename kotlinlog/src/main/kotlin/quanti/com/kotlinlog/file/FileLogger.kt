@@ -10,10 +10,8 @@ import quanti.com.kotlinlog.base.getLogLevelString
 import quanti.com.kotlinlog.file.bundle.BaseBundle
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
-import quanti.com.kotlinlog.file.file.AbstractLogFile
-import quanti.com.kotlinlog.file.file.CircleLogFile
-import quanti.com.kotlinlog.file.file.CrashLogFile
-import quanti.com.kotlinlog.file.file.DayLogFile
+import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
+import quanti.com.kotlinlog.file.file.*
 import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.getApplicationName
 import quanti.com.kotlinlog.utils.getFormattedNow
@@ -38,6 +36,7 @@ class FileLogger(
     private var logFile: AbstractLogFile = when (bun) {
         is DayLogBundle -> DayLogFile(appCtx, bun.maxDaysSaved)
         is CircleLogBundle -> CircleLogFile(appCtx, bun)
+        is StrictCircleLogBundle -> StrictCircleLogFile(appCtx, bun)
         else -> {
             throw Exception("Unknown file bundle.")
         }
