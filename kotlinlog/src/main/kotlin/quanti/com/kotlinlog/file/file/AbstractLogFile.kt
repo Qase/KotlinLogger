@@ -71,7 +71,7 @@ abstract class AbstractLogFile(
         lock.withLock {
             fos.close()
             val del = file.delete()
-            android.util.Log.i(TAG, "Deleting file: $del")
+            loga("Deleting file: $del")
             fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
         }
     }

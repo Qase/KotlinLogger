@@ -14,6 +14,7 @@ import quanti.com.kotlinlog.file.file.*
 import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.getApplicationName
 import quanti.com.kotlinlog.utils.getFormattedNow
+import quanti.com.kotlinlog.utils.loga
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ScheduledExecutorService
@@ -49,11 +50,11 @@ class FileLogger(
 
         val func = Runnable {
             //first write everything form queue to file
-            android.util.Log.i(TAG, "TASK: Writing data from queue: ${blockingQueue.size}")
+            loga("TASK: Writing data from queue: ${blockingQueue.size}")
             logFile.writeBatch(blockingQueue)
 
             //perform cleaning
-            android.util.Log.i(TAG, "TASK: Cleaning folder")
+            loga("TASK: Cleaning folder")
             logFile.cleanFolder()
 
             //clean error files
