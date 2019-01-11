@@ -7,9 +7,9 @@ import quanti.com.kotlinlog.TAG
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.base.getLogLevelString
+import quanti.com.kotlinlog.file.bundle.BaseBundle
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
-import quanti.com.kotlinlog.file.bundle.IBundle
 import quanti.com.kotlinlog.file.file.AbstractLogFile
 import quanti.com.kotlinlog.file.file.CircleLogFile
 import quanti.com.kotlinlog.file.file.CrashLogFile
@@ -17,7 +17,6 @@ import quanti.com.kotlinlog.file.file.DayLogFile
 import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.getApplicationName
 import quanti.com.kotlinlog.utils.getFormattedNow
-import java.lang.Exception
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ScheduledExecutorService
@@ -33,13 +32,15 @@ import java.util.concurrent.TimeUnit
 //todo java annotation
 class FileLogger(
         private val appCtx: Context,
-        private val bun: IBundle
-) : ILogger{
+        private val bun: BaseBundle
+) : ILogger {
 
-    private var logFile: AbstractLogFile = when(bun){
+    private var logFile: AbstractLogFile = when (bun) {
         is DayLogBundle -> DayLogFile(appCtx, bun.maxDaysSaved)
         is CircleLogBundle -> CircleLogFile(appCtx, bun)
-        else -> {throw Exception("Unknown file bundle.")}
+        else -> {
+            throw Exception("Unknown file bundle.")
+        }
     }
 
     private val blockingQueue = LinkedBlockingQueue<String>()
@@ -57,13 +58,16 @@ class FileLogger(
             //perform cleaning
             android.util.Log.i(TAG, "TASK: Cleaning folder")
             logFile.cleanFolder()
+
+            //clean error files
+            CrashLogFile.clean(appCtx, bun.maxDaysSavedThrowable)
         }
         threadExecutor.scheduleAtFixedRate(func, 1, 5, TimeUnit.SECONDS)
     }
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
 
-        if (androidLogLevel < bun.getMinimalLogLevelInt()) {
+        if (androidLogLevel < bun.minimalLogLevel) {
             return
         }
 
@@ -73,7 +77,7 @@ class FileLogger(
     }
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) {
-        if (androidLogLevel < bun.getMinimalLogLevelInt()) {
+        if (androidLogLevel < bun.minimalLogLevel) {
             return
         }
 
@@ -112,12 +116,10 @@ class FileLogger(
     }
 
     companion object {
-        fun deleteAllLogs(appCtx: Context){
+        fun deleteAllLogs(appCtx: Context) {
             appCtx.filesDir.listFiles().forEach { it.delete() }
         }
     }
-
-
 
 
 }

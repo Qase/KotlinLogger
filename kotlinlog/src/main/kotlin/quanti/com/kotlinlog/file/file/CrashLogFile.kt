@@ -1,7 +1,7 @@
 package quanti.com.kotlinlog.file.file
 
 import android.content.Context
-import quanti.com.kotlinlog.utils.getFormattedFileNameDayNowWithSeconds
+import quanti.com.kotlinlog.utils.*
 import java.io.FileOutputStream
 
 /**
@@ -28,8 +28,15 @@ class CrashLogFile(
 
     fun closeOutputStream() = fos.close()
 
-    //todo how to delete this files
-    //going to be filtered out
 
+    companion object {
+        fun clean(appCtx: Context, maxDays: Int){
+            //remove all files that exceeds specified limit
+            appCtx.filesDir
+                    .listFiles()
+                    .filter { it.name.contains("handled") }
+                    .deleteAllOldFiles(maxDays)
+        }
+    }
 
 }
