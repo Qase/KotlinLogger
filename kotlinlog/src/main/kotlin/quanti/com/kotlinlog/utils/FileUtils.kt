@@ -5,7 +5,6 @@ import android.media.MediaScannerConnection
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.Log.Companion.i
 import java.io.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -57,7 +56,10 @@ fun File.fileAge(): Int {
 
     val todayDay = TimeUnit.DAYS.convert(todayMillis, TimeUnit.MILLISECONDS)
     val fileDay = TimeUnit.DAYS.convert(fileMillis, TimeUnit.MILLISECONDS)
-    return (todayDay - fileDay).toInt()
+    val ret = (todayDay - fileDay).toInt()
+
+    loga(name, ret)
+    return ret
 }
 
 

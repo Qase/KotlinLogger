@@ -2,6 +2,7 @@ package quanti.com.kotlinlog.file.file
 
 import android.content.Context
 import quanti.com.kotlinlog.TAG
+import quanti.com.kotlinlog.utils.ActualTime
 import quanti.com.kotlinlog.utils.loga
 import java.io.File
 import java.io.FileOutputStream
@@ -100,6 +101,7 @@ abstract class AbstractLogFile(
             fileName = createNewFileName()
             loga("Creating new file $fileName")
             file = File(ctx.filesDir, fileName)
+            file.setLastModified(ActualTime.currentTimeMillis()) //needed for testing
             fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
         }
     }
