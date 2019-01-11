@@ -18,4 +18,14 @@ data class CircleLogBundle @JvmOverloads constructor(
         val numOfFiles: Int = 10
 ) : IBundle {
     override fun getMinimalLogLevelInt() = minimalLogLevel
+
+    constructor(minimalLogLevel: Int = LogLevel.VERBOSE,
+                maxFileSizeMegaBytes: Int,
+                numOfFiles: Int = 10,
+                javaSatisfier:Boolean = true):
+            this(minimalLogLevel, maxFileSizeMegaBytes * ONE_MEGABYTE, numOfFiles)
 }
+
+const val ONE_MEGABYTE = 1048576L
+const val ONE_KILOBYTE = 1024
+
