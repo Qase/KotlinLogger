@@ -247,6 +247,18 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        android:id="@+id/testn7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:onClick="testShare_clicked"
+        android:text="Share"
+        app:layout_constraintBottom_toTopOf="@+id/testn6"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/testn4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -382,5 +394,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/testn6"
         app:layout_constraintTop_toTopOf="@+id/testn6" />
+
+    <TextView
+        android:id="@+id/loggerInUseTextView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Share"
+        app:layout_constraintBottom_toBottomOf="@+id/testn7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toEndOf="@+id/testn7"
+        app:layout_constraintTop_toTopOf="@+id/testn7" />
 
 </android.support.constraint.ConstraintLayout>

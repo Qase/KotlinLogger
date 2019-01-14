@@ -4,6 +4,7 @@ package quanti.com.kotlinlog3
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.IdRes
@@ -26,6 +27,7 @@ import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.base.getLogLevel
 import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
 import quanti.com.kotlinlog.file.FileLogger
+import quanti.com.kotlinlog.file.SendLogDialogFragment
 import quanti.com.kotlinlog.file.bundle.BaseBundle
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
@@ -207,7 +209,39 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     }
 
+    fun testShare_clicked(view: View){
+
+        SendLogDialogFragment.newInstance("kidal5@centrum.cz").show(supportFragmentManager, "STRING")
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

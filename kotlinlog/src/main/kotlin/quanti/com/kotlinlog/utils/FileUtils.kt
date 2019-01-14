@@ -13,7 +13,6 @@ import java.util.zip.ZipOutputStream
  *
  * File extensions written in kotlin
  *
- * @author Sylvain Berfini
  * @author Vladislav Trnka
  */
 
@@ -63,10 +62,11 @@ fun File.fileAge(): Int {
 }
 
 
-fun Array<File>.zip(zipFile: File): File {
+fun List<File>.zip(zipFile: File): File {
     if (isEmpty()) {
         return zipFile
     }
+
     try {
         val dest = FileOutputStream(zipFile)
         val out = ZipOutputStream(BufferedOutputStream(dest))
@@ -87,28 +87,3 @@ fun Array<File>.zip(zipFile: File): File {
 
     return zipFile
 }
-
-fun File.existsAndIsFile() = exists() && isFile
-
-@Suppress("ConstantConditionIf")
-fun mergeToFile(from: String, to: String, ctx: Context): Boolean {
-
-    val fromFile = File(ctx.filesDir, from)
-
-    if (!fromFile.existsAndIsFile()) {
-        loga("Cannot merge files - this file does not exists " + fromFile.absoluteFile)
-    }
-
-    loga("MERGE")
-
-    val fis = ctx.openFileInput(from)
-    val fos = ctx.openFileOutput(to, android.content.Context.MODE_APPEND)
-
-    fis.copyTo(fos)
-
-    fis.close()
-    fos.close()
-
-    return true
-}
-

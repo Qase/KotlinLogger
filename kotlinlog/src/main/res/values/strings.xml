@@ -1,5 +1,5 @@
 <resources>
     <string name="logs_email_subject">Logs from </string>
-    <string name="logs_email_text">_Here add supplementary information on the fall_</string>
+    <string name="logs_email_text">_Here add supplementary information of the fall_</string>
     <string name="logs_email_no_client_installed">No email client is installed.</string>
 </resources>
