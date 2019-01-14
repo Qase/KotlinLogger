@@ -9,10 +9,12 @@ import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import quanti.com.kotlinlog.R
-import quanti.com.kotlinlog.utils.*
+import quanti.com.kotlinlog.utils.copyLogsToSDCard
+import quanti.com.kotlinlog.utils.getFormattedFileNameDayNow
+import quanti.com.kotlinlog.utils.getZipOfLogsUri
+import quanti.com.kotlinlog.utils.hasFileWritePermission
 
 /**
  * Created by Trnka Vladislav on 20.06.2017.
@@ -73,7 +75,7 @@ class SendLogDialogFragment : DialogFragment() {
                     setTitle(arguments!!.getString(TITLE))
                     setPositiveButton(arguments!!.getString(EMAIL_BUTTON_TEXT), this@SendLogDialogFragment::positiveButtonClick)
 
-                    if (hasFilePermission){
+                    if (hasFilePermission) {
                         setNeutralButton(arguments!!.getString(FILE_BUTTON_TEXT), this@SendLogDialogFragment::neutralButtonClick)
                     }
                 }.create()
@@ -81,7 +83,7 @@ class SendLogDialogFragment : DialogFragment() {
 
     /**
      * On positive button click
-     * Creates zip of all logs and opens email client to send
+     * Create zip of all logs and open email client to send
      */
     private fun positiveButtonClick(dialog: DialogInterface, which: Int) = runBlocking {
 
@@ -111,14 +113,14 @@ class SendLogDialogFragment : DialogFragment() {
 
     /**
      * On neutral button click
-     * Copies ZIP of all logs to sd card
+     * Copy ZIP of all logs to sd card
      */
     private fun neutralButtonClick(dialog: DialogInterface, which: Int) = runBlocking {
 
-        val file = async (Dispatchers.IO) {
+        val file = async(Dispatchers.IO) {
             copyLogsToSDCard(activity!!.applicationContext)
         }
 
-        Toast.makeText(context,"File successfully copied" + "\n" + file.await().absolutePath, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "File successfully copied" + "\n" + file.await().absolutePath, Toast.LENGTH_LONG).show()
     }
 }

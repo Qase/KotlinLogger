@@ -21,7 +21,7 @@ fun Context.checkPermission(permission: String) = ContextCompat.checkSelfPermiss
  */
 fun Context.hasPermission(permission: String) = checkPermission(permission) == PackageManager.PERMISSION_GRANTED
 
-fun Context.hasFileWritePermission() = checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+fun Context.hasFileWritePermission() = hasPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 
 
