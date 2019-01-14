@@ -41,7 +41,12 @@ fun Throwable.convertToLogCatString(): String {
     }
 
     return sb.toString()
+}
 
+fun StackTraceElement.getClassNameWithoutPackage(): String {
+
+    val indexOfLastDot = className.lastIndexOf('.')
+    return className.removeRange(0, indexOfLastDot + 1)
 }
 
 private val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
