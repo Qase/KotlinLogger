@@ -2,15 +2,13 @@ package quanti.com.kotlinlog.utils
 
 import android.content.Context
 import android.media.MediaScannerConnection
-import quanti.com.kotlinlog.Log
+import android.os.Environment
+import android.support.v4.content.FileProvider
 import quanti.com.kotlinlog.Log.Companion.i
 import java.io.*
 import java.util.concurrent.TimeUnit
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 
 /**
- *
  * File extensions written in kotlin
  *
  * @author Vladislav Trnka
@@ -61,29 +59,62 @@ fun File.fileAge(): Int {
     return ret
 }
 
+/**
+ * Add children path to current filepath
+ */
+fun File.addPath(vararg childrenPath :String): File {
 
-fun List<File>.zip(zipFile: File): File {
-    if (isEmpty()) {
-        return zipFile
+    var file = this
+    childrenPath.forEach {
+        file = File(file, it)
     }
 
-    try {
-        val dest = FileOutputStream(zipFile)
-        val out = ZipOutputStream(BufferedOutputStream(dest))
+    return file
+}
 
-        for (i in this.indices) {
-            //Log.v("Adding: " + files[i])
-            val fi = FileInputStream(this[i])
-            val entry = ZipEntry(this[i].name)
-            out.putNextEntry(entry)
 
-            fi.copyTo(out)
-            fi.close()
-        }
-        out.close()
-    } catch (ex: Exception) {
-        Log.e("Zipping error", ex)
+/**
+ * Get shareable uri fo current file
+ */
+fun File.getUriForFile(appCtx: Context) = FileProvider.getUriForFile(appCtx, appCtx.packageName, this)
+
+/**
+ * Copy zip of logs to sd card
+ */
+fun File.copyLogsTOSDCard(sdCardFolderName: String = "KotlinLogger"): File {
+    val outputFile = Environment
+            .getExternalStorageDirectory()
+            .addPath(sdCardFolderName, name)
+
+    copyTo(outputFile, overwrite = true)
+
+    return outputFile
+}
+
+/**
+ * Create zip of all logs in current app directory
+ *
+ * @param appCtx application context
+ * @param fileAge how many days backward you want to go - default 4
+ */
+fun getZipOfLogs(appCtx: Context, fileAge: Int = 4): File {
+    //first perform clean of mess
+    appCtx.filesDir.listFiles().deleteAllZips()
+    appCtx.filesDir.listFiles().deleteAllOldFiles(fileAge)
+
+    if (appCtx.filesDir.listFiles().isEmpty()) {
+        throw FileNotFoundException("No files were found")
     }
 
+    val zipFileName = "Logs_${getFormattedFileNameForDayTemp()}_${appCtx.getApplicationName()}.zip"
+    val zipFile = File(appCtx.filesDir, zipFileName)
+    zipFile.createNewFile()  //create file if not exists
+
+    appCtx.filesDir
+            .listFiles()
+            .filter { it.isFile } //take only files
+            .filter { it.name.contains(".log", ignoreCase = true) } //take only .log
+            .zip(zipFile)
     return zipFile
 }
+

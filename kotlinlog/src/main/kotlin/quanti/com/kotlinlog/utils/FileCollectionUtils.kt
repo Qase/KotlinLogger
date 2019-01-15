@@ -1,7 +1,13 @@
 package quanti.com.kotlinlog.utils
 
+import quanti.com.kotlinlog.Log
+import java.io.BufferedOutputStream
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /**
  * Array section
@@ -85,6 +91,35 @@ fun List<File>.sortByAge(youngestFirst: Boolean = true): List<File> {
     }
 }
 
+
+/**
+ * Create .zip from all specified files
+ */
+fun List<File>.zip(zipFile: File): File {
+    if (isEmpty()) {
+        return zipFile
+    }
+
+    try {
+        val dest = FileOutputStream(zipFile)
+        val out = ZipOutputStream(BufferedOutputStream(dest))
+
+        for (i in this.indices) {
+            //Log.v("Adding: " + files[i])
+            val fi = FileInputStream(this[i])
+            val entry = ZipEntry(this[i].name)
+            out.putNextEntry(entry)
+
+            fi.copyTo(out)
+            fi.close()
+        }
+        out.close()
+    } catch (ex: Exception) {
+        Log.e("Zipping error", ex)
+    }
+
+    return zipFile
+}
 
 private val comparator = Comparator<File> { o1, o2 ->
     val firstTime = o1.lastModified()
