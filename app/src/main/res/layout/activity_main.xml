@@ -240,7 +240,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="2dp"
         android:onClick="askForPermission_clicked"
         android:text="Request"
         app:layout_constraintBottom_toTopOf="@+id/switchButton"
