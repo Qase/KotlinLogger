@@ -1,10 +1,10 @@
 package quanti.com.kotlinlog
 
 import android.content.Context
-import junit.framework.Assert
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
