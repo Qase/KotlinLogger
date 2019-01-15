@@ -125,7 +125,7 @@
 
 
     <Button
-        android:id="@+id/clickme"
+        android:id="@+id/hitme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
@@ -158,7 +158,7 @@
         android:layout_marginBottom="2dp"
         android:onClick="testone_clicked"
         android:text="Test #1"
-        app:layout_constraintBottom_toTopOf="@+id/clickme"
+        app:layout_constraintBottom_toTopOf="@+id/hitme"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -291,10 +291,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="One log line based on selected radio button"
-        app:layout_constraintBottom_toBottomOf="@+id/clickme"
+        app:layout_constraintBottom_toBottomOf="@+id/hitme"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/clickme"
-        app:layout_constraintTop_toTopOf="@+id/clickme" />
+        app:layout_constraintStart_toEndOf="@+id/hitme"
+        app:layout_constraintTop_toTopOf="@+id/hitme" />
 
     <TextView
         android:id="@+id/textView6"

@@ -4,7 +4,6 @@ package quanti.com.kotlinlog3
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.IdRes
@@ -34,6 +33,7 @@ import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
 
 const val REQUEST = 98
+const val RANDOM_TEXT = "qwertyuiop"
 
 class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
@@ -74,11 +74,11 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     fun hitme_clicked(view: View) {
         when (checked) {
-            LogLevel.DEBUG -> Log.d("laisdjlakdj")
-            LogLevel.ERROR -> Log.e("laisdjlakdj")
-            LogLevel.INFO -> Log.i("laisdjlakdj")
-            LogLevel.VERBOSE -> Log.v("laisdjlakdj")
-            LogLevel.WARN -> Log.w("laisdjlakdj")
+            LogLevel.DEBUG -> Log.d(RANDOM_TEXT)
+            LogLevel.ERROR -> Log.e(RANDOM_TEXT)
+            LogLevel.INFO -> Log.i(RANDOM_TEXT)
+            LogLevel.VERBOSE -> Log.v(RANDOM_TEXT)
+            LogLevel.WARN -> Log.w(RANDOM_TEXT)
         }
     }
 
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         val threads = 5
         val end = 1000
-        (0..threads)
+        (1..threads)
                 .onEach { thread ->
                     Flowable.range(0, end)
                             .subscribeOn(Schedulers.newThread())
@@ -110,6 +110,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     @SuppressLint("CheckResult")
     fun testthree_clicked(view: View) {
         Flowable.range(0, 10000)
+                .subscribeOn(Schedulers.newThread())
                 .subscribe {
                     if (it % 1000 == 0) {
                         Log.e("Something bad happened $it", ArrayIndexOutOfBoundsException("Message in exception $it"))
@@ -209,7 +210,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     }
 
-    fun testShare_clicked(view: View){
+    fun testShare_clicked(view: View) {
 
         SendLogDialogFragment.newInstance("kidal5@centrum.cz").show(supportFragmentManager, "STRING")
 
