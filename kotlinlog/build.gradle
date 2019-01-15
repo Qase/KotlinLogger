@@ -38,8 +38,18 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+
+            //added to show failing test description in cmd
+            all {
+                testLogging {
+                    events "failed"
+                    exceptionFormat "short"
+                }
+            }
         }
     }
+
+
 
 
 
@@ -70,4 +80,5 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.1'
 
 }
+
 
