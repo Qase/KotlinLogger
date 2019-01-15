@@ -76,6 +76,7 @@ class TimeFileTest {
         val list = (0..20).map {
             val file = createFile("temp$it.txt")
             file.writeBytes(test) //force file to be written to
+            Thread.sleep(10L)
             return@map file
         }.reversed()
 
@@ -92,6 +93,7 @@ class TimeFileTest {
         val list = (0..20).map {
             val file = createFile("temp$it.txt")
             file.writeBytes(test) //force file to be written to
+            Thread.sleep(10L) //force sleep since few files had the same write time
             return@map file
         }
 
