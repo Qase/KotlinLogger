@@ -20,7 +20,7 @@ before_install:
 - chmod +x gradlew
 - yes | sdkmanager "platforms;android-28"
 script:
-- "./gradlew build -p kotlinlog"
+- "./gradlew assemble -p kotlinlog"
 notifications:
   email: false
   slack:
