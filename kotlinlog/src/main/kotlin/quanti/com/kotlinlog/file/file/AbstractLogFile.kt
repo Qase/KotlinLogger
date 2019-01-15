@@ -39,6 +39,9 @@ abstract class AbstractLogFile(
      */
     open fun write(string: String) {
         lock.withLock {
+            if (!file.exists()){
+                createNewFile()
+            }
             fos.write(string.toByteArray())
         }
     }
@@ -48,6 +51,9 @@ abstract class AbstractLogFile(
      */
     open fun writeBatch(queue: LinkedBlockingQueue<String>) {
         lock.withLock {
+            if (!file.exists()){
+                createNewFile()
+            }
             while (queue.isNotEmpty()) {
                 fos.write(queue.poll().toByteArray())
             }

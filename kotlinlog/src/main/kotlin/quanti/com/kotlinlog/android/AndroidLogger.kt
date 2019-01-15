@@ -26,4 +26,7 @@ class AndroidLogger(
     }
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) = log(androidLogLevel, tag, methodName, text)
+
+    override fun cleanResources() {}
+
 }

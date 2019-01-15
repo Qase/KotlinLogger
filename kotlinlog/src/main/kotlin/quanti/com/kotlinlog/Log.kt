@@ -104,6 +104,7 @@ class Log {
          */
         @JvmStatic
         fun removeAllLoggers() {
+            loggers.forEach { it.cleanResources() }
             loggers.clear()
         }
     }

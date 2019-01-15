@@ -29,4 +29,6 @@ class CrashlyticsLogger(
         Crashlytics.logException(t)
     }
 
+    override fun cleanResources() {}
+
 }

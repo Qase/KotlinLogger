@@ -22,4 +22,9 @@ interface ILogger {
      */
     fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String)
 
+    /**
+     * Clean all allocated resources
+     */
+    fun cleanResources()
+
 }

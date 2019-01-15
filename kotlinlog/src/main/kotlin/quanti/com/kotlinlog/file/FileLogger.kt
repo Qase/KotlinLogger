@@ -32,6 +32,7 @@ class FileLogger(
         private val bun: BaseBundle
 ) : ILogger {
 
+
     private var logFile: AbstractLogFile = when (bun) {
         is DayLogBundle -> DayLogFile(appCtx, bun.maxDaysSaved)
         is CircleLogBundle -> CircleLogFile(appCtx, bun)
@@ -110,6 +111,10 @@ class FileLogger(
 
         //we want errors to be sync
         logFile.write(finalText)
+    }
+
+    override fun cleanResources() {
+        threadExecutor.shutdown()
     }
 
     /**
