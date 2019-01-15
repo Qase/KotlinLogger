@@ -157,7 +157,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
     fun switchLogger_clicked(view: View) {
         bundle = when (bundle) {
             is DayLogBundle -> CircleLogBundle(maxFileSizeMegaBytes = 1)
-            is CircleLogBundle -> StrictCircleLogBundle(maxFileSizeMegaBytes = 1)
+            is CircleLogBundle -> StrictCircleLogBundle(maxFileSizeMegaBytes = 1, numOfFiles = 4)
             is StrictCircleLogBundle -> DayLogBundle()
             else -> throw Exception("Unknown bundle, should not arise at all")
         }
