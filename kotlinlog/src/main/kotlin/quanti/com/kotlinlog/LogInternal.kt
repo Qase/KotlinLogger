@@ -7,7 +7,6 @@ import quanti.com.kotlinlog.utils.getClassNameWithoutPackage
  * PRIVATE
  */
 
-const val DEBUG_LIBRARY = true
 const val TAG = "LogFileDEBUG"
 const val SECRET_CODE_UNHANDLED = "UNHANDLED"
 var loggerNotAdded = true

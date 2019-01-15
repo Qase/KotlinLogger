@@ -1,6 +1,6 @@
 package quanti.com.kotlinlog.utils
 
-import quanti.com.kotlinlog.DEBUG_LIBRARY
+import quanti.com.kotlinlog.BuildConfig
 import quanti.com.kotlinlog.TAG
 
 fun loga(vararg strings: Any){
@@ -8,7 +8,7 @@ fun loga(vararg strings: Any){
 }
 
 fun loga(string: String){
-    if(DEBUG_LIBRARY){
+    if(BuildConfig.DEBUG_LOG){
         println("$TAG $string")
         android.util.Log.i(TAG, string)
     }
