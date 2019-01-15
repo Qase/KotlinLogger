@@ -25,7 +25,7 @@ abstract class AbstractLogFile(
 
     protected val lock = ReentrantLock()
 
-    protected abstract var fileName: String
+    abstract var fileName: String //make it testable
     protected abstract var file: File
 
     //this writes to internal storage so no need for permissions

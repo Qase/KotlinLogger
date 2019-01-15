@@ -27,8 +27,6 @@ import java.util.concurrent.TimeUnit
  *
  * Implementation of async file logger
  */
-//todo java annotation
-//todo minimal log level??
 class FileLogger(
         private val appCtx: Context,
         private val bun: BaseBundle
