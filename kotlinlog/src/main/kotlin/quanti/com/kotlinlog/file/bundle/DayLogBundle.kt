@@ -11,12 +11,12 @@ import quanti.com.kotlinlog.base.LogLevel
  * @param maxDaysSaved max days of keeping logs- default 7
  * @param minimalLogLevel minimalLogLevel - default LogLevel.Verbose
  * @param maxDaysSavedThrowable max days of keeping exception logs
- *
+ * @param minimalOwnFileLogLevelThrowable minimal log level when create separate file for exception - default LogLevel.Verbose
  */
 
 class DayLogBundle(
         minimalLogLevel: Int = LogLevel.VERBOSE,
         val maxDaysSaved: Int = 7,
-        maxDaysSavedThrowable: Int = 10
-
-) : BaseBundle(minimalLogLevel, maxDaysSavedThrowable)
+        maxDaysSavedThrowable: Int = 10,
+        minimalOwnFileLogLevelThrowable: Int = LogLevel.VERBOSE
+) : BaseBundle(minimalLogLevel, maxDaysSavedThrowable, minimalOwnFileLogLevelThrowable)

@@ -8,5 +8,6 @@ import quanti.com.kotlinlog.base.LogLevel
  */
 abstract class BaseBundle(
         val minimalLogLevel:Int,
-        val maxDaysSavedThrowable: Int
+        val maxDaysSavedThrowable: Int,
+        val minimalOwnFileLogLevelThrowable: Int
 )

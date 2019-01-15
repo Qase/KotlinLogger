@@ -1,10 +1,11 @@
 package quanti.com.kotlinlog.file
 
 import android.content.Context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import quanti.com.kotlinlog.SECRET_CODE_UNHANDLED
-import quanti.com.kotlinlog.TAG
 import quanti.com.kotlinlog.base.ILogger
-import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.base.getLogLevelString
 import quanti.com.kotlinlog.file.bundle.BaseBundle
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
@@ -87,11 +88,6 @@ class FileLogger(
 
 
     override fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable) {
-        val errorFile = CrashLogFile(
-                appCtx,
-                t.javaClass.simpleName,
-                text == SECRET_CODE_UNHANDLED
-        )
 
         val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
 
@@ -99,12 +95,23 @@ class FileLogger(
         sb.append(formattedString)
         sb.append(t.convertToLogCatString())
 
-        val str = sb.toString()
-        errorFile.write(str)
-        errorFile.closeOutputStream()
+        val finalText = sb.toString()
+
+        if (bun.minimalOwnFileLogLevelThrowable <= androidLogLevel) {
+            GlobalScope.launch(Dispatchers.IO) {
+                CrashLogFile(
+                        appCtx,
+                        t.javaClass.simpleName,
+                        text == SECRET_CODE_UNHANDLED
+                ).apply {
+                    write(finalText)
+                    closeOutputStream()
+                }
+            }
+        }
 
         //we want errors to be sync
-        logFile.write(str)
+        logFile.write(finalText)
     }
 
     /**
