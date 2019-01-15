@@ -43,7 +43,9 @@ android {
             all {
                 testLogging {
                     events "failed"
-                    exceptionFormat "short"
+                    exceptionFormat "full"
+//                    showExceptions "true"
+//                    showStackTraces "true"
                 }
             }
         }
