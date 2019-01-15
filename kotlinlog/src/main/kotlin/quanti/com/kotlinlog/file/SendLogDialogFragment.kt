@@ -88,6 +88,7 @@ class SendLogDialogFragment : DialogFragment() {
      * On positive button click
      * Create zip of all logs and open email client to send
      */
+    @Suppress("UNUSED_PARAMETER")
     private fun positiveButtonClick(dialog: DialogInterface, which: Int) = runBlocking {
 
         val appContext = this@SendLogDialogFragment.context!!.applicationContext
@@ -120,6 +121,7 @@ class SendLogDialogFragment : DialogFragment() {
      * On neutral button click
      * Copy ZIP of all logs to sd card
      */
+    @Suppress("UNUSED_PARAMETER")
     private fun neutralButtonClick(dialog: DialogInterface, which: Int) {
 
         val appContext = this@SendLogDialogFragment.context!!.applicationContext
