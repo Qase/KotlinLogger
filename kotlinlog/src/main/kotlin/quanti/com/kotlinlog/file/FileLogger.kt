@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit
  * Implementation of async file logger
  */
 //todo java annotation
+//todo minimal log level??
 class FileLogger(
         private val appCtx: Context,
         private val bun: BaseBundle
@@ -85,14 +86,14 @@ class FileLogger(
     }
 
 
-    override fun logThrowable(tag: String, methodName: String, text: String, t: Throwable) {
+    override fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable) {
         val errorFile = CrashLogFile(
                 appCtx,
                 t.javaClass.simpleName,
                 text == SECRET_CODE_UNHANDLED
         )
 
-        val formattedString = getFormatedString(appName, LogLevel.ERROR, tag, methodName, text)
+        val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
 
         val sb = StringBuilder()
         sb.append(formattedString)

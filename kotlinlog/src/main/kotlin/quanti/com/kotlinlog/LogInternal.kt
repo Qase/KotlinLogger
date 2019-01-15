@@ -14,43 +14,36 @@ var loggerNotAdded = true
 internal val loggers = arrayListOf<ILogger>()
 
 
-internal fun allLog(androidLogLevel: Int, text: String) {
-    val element = getMethodStackTraceElement()
-    allLog(androidLogLevel, element.getClassNameWithoutPackage(), element.methodName, text)
-}
-
-internal fun allLog(androidLogLevel: Int, tag: String, methodName: String = "", text: String) {
+internal fun allLog(androidLogLevel: Int, tag: String?, text: String) {
     if (emptyCheck()) return
+
+    val element = getMethodStackTraceElement()
+    val safeTag = tag ?: element.getClassNameWithoutPackage()
+
     loggers.forEach {
-        it.log(androidLogLevel, tag, methodName, text)
+        it.log(androidLogLevel, safeTag, element.methodName, text)
     }
 }
 
-internal fun allLogSync(androidLogLevel: Int, text: String) {
-    val element = getMethodStackTraceElement()
-    allLogSync(androidLogLevel, element.getClassNameWithoutPackage(), element.methodName, text)
-}
-
-internal fun allLogSync(androidLogLevel: Int, tag: String, methodName: String = "", text: String) {
+internal fun allLogSync(androidLogLevel: Int, tag: String?, text: String) {
     if (emptyCheck()) return
+
+    val element = getMethodStackTraceElement()
+    val safeTag = tag ?: element.getClassNameWithoutPackage()
+
     loggers.forEach {
-        it.logSync(androidLogLevel, tag, methodName, text)
+        it.logSync(androidLogLevel, safeTag, element.methodName, text)
     }
 }
 
-
-internal fun allLogThrowable(text: String, t: Throwable) {
+internal fun allLogThrowable(androidLogLevel: Int, tag: String?, text: String, t: Throwable) {
     if (emptyCheck()) return
+
     val element = getMethodStackTraceElement()
-    loggers.forEach {
-        it.logThrowable(element.className, element.methodName, text, t)
-    }
-}
+    val safeTag = tag ?: element.getClassNameWithoutPackage()
 
-internal fun allLogThrowable(tag: String, methodName: String = "", text: String, t: Throwable) {
-    if (emptyCheck()) return
     loggers.forEach {
-        it.logThrowable(tag, methodName, text, t)
+        it.logThrowable(androidLogLevel, safeTag, element.methodName, text, t)
     }
 }
 

@@ -15,66 +15,55 @@ class Log {
 
     companion object {
 
-        @JvmStatic
-        fun v(text: String) = allLog(LogLevel.VERBOSE, text)
+        //ASYNC METHODS
+        @JvmStatic @JvmOverloads
+        fun v(text: String, tag: String? = null) = allLog(LogLevel.VERBOSE, tag, text)
 
-        @JvmStatic
-        fun i(text: String) = allLog(LogLevel.INFO, text)
+        @JvmStatic @JvmOverloads
+        fun d(text: String, tag: String? = null) = allLog(LogLevel.DEBUG, tag, text)
 
-        @JvmStatic
-        fun w(text: String) = allLog(LogLevel.WARN, text)
+        @JvmStatic @JvmOverloads
+        fun i(text: String, tag: String? = null) = allLog(LogLevel.INFO, tag, text)
 
-        @JvmStatic
-        fun d(text: String) = allLog(LogLevel.DEBUG, text)
+        @JvmStatic @JvmOverloads
+        fun w(text: String, tag: String? = null) = allLog(LogLevel.WARN, tag, text)
 
-        @JvmStatic
-        fun e(text: String) = allLog(LogLevel.ERROR, text)
-
-        @JvmStatic
-        fun v(tag: String, text: String) = allLog(LogLevel.VERBOSE, tag, "", text)
-
-        @JvmStatic
-        fun i(tag: String, text: String) = allLog(LogLevel.INFO, tag, "", text)
-
-        @JvmStatic
-        fun w(tag: String, text: String) = allLog(LogLevel.WARN, tag, "", text)
-
-        @JvmStatic
-        fun d(tag: String, text: String) = allLog(LogLevel.DEBUG, tag, "", text)
-
-        @JvmStatic
-        fun e(tag: String, text: String) = allLog(LogLevel.ERROR, tag, "", text)
-
-        @JvmStatic
-        fun e(text: String = "", e: Throwable) = allLogThrowable(text, e)
-
-        @JvmStatic
-        fun e(tag: String, text: String = "", e: Throwable) = allLogThrowable(tag, "", text, e)
+        @JvmStatic @JvmOverloads
+        fun e(text: String, tag: String? = null) = allLog(LogLevel.ERROR, tag, text)
 
 
-        @JvmStatic
-        fun vSync(text: String) = allLogSync(LogLevel.VERBOSE, text)
+        //SYNC METHODS
+        @JvmStatic @JvmOverloads
+        fun vSync(text: String, tag: String? = null) = allLogSync(LogLevel.VERBOSE, tag, text)
 
-        @JvmStatic
-        fun iSync(text: String) = allLogSync(LogLevel.INFO, text)
+        @JvmStatic @JvmOverloads
+        fun iSync(text: String, tag: String? = null) = allLogSync(LogLevel.INFO, tag, text)
 
-        @JvmStatic
-        fun wSync(text: String) = allLogSync(LogLevel.WARN, text)
+        @JvmStatic @JvmOverloads
+        fun wSync(text: String, tag: String? = null) = allLogSync(LogLevel.WARN, tag, text)
 
-        @JvmStatic
-        fun dSync(text: String) = allLogSync(LogLevel.DEBUG, text)
+        @JvmStatic @JvmOverloads
+        fun dSync(text: String, tag: String? = null) = allLogSync(LogLevel.DEBUG, tag, text)
 
-        @JvmStatic
-        fun vSync(tag: String, text: String) = allLogSync(LogLevel.VERBOSE, tag, "", text)
+        @JvmStatic @JvmOverloads
+        fun eSync(text: String, tag: String? = null) = allLogSync(LogLevel.ERROR, tag, text)
 
-        @JvmStatic
-        fun iSync(tag: String, text: String) = allLogSync(LogLevel.INFO, tag, "", text)
+        //THROWABLE METHODS
+        @JvmStatic @JvmOverloads
+        fun v(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.VERBOSE, tag, text, t)
 
-        @JvmStatic
-        fun wSync(tag: String, text: String) = allLogSync(LogLevel.WARN, tag, "", text)
+        @JvmStatic @JvmOverloads
+        fun d(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.INFO, tag, text, t)
 
-        @JvmStatic
-        fun dSync(tag: String, text: String) = allLogSync(LogLevel.DEBUG, tag, "", text)
+        @JvmStatic @JvmOverloads
+        fun i(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.WARN, tag, text, t)
+
+        @JvmStatic @JvmOverloads
+        fun w(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.DEBUG, tag, text, t)
+
+        @JvmStatic @JvmOverloads
+        fun e(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.ERROR, tag, text, t)
+
 
         /**
          * Logs some useful system data to all connected loggers
@@ -93,8 +82,7 @@ class Log {
             val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
 
             Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-                e(SECRET_CODE_UNHANDLED, paramThrowable)
-
+                
                 if (oldHandler != null)
                     oldHandler.uncaughtException(paramThread, paramThrowable) //Delegates to Android's error handling
                 else
@@ -118,8 +106,8 @@ class Log {
         fun removeAllLoggers() {
             loggers.clear()
         }
-
     }
+
 
 }
 

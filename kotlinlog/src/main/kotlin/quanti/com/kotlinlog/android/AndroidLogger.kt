@@ -20,8 +20,9 @@ class AndroidLogger(
         }
     }
 
-    override fun logThrowable(tag: String, methodName: String, text: String, t: Throwable) {
-        android.util.Log.e(tag, text, t)
+    override fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable) {
+        val newText = text + '\n' + android.util.Log.getStackTraceString(t)
+        android.util.Log.println(androidLogLevel, tag, newText)
     }
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) = log(androidLogLevel, tag, methodName, text)

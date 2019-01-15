@@ -15,7 +15,7 @@ interface ILogger {
     /**
      * Log error
      */
-    fun logThrowable(tag: String, methodName: String, text: String, t: Throwable)
+    fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable)
 
     /**
      * Force log to be written synchronously
