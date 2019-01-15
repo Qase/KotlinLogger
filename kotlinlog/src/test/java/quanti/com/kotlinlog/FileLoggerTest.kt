@@ -1,6 +1,7 @@
 package quanti.com.kotlinlog
 
 import android.content.Context
+import junit.framework.Assert
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -25,6 +26,7 @@ class FileLoggerTest {
     private lateinit var logger: FileLogger
     private lateinit var file: File
 
+    @Suppress("DEPRECATION")
     @Before
     fun init() {
         RuntimeEnvironment.application.applicationInfo.nonLocalizedLabel = "FAKE APP NAME"
@@ -47,7 +49,7 @@ class FileLoggerTest {
         Log.iSync("Ahoj")
 
         //check if file exists
-        assert(file.exists())
+        Assert.assertEquals(true, file.exists())
     }
 
     /**
@@ -62,8 +64,8 @@ class FileLoggerTest {
         //check if file contains
         val lines = file.readLines()
 
-        assert(lines.size == 1)
-        assert(lines[0].contains(str))
+        Assert.assertEquals(1, lines.size)
+        Assert.assertEquals(true, lines[0].contains(str))
     }
 
     /**
@@ -81,7 +83,7 @@ class FileLoggerTest {
         //check if file contains
         val lines = file.readLines()
 
-        assert(lines.size == list.size)
+        Assert.assertEquals(list.size, lines.size)
 
         val result = lines
                 .zip(list)
@@ -90,7 +92,7 @@ class FileLoggerTest {
                     val strFromList = it.second
                     strFromFile.contains(strFromList)
                 }
-        assert(result)
+        Assert.assertEquals(true, result)
     }
 
     /**
@@ -105,7 +107,7 @@ class FileLoggerTest {
         //wait 6 seconds, beacuse thread executor writes every 5 seconds
         Thread.sleep(6000)
         //check if file exists
-        assert(file.exists())
+        Assert.assertEquals(true, file.exists())
     }
 
     /**
@@ -124,7 +126,7 @@ class FileLoggerTest {
 
         //check if file contains
         val lines = file.readLines()
-        assert(lines.size == list.size)
+        Assert.assertEquals(list.size, lines.size)
 
         val result = lines
                 .zip(list)
@@ -133,7 +135,7 @@ class FileLoggerTest {
                     val strFromList = it.second
                     strFromFile.contains(strFromList)
                 }
-        assert(result)
+        Assert.assertEquals(true, result)
     }
 
     /**
@@ -163,7 +165,7 @@ class FileLoggerTest {
         val count = file.readLines().count()
         println(count)
 
-        assert(count == threads * strings)
+        Assert.assertEquals(threads * strings, count)
     }
 
     /**
@@ -195,6 +197,6 @@ class FileLoggerTest {
         val count = file.readLines().onEach { println(it) }.count()
         println(count)
 
-        assert(count == threads * strings)
+        Assert.assertEquals(threads * strings, count)
     }
 }

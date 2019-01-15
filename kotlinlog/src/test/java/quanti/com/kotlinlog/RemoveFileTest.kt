@@ -18,6 +18,7 @@ class RemoveFileTest {
 
     lateinit var appCtx: Context
 
+    @Suppress("DEPRECATION")
     @Before
     fun init() {
         RuntimeEnvironment.application.applicationInfo.nonLocalizedLabel = "FAKE APP NAME"
@@ -40,7 +41,7 @@ class RemoveFileTest {
         createFile()
 
         appCtx.filesDir.listFiles().deleteAllOldFiles(3)
-        assert(appCtx.filesDir.listFiles().size == 1)
+        Assert.assertEquals(1, appCtx.filesDir.listFiles().size)
     }
 
     @Test
@@ -50,14 +51,14 @@ class RemoveFileTest {
         ActualTime.shiftByOneDay()
 
         appCtx.filesDir.listFiles().deleteAllOldFiles(0)
-        assert(appCtx.filesDir.listFiles().isEmpty())
+        Assert.assertEquals(true, appCtx.filesDir.listFiles().isEmpty())
     }
 
     @Test
     fun createZip() {
         createFile(".zip")
         appCtx.filesDir.listFiles().deleteAllZips()
-        assert(appCtx.filesDir.listFiles().isEmpty())
+        Assert.assertEquals(true, appCtx.filesDir.listFiles().isEmpty())
     }
 
     @Test
@@ -68,7 +69,7 @@ class RemoveFileTest {
         (1..txtCount).forEach { createFile(".txt") }
 
         appCtx.filesDir.listFiles().deleteAllZips()
-        assert(appCtx.filesDir.listFiles().count() == txtCount)
+        Assert.assertEquals(txtCount, appCtx.filesDir.listFiles().size)
     }
 
     @Test
@@ -80,7 +81,8 @@ class RemoveFileTest {
         ActualTime.shiftByOneDay()
         (1..afterCount).forEach { createFile() }
         appCtx.filesDir.listFiles().deleteAllOldFiles(0)
-        Assert.assertEquals(afterCount, appCtx.filesDir.listFiles().count())
+        Assert.assertEquals(afterCount, appCtx.filesDir.listFiles().size)
+
     }
 
 

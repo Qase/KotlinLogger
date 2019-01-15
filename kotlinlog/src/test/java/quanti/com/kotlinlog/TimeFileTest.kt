@@ -1,7 +1,7 @@
 package quanti.com.kotlinlog
 
 import android.content.Context
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,6 +19,7 @@ class TimeFileTest {
 
     private lateinit var appCtx: Context
 
+    @Suppress("DEPRECATION")
     @Before
     fun init() {
         RuntimeEnvironment.application.applicationInfo.nonLocalizedLabel = "FAKE APP NAME"
@@ -37,7 +38,7 @@ class TimeFileTest {
         val nameBefore = getFormattedFileNameForDayTemp()
         ActualTime.shiftByOneDay()
         val nameAfter = getFormattedFileNameForDayTemp()
-        assert(!nameAfter.contentEquals(nameBefore))
+        Assert.assertEquals(false,nameAfter.contentEquals(nameBefore))
     }
 
     @Test
