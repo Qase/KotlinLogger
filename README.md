@@ -18,10 +18,11 @@ Mostly used in Prague based android develpoment company - [Quanti](https://www.q
 * Usable in every JVM language including Java/Kotlin/Scala ...
 * Very easy to use
 * No more TAGs, but you can still use them
-* Easy to extend using your own logger
+* Easy to extend using your own ILogger interface
 * Lot of optional parameters
 * Lightweight
 * Possibility to print system info
+* Every logged exception is logged to own separate file
 * Sample [app](github/sampleApp.png) is ready to build
 
 ## Installation
@@ -43,24 +44,33 @@ android{
 }
 ```
 
-2) Add all needed logers to your mainActivity. Every logger is singleton and some of them needs to be initialized using init method.
+2) Add all needed logers to your mainActivity. Every logger can be initialized using bundle or use default values.
 
 ```kotlin
-Log.addLogger(AndroidLogger)           //forwards all log to android logcat
-AndroidLogger.init(LoggerBundle())     //not necesarry
+//forwards all log to android logcat
+val androidBundle = LoggerBundle(LogLevel.INFO)
+Log.addLogger(AndroidLogger(androidBundle))
 
-Log.addLogger(CrashlyticsLogger)       //default logging level is warn
-CrashlyticsLogger.init(LoggerBundle()) //not necesarry
+//default log level is warn
+Fabric.with(this, Crashlytics())
+Log.addLogger(CrashlyticsLogger())
 
-Log.addLogger(FileLogger); 
-FileLogger.init(applicationContext)    //NECESARRY, need appContext for access to files
+//Every LogBundles has ton of options, see javadoc for more
+//DayLogBundle logs every day to one separate log file
+val dayLogBundle = DayLogBundle(maxDaysSaved = 4)
+Log.addLogger(FileLogger(applicationContext, dayLogBundle))
+
+//CircleLogBundle logs to one file until specified size is reached, but may overflow
+val rotateBundle = CircleLogBundle(numOfFiles = 7)
+Log.addLogger(FileLogger(applicationContext, rotateBundle))
+
+//StrictCircleLogBundle logs to one file until specified size is reached, never overflows but slower
+val strictRotateBundle = StrictCircleLogBundle(maxFileSizeMegaBytes = 1)  
+Log.addLogger(FileLogger(applicationContext, strictRotateBundle))
 
 ```
 
-For usage of FileLogger is necesarry this permission in manifest file
-```
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-```
+
 
 3) Then log as you would normally do - just using another dependency
 (or log sync using Log.xSync methods)
@@ -69,7 +79,7 @@ For usage of FileLogger is necesarry this permission in manifest file
 Log.v("This");
 Log.d("is");
 Log.i("sample");
-Log.i("text");
+Log.i("text", "OWN TAG");
 Log.i("that");
 Log.i("will");
 Log.iSync("be");
@@ -89,6 +99,8 @@ FileLogger.deleteAllLogs()
 Log.logMetadata(appContext)
 
 //Use of SendLogDialogFragment
+//It can send zip of logs to email or save to sd card 
+//WRITE_EXTERNAL_STORAGE permission is needed if you want to save lgos to sd card
 SendLogDialogFragment.newInstance("your@email.com", deleteLogs = true).show(supportFragmentManager, "TAG")
 ```
 <img src="github/dialog.png" width="250">
