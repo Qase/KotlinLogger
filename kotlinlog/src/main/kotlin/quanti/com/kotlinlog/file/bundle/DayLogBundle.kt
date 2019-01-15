@@ -14,7 +14,7 @@ import quanti.com.kotlinlog.base.LogLevel
  * @param minimalOwnFileLogLevelThrowable minimal log level when create separate file for exception - default LogLevel.Verbose
  */
 
-class DayLogBundle(
+class DayLogBundle @JvmOverloads constructor(
         minimalLogLevel: Int = LogLevel.VERBOSE,
         val maxDaysSaved: Int = 7,
         maxDaysSavedThrowable: Int = 10,

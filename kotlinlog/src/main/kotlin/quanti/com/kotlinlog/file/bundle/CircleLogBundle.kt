@@ -15,7 +15,7 @@ import quanti.com.kotlinlog.base.LogLevel
  * @param minimalOwnFileLogLevelThrowable minimal log level when create separate file for exception - default LogLevel.Verbose
  */
 
-class CircleLogBundle(
+class CircleLogBundle @JvmOverloads constructor(
         minimalLogLevel: Int = LogLevel.VERBOSE,
         val maxFileSize: Long = 5242880L,
         val numOfFiles: Int = 10,
@@ -24,13 +24,13 @@ class CircleLogBundle(
 
 ) : BaseBundle(minimalLogLevel, maxDaysSavedThrowable, minimalOwnFileLogLevelThrowable) {
 
-
     constructor(minimalLogLevel: Int = LogLevel.VERBOSE,
                 maxFileSizeMegaBytes: Int,
                 numOfFiles: Int = 10,
-                maxDaysSavedThrowable: Int = 10
+                maxDaysSavedThrowable: Int = 10,
+                minimalOwnFileLogLevelThrowable: Int = LogLevel.VERBOSE
     ) :
-            this(minimalLogLevel, maxFileSizeMegaBytes * ONE_MEGABYTE, numOfFiles, maxDaysSavedThrowable)
+            this(minimalLogLevel, maxFileSizeMegaBytes * ONE_MEGABYTE, numOfFiles, maxDaysSavedThrowable, minimalOwnFileLogLevelThrowable)
 
     companion object {
         const val ONE_MEGABYTE = 1048576L
