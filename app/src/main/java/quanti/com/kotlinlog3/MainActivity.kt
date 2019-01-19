@@ -12,10 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import io.reactivex.Flowable
@@ -32,6 +29,7 @@ import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
 import quanti.com.kotlinlog.weblogger.WebApiLogger
+import quanti.com.kotlinlog.weblogger.bundle.WebServerApiBundle
 
 const val REQUEST = 98
 const val RANDOM_TEXT = "qwertyuiop"
@@ -40,6 +38,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
     private var checked = 3
     private var bundle: BaseBundle = DayLogBundle()
+    private var apiServerBundle: WebServerApiBundle? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +48,11 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         initLog()
 
         (findViewById<RadioGroup>(R.id.radioGroup)).setOnCheckedChangeListener(this)
+        (findViewById<Button>(R.id.apiServer_button)).setOnClickListener {
+            val url = findViewById<EditText>(R.id.apiServer_editText).text.toString()
+            apiServerBundle = WebServerApiBundle(url)
+            initLog()
+        }
 
     }
 
@@ -66,9 +70,10 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         (findViewById<TextView>(R.id.loggerInUseTextView)).text = text
 
+        if (apiServerBundle != null){
+            Log.addLogger(WebApiLogger(apiServerBundle!!))
+        }
 
-        val url = "http://00d80908.ngrok.io/api/v1/"
-        Log.addLogger(WebApiLogger(url))
 
     }
 
