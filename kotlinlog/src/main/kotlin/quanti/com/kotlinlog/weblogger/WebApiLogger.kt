@@ -8,9 +8,9 @@ import kotlinx.coroutines.launch
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.getWebLoggerString
 import quanti.com.kotlinlog.utils.convertToLogCatString
-import quanti.com.kotlinlog.utils.getRandomString
 import quanti.com.kotlinlog.utils.loga
 import quanti.com.kotlinlog.weblogger.api.WebServerApi
+import quanti.com.kotlinlog.weblogger.bundle.WebServerApiBundle
 import quanti.com.kotlinlog.weblogger.entity.WebLoggerEntity
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,10 +26,7 @@ import java.util.concurrent.TimeUnit
  *
  *
  */
-class WebApiLogger(url: String,
-                   private val sessionName: String = "KotlinLoggerSession_" + getRandomString(4)
-
-) : ILogger {
+class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
 
 
     private val loggerApi: WebServerApi
@@ -38,14 +35,15 @@ class WebApiLogger(url: String,
 
 
     init {
-        if (!url.endsWith("/api/v1/")) {
+
+        if (!bun.url.endsWith("/api/v1/")) {
             Log.e("WebApiLogger", "Url doesn't end with /api/v1/. Have you specified correct webserver endpoint?")
         }
 
 
-        Log.d("WebApiLogger", "Creating connection to $url")
+        Log.d("WebApiLogger", "Creating connection to ${bun.url}")
         val retrofit = Retrofit.Builder()
-                .baseUrl(url)
+                .baseUrl(bun.url)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
         loggerApi = retrofit.create<WebServerApi>(WebServerApi::class.java)
@@ -77,29 +75,24 @@ class WebApiLogger(url: String,
 
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
-        val entity = WebLoggerEntity(
-                id = "",
-                sessionName = sessionName,
-                timestamp = Date().time,
-                severity = androidLogLevel.getWebLoggerString(),
-                message = "$tag/$methodName: $text"
-        )
+        if (androidLogLevel < bun.minimalLogLevel)
+            return
+
+        val message = "$tag/$methodName: $text"
+        val entity = WebLoggerEntity(bun.sessionName, androidLogLevel.getWebLoggerString(), message)
 
         blockingQueue.add(entity)
     }
 
     override fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable) {
 
+        if (androidLogLevel < bun.minimalLogLevelThrowable)
+            return
+
         var message = "$tag/$methodName: $text/n"
         message += t.convertToLogCatString()
 
-        val entity = WebLoggerEntity(
-                id = "",
-                sessionName = sessionName,
-                timestamp = Date().time,
-                severity = androidLogLevel.getWebLoggerString(),
-                message = message
-        )
+        val entity = WebLoggerEntity(bun.sessionName, androidLogLevel.getWebLoggerString(), message)
 
         //we want errors to be sync
         GlobalScope.launch(Dispatchers.IO) {
@@ -108,14 +101,12 @@ class WebApiLogger(url: String,
     }
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) {
-        val entity = WebLoggerEntity(
-                id = "",
-                sessionName = sessionName,
-                timestamp = Date().time,
-                severity = androidLogLevel.getWebLoggerString(),
-                message = "$tag/$methodName: $text"
-        )
 
+        if (androidLogLevel < bun.minimalLogLevel)
+            return
+
+        val message = "$tag/$methodName: $text"
+        val entity = WebLoggerEntity(bun.sessionName, androidLogLevel.getWebLoggerString(), message)
 
         GlobalScope.launch(Dispatchers.IO) {
             loggerApi.postLogs(listOf(entity)).execute()
