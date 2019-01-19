@@ -31,6 +31,7 @@ import quanti.com.kotlinlog.file.bundle.BaseBundle
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
+import quanti.com.kotlinlog.weblogger.WebApiLogger
 
 const val REQUEST = 98
 const val RANDOM_TEXT = "qwertyuiop"
@@ -64,6 +65,10 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         val text = bundle.javaClass.simpleName.replace("Bundle", "")
 
         (findViewById<TextView>(R.id.loggerInUseTextView)).text = text
+
+
+        val url = "http://00d80908.ngrok.io/api/v1/"
+        Log.addLogger(WebApiLogger(url))
 
     }
 
