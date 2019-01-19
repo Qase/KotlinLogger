@@ -52,7 +52,7 @@ fun Int.getLogLevelString(): String {
         android.util.Log.VERBOSE -> "V"
         android.util.Log.INFO -> "I"
         android.util.Log.WARN -> "W"
-        android.util.Log.ASSERT-> "A"
+        android.util.Log.ASSERT -> "A"
 
         else -> "?"
     }
@@ -70,4 +70,16 @@ fun String.getLogLevel(): Int {
     }
 }
 
+fun Int.getWebLoggerString(): String {
+    return when (this) {
+        android.util.Log.DEBUG -> "DEBUG"
+        android.util.Log.ERROR -> "ERROR"
+        android.util.Log.VERBOSE -> "VERBOSE"
+        android.util.Log.INFO -> "INFO"
+        android.util.Log.WARN -> "WARNING"
+        android.util.Log.ASSERT -> "FATAL"
+
+        else -> "?"
+    }
+}
 
