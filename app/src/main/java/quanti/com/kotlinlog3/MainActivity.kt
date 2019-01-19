@@ -4,6 +4,8 @@ package quanti.com.kotlinlog3
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.IdRes
@@ -28,6 +30,7 @@ import quanti.com.kotlinlog.file.bundle.BaseBundle
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
+import quanti.com.kotlinlog.utils.loga
 import quanti.com.kotlinlog.weblogger.WebApiLogger
 import quanti.com.kotlinlog.weblogger.api.IApiServerActive
 import quanti.com.kotlinlog.weblogger.bundle.WebServerApiBundle
@@ -50,7 +53,19 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IA
 
         findViewById<RadioGroup>(R.id.radioGroup).setOnCheckedChangeListener(this)
         findViewById<Button>(R.id.apiServer_button).setOnClickListener {
-            val url = findViewById<EditText>(R.id.apiServer_editText).text.toString()
+
+            val editText = findViewById<EditText>(R.id.apiServer_editText)
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+
+            val url = when{
+                editText.text.isNotEmpty() -> editText.text
+                clipboard.hasPrimaryClip() -> clipboard.primaryClip.getItemAt(0).text
+                else -> ""
+            }.toString()
+
+            editText.setText(url)
+
             apiServerBundle = WebServerApiBundle(url, this)
             initLog()
         }
