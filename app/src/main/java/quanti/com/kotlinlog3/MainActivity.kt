@@ -73,9 +73,9 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
         if (apiServerBundle != null){
             try {
                 Log.addLogger(WebApiLogger(apiServerBundle!!))
-                Toast.makeText(this, "Successfully connected", Toast.LENGTH_LONG)
+                Toast.makeText(this, "Successfully connected", Toast.LENGTH_LONG).show()
             } catch (e : Exception){
-                Toast.makeText(this, e.message, Toast.LENGTH_LONG)
+                Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
             }
         }
 
