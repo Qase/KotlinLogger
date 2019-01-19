@@ -2,7 +2,6 @@ package quanti.com.kotlinlog.weblogger
 
 import android.util.Log
 import com.google.gson.GsonBuilder
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,7 +27,7 @@ import java.util.concurrent.TimeUnit
  *
  */
 class WebApiLogger(url: String,
-                   private val sessionName: String = "KotlinLoggerSession" + getRandomString(4)
+                   private val sessionName: String = "KotlinLoggerSession_" + getRandomString(4)
 
 ) : ILogger {
 
@@ -39,23 +38,36 @@ class WebApiLogger(url: String,
 
 
     init {
-        checkUrl(url)
+        if (!url.endsWith("/api/v1/")) {
+            Log.e("WebApiLogger", "Url doesn't end with /api/v1/. Have you specified correct webserver endpoint?")
+        }
 
-        Log.d("TAG", "Creating connection to $url")
+
+        Log.d("WebApiLogger", "Creating connection to $url")
         val retrofit = Retrofit.Builder()
                 .baseUrl(url)
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
         loggerApi = retrofit.create<WebServerApi>(WebServerApi::class.java)
 
         val func = Runnable {
-            loga("TASK: Writing data from queue: ${blockingQueue.size}")
+            loga("WebApiLogger", "TASK: Writing data from queue: ${blockingQueue.size}")
+
+            if (blockingQueue.isEmpty())
+                return@Runnable
 
             val listOfLogs = blockingQueue.toList()
             blockingQueue.clear()
 
-            loggerApi.postLogs(listOfLogs)
+            listOfLogs
+                    .chunked(25)
+                    .forEach {
+                        GlobalScope.launch(Dispatchers.IO) {
+                            loga("WebApiLogger", "TASK: Writing chunked data of size: ${it.size}")
+                            loggerApi.postLogs(it).execute()
+                        }
+
+                    }
         }
 
         threadExecutor.scheduleAtFixedRate(func, 1, 5, TimeUnit.SECONDS)
@@ -63,22 +75,6 @@ class WebApiLogger(url: String,
 
     }
 
-    private fun checkUrl(url: String) {
-        //baseUrl must end in /
-        if (!url.startsWith("http://")) {
-            Log.d("WebApiLogger", "Url doesn't start with http://")
-            //todo is that necessary??
-        }
-
-        if (!url.endsWith("/api/v1/")) {
-            Log.d("WebApiLogger", "Url doesn't end with /api/v1/")
-            //todo is that necessary??
-        }
-
-        if (!url.endsWith("/")) {
-            Log.d("WebApiLogger", "Url doesn't end with /")
-        }
-    }
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
         val entity = WebLoggerEntity(
@@ -107,7 +103,7 @@ class WebApiLogger(url: String,
 
         //we want errors to be sync
         GlobalScope.launch(Dispatchers.IO) {
-            loggerApi.postLogs(listOf(entity))
+            loggerApi.postLogs(listOf(entity)).execute()
         }
     }
 
@@ -122,7 +118,7 @@ class WebApiLogger(url: String,
 
 
         GlobalScope.launch(Dispatchers.IO) {
-            loggerApi.postLogs(listOf(entity))
+            loggerApi.postLogs(listOf(entity)).execute()
         }
     }
 

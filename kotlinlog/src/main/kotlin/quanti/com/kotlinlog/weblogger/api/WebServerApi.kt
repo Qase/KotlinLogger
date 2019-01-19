@@ -1,6 +1,7 @@
 package quanti.com.kotlinlog.weblogger.api
 
 import quanti.com.kotlinlog.weblogger.entity.WebLoggerEntity
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -8,7 +9,7 @@ import retrofit2.http.POST
 interface WebServerApi {
 
     @POST("log")
-    fun postLogs(@Body logs: List<WebLoggerEntity>)
+    fun postLogs(@Body logs: List<WebLoggerEntity>) : Call<Void>
 
 }
 
