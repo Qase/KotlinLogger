@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.getWebLoggerString
 import quanti.com.kotlinlog.utils.convertToLogCatString
@@ -48,6 +49,15 @@ class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
                 .build()
         loggerApi = retrofit.create<WebServerApi>(WebServerApi::class.java)
 
+        GlobalScope.launch(Dispatchers.IO) {
+            val list = arrayListOf(WebLoggerEntity.getTestEntity())
+            val response = loggerApi.postLogs(list).execute()
+
+            withContext(Dispatchers.Main){
+                bun.severActive.isServerActive(response.isSuccessful)
+            }
+        }
+
         val func = Runnable {
             loga("WebApiLogger", "TASK: Writing data from queue: ${blockingQueue.size}")
 
@@ -59,20 +69,12 @@ class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
 
             listOfLogs
                     .chunked(25)
-                    .forEach {
-                        GlobalScope.launch(Dispatchers.IO) {
-                            loga("WebApiLogger", "TASK: Writing chunked data of size: ${it.size}")
-                            loggerApi.postLogs(it).execute()
-                        }
-
-                    }
+                    .forEach(this@WebApiLogger::post)
         }
 
         threadExecutor.scheduleAtFixedRate(func, 1, 5, TimeUnit.SECONDS)
 
-
     }
-
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
         if (androidLogLevel < bun.minimalLogLevel)
@@ -94,10 +96,7 @@ class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
 
         val entity = WebLoggerEntity(bun.sessionName, androidLogLevel.getWebLoggerString(), message)
 
-        //we want errors to be sync
-        GlobalScope.launch(Dispatchers.IO) {
-            loggerApi.postLogs(listOf(entity)).execute()
-        }
+        post(entity)
     }
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) {
@@ -108,13 +107,20 @@ class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
         val message = "$tag/$methodName: $text"
         val entity = WebLoggerEntity(bun.sessionName, androidLogLevel.getWebLoggerString(), message)
 
-        GlobalScope.launch(Dispatchers.IO) {
-            loggerApi.postLogs(listOf(entity)).execute()
-        }
+        post(entity)
     }
 
     override fun cleanResources() {
         threadExecutor.shutdown()
+    }
+
+    private fun post(entity: WebLoggerEntity) = post(arrayListOf(entity))
+
+    private fun post(list : List<WebLoggerEntity>){
+        GlobalScope.launch(Dispatchers.IO) {
+            loga("WebApiLogger", "TASK: Writing data of size: ${list.size}")
+            loggerApi.postLogs(list).execute()
+        }
     }
 
 

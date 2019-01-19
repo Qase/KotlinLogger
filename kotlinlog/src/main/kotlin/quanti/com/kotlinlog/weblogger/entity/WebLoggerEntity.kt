@@ -8,4 +8,10 @@ data class WebLoggerEntity @JvmOverloads constructor(
         @SerializedName("message") val message: String,
         @SerializedName("id") val id: String = "",
         @SerializedName("timestamp") val timestamp: Long = System.currentTimeMillis()
-)
+) {
+    companion object {
+        fun getTestEntity() : WebLoggerEntity = WebLoggerEntity("testSession", "INFO", "TestMessage")
+    }
+}
+
+

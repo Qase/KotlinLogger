@@ -29,12 +29,13 @@ import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
 import quanti.com.kotlinlog.weblogger.WebApiLogger
+import quanti.com.kotlinlog.weblogger.api.IApiServerActive
 import quanti.com.kotlinlog.weblogger.bundle.WebServerApiBundle
 
 const val REQUEST = 98
 const val RANDOM_TEXT = "qwertyuiop"
 
-class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
+class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IApiServerActive {
 
     private var checked = 3
     private var bundle: BaseBundle = DayLogBundle()
@@ -47,14 +48,24 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         initLog()
 
-        (findViewById<RadioGroup>(R.id.radioGroup)).setOnCheckedChangeListener(this)
-        (findViewById<Button>(R.id.apiServer_button)).setOnClickListener {
+        findViewById<RadioGroup>(R.id.radioGroup).setOnCheckedChangeListener(this)
+        findViewById<Button>(R.id.apiServer_button).setOnClickListener {
             val url = findViewById<EditText>(R.id.apiServer_editText).text.toString()
-            apiServerBundle = WebServerApiBundle(url)
+            apiServerBundle = WebServerApiBundle(url, this)
             initLog()
         }
 
     }
+
+    override fun isServerActive(isActive: Boolean) {
+        val text = if (isActive) {
+            "Successfully connected"
+        } else {
+            "Connection error, have you written address correctly?"
+        }
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    }
+
 
     private fun initLog() {
         Log.removeAllLoggers()
@@ -70,11 +81,10 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener {
 
         (findViewById<TextView>(R.id.loggerInUseTextView)).text = text
 
-        if (apiServerBundle != null){
+        if (apiServerBundle != null) {
             try {
                 Log.addLogger(WebApiLogger(apiServerBundle!!))
-                Toast.makeText(this, "Successfully connected", Toast.LENGTH_LONG).show()
-            } catch (e : Exception){
+            } catch (e: Exception) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
             }
         }
