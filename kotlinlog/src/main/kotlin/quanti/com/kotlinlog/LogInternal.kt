@@ -19,7 +19,7 @@ internal fun allLog(androidLogLevel: Int, tag: String?, text: String) {
     val element = getMethodStackTraceElement()
     val safeTag = tag ?: element.getClassNameWithoutPackage()
 
-    loggers.forEach {
+    loggers.filterLogLevel(androidLogLevel).forEach {
         it.log(androidLogLevel, safeTag, element.methodName, text)
     }
 }
@@ -30,7 +30,7 @@ internal fun allLogSync(androidLogLevel: Int, tag: String?, text: String) {
     val element = getMethodStackTraceElement()
     val safeTag = tag ?: element.getClassNameWithoutPackage()
 
-    loggers.forEach {
+    loggers.filterLogLevel(androidLogLevel).forEach {
         it.logSync(androidLogLevel, safeTag, element.methodName, text)
     }
 }
@@ -41,10 +41,12 @@ internal fun allLogThrowable(androidLogLevel: Int, tag: String?, text: String, t
     val element = getMethodStackTraceElement()
     val safeTag = tag ?: element.getClassNameWithoutPackage()
 
-    loggers.forEach {
+    loggers.filterLogLevel(androidLogLevel).forEach {
         it.logThrowable(androidLogLevel, safeTag, element.methodName, text, t)
     }
 }
+
+private fun ArrayList<ILogger>.filterLogLevel(logLevel: Int) = filter { logLevel >= it.getMinimalLoggingLevel()}
 
 private fun emptyCheck(): Boolean {
     if (loggerNotAdded) {
@@ -53,6 +55,7 @@ private fun emptyCheck(): Boolean {
     }
     return false
 }
+
 
 /**
  * @return Returns method name by reflexion

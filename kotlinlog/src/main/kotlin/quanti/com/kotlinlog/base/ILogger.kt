@@ -27,4 +27,9 @@ interface ILogger {
      */
     fun cleanResources()
 
+    /**
+     * Return minimal log level form which to log
+     */
+    fun getMinimalLoggingLevel() : Int
+
 }

@@ -13,11 +13,10 @@ import quanti.com.kotlinlog.base.LoggerBundle
 class AndroidLogger(
         private var bun: LoggerBundle = LoggerBundle()
 ) : ILogger {
+    override fun getMinimalLoggingLevel(): Int = bun.minimalLogLevel
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
-        if (androidLogLevel >= bun.minimalLogLevel) {
-            android.util.Log.println(androidLogLevel, tag, text)
-        }
+        android.util.Log.println(androidLogLevel, tag, text)
     }
 
     override fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable) {

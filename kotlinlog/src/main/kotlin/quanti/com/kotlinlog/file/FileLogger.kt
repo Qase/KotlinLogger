@@ -65,23 +65,12 @@ class FileLogger(
     }
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
-
-        if (androidLogLevel < bun.minimalLogLevel) {
-            return
-        }
-
         val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
-
         blockingQueue.add(formattedString)
     }
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) {
-        if (androidLogLevel < bun.minimalLogLevel) {
-            return
-        }
-
         val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
-
         logFile.write(formattedString)
     }
 
@@ -116,6 +105,8 @@ class FileLogger(
     override fun cleanResources() {
         threadExecutor.shutdown()
     }
+
+    override fun getMinimalLoggingLevel(): Int = bun.minimalLogLevel
 
     /**
      * Returns android-log like formatted string

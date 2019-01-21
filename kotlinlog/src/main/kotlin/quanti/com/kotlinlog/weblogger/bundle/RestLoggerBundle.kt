@@ -5,7 +5,7 @@ import quanti.com.kotlinlog.utils.getRandomString
 import quanti.com.kotlinlog.weblogger.rest.IServerActive
 
 /**
- * Bundle class for quanti web api logging server
+ * Bundle class for WebLogger using REST api
  *
  * @param url okhttp url address of the server - it has to start with 'http://' and end with '/'
  * @param severActive callback to check if server is active
@@ -13,18 +13,12 @@ import quanti.com.kotlinlog.weblogger.rest.IServerActive
  * @param minimalLogLevelThrowable minimal log level for calls with throwable - default LogLevel.Verbose
  * @param sessionName session name identificator on webserver
  */
-data class WebLoggerBundle @JvmOverloads constructor(
-        val url: String,
-        val severActive: IServerActive = dummyIsServerActiveImplementation,
-        val minimalLogLevel: Int = LogLevel.DEBUG,
-        val minimalLogLevelThrowable: Int = LogLevel.VERBOSE,
-        val sessionName: String = "KotlinLoggerSession_" + getRandomString(4)
-) {
-
-    companion object {
-        val dummyIsServerActiveImplementation = object : IServerActive {
-            override fun isServerActive(isActive: Boolean) {}
-        }
-    }
-}
-
+class RestLoggerBundle @JvmOverloads constructor(
+        url: String,
+        severActive: IServerActive = dummyIsServerActiveImplementation,
+        minimalLogLevel: Int = LogLevel.VERBOSE,
+        minimalLogLevelThrowable: Int = LogLevel.VERBOSE,
+        sessionName: String = "KotlinLoggerSession_rest_" + getRandomString(4)
+) : BaseWebLoggerBundle (
+        url, severActive, minimalLogLevel, minimalLogLevelThrowable, sessionName
+)

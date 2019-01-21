@@ -250,8 +250,7 @@
         android:layout_marginStart="2dp"
         android:layout_marginLeft="2dp"
         android:layout_marginBottom="2dp"
-        android:onClick="switchLogger_clicked"
-        android:text="Server"
+        android:text="REST"
         app:layout_constraintBottom_toTopOf="@+id/share"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -277,6 +276,17 @@
         android:onClick="testShare_clicked"
         android:text="Share"
         app:layout_constraintBottom_toTopOf="@+id/testn6"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/wsServer_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="2dp"
+        android:text="WS"
+        app:layout_constraintBottom_toTopOf="@+id/apiServer_button"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -442,6 +452,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/apiServer_button"
         app:layout_constraintTop_toTopOf="@+id/apiServer_button" />
+
+    <EditText
+        android:id="@+id/wsServer_editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:hint="ws://webserver_address/ws/v1/"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/wsServer_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/apiServer_button"
+        app:layout_constraintTop_toTopOf="@+id/wsServer_button" />
 
 </android.support.constraint.ConstraintLayout>
 

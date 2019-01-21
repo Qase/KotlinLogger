@@ -15,11 +15,10 @@ import quanti.com.kotlinlog.base.LoggerBundle
 class CrashlyticsLogger(
         private var bun: LoggerBundle = LoggerBundle(LogLevel.WARN)
 ) : ILogger {
+    override fun getMinimalLoggingLevel(): Int = bun.minimalLogLevel
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
-        if (androidLogLevel >= bun.minimalLogLevel) {
-            Crashlytics.log("$tag $methodName $text")
-        }
+        Crashlytics.log("$tag $methodName $text")
     }
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) = log(androidLogLevel, tag, methodName, text)

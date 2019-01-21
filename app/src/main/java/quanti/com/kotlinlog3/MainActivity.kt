@@ -8,6 +8,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
 import android.support.annotation.IdRes
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -30,9 +31,11 @@ import quanti.com.kotlinlog.file.bundle.BaseBundle
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
-import quanti.com.kotlinlog.weblogger.RestLogger
+import quanti.com.kotlinlog.weblogger.WebLogger
 import quanti.com.kotlinlog.weblogger.rest.IServerActive
-import quanti.com.kotlinlog.weblogger.bundle.WebLoggerBundle
+import quanti.com.kotlinlog.weblogger.bundle.BaseWebLoggerBundle
+import quanti.com.kotlinlog.weblogger.bundle.RestLoggerBundle
+import quanti.com.kotlinlog.weblogger.bundle.WebSocketLoggerBundle
 
 const val REQUEST = 98
 const val RANDOM_TEXT = "qwertyuiop"
@@ -41,7 +44,26 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
     private var checked = 3
     private var bundle: BaseBundle = DayLogBundle()
-    private var apiServerBundle: WebLoggerBundle? = null
+    private var restLoggerBundle: RestLoggerBundle? = null
+    private var wsLoggerBundle: WebSocketLoggerBundle? = null
+
+
+
+
+    private val restButtonCallback = View.OnClickListener{
+
+        val editText = findViewById<EditText>(R.id.apiServer_editText)
+        val url = getTextFrom(editText,false)
+        restLoggerBundle = RestLoggerBundle(url, this)
+        initLog()
+    }
+
+    private val wsButtonCallback = View.OnClickListener{
+        val editText = findViewById<EditText>(R.id.wsServer_editText)
+        val url = getTextFrom(editText, true)
+        wsLoggerBundle = WebSocketLoggerBundle(url, this)
+        initLog()
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,23 +73,8 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
         initLog()
 
         findViewById<RadioGroup>(R.id.radioGroup).setOnCheckedChangeListener(this)
-        findViewById<Button>(R.id.apiServer_button).setOnClickListener {
-
-            val editText = findViewById<EditText>(R.id.apiServer_editText)
-            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
-
-            val url = when{
-                editText.text.isNotEmpty() -> editText.text
-                clipboard.hasPrimaryClip() -> clipboard.primaryClip.getItemAt(0).text
-                else -> ""
-            }.toString()
-
-            editText.setText(url)
-
-            apiServerBundle = WebLoggerBundle(url, this)
-            initLog()
-        }
+        findViewById<Button>(R.id.apiServer_button).setOnClickListener(restButtonCallback)
+        findViewById<Button>(R.id.wsServer_button).setOnClickListener(wsButtonCallback)
 
     }
 
@@ -77,7 +84,9 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
         } else {
             "Connection error, have you written address correctly?"
         }
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        runOnUiThread {
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        }
     }
 
 
@@ -95,14 +104,21 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
         (findViewById<TextView>(R.id.loggerInUseTextView)).text = text
 
-        if (apiServerBundle != null) {
+        if (restLoggerBundle != null) {
             try {
-                Log.addLogger(RestLogger(apiServerBundle!!))
+                Log.addLogger(WebLogger(restLoggerBundle!!))
             } catch (e: Exception) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
             }
         }
 
+        if (wsLoggerBundle != null) {
+            try {
+                Log.addLogger(WebLogger(wsLoggerBundle!!))
+            } catch (e: Exception) {
+                Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+            }
+        }
 
     }
 
@@ -253,6 +269,26 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
         SendLogDialogFragment.newInstance("kidal5@centrum.cz").show(supportFragmentManager, "STRING")
 
+    }
+
+    private fun getTextFrom(editText: EditText, ws: Boolean): String {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        val url = when{
+            editText.text.isNotEmpty() -> editText.text
+            clipboard.hasPrimaryClip() -> {
+                val baseUrl = clipboard.primaryClip.getItemAt(0).text
+                when(ws){
+                    true -> "ws://$baseUrl/ws/v1/"
+                    false -> "http://$baseUrl/api/v1/"
+                }
+            }
+            else -> ""
+        }.toString()
+
+        editText.setText(url)
+
+        return url
     }
 
 }
