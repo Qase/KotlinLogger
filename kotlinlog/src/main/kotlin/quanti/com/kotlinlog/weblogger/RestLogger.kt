@@ -7,12 +7,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import quanti.com.kotlinlog.base.ILogger
-import quanti.com.kotlinlog.base.getWebLoggerString
 import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.loga
-import quanti.com.kotlinlog.weblogger.rest.RestApiDefinition
-import quanti.com.kotlinlog.weblogger.bundle.RestLoggerBundle
+import quanti.com.kotlinlog.weblogger.bundle.WebLoggerBundle
 import quanti.com.kotlinlog.weblogger.entity.WebLoggerEntity
+import quanti.com.kotlinlog.weblogger.rest.RestApiDefinition
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.Executors
@@ -26,8 +25,7 @@ import java.util.concurrent.TimeUnit
  *
  *
  */
-class RestLogger(private val bun: RestLoggerBundle) : ILogger {
-
+class RestLogger(private val bun: WebLoggerBundle) : ILogger {
 
     private val loggerApi: RestApiDefinition
     private val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
@@ -52,7 +50,7 @@ class RestLogger(private val bun: RestLoggerBundle) : ILogger {
             val list = arrayListOf(WebLoggerEntity.getTestEntity())
             val response = loggerApi.postLogs(list).execute()
 
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 bun.severActive.isServerActive(response.isSuccessful)
             }
         }
@@ -80,7 +78,7 @@ class RestLogger(private val bun: RestLoggerBundle) : ILogger {
             return
 
         val message = "$tag/$methodName: $text"
-        val entity = WebLoggerEntity(bun.sessionName, androidLogLevel.getWebLoggerString(), message)
+        val entity = WebLoggerEntity(bun.sessionName, androidLogLevel, message)
 
         blockingQueue.add(entity)
     }
@@ -93,7 +91,7 @@ class RestLogger(private val bun: RestLoggerBundle) : ILogger {
         var message = "$tag/$methodName: $text/n"
         message += t.convertToLogCatString()
 
-        val entity = WebLoggerEntity(bun.sessionName, androidLogLevel.getWebLoggerString(), message)
+        val entity = WebLoggerEntity(bun.sessionName, androidLogLevel, message)
 
         post(entity)
     }
@@ -104,7 +102,7 @@ class RestLogger(private val bun: RestLoggerBundle) : ILogger {
             return
 
         val message = "$tag/$methodName: $text"
-        val entity = WebLoggerEntity(bun.sessionName, androidLogLevel.getWebLoggerString(), message)
+        val entity = WebLoggerEntity(bun.sessionName, androidLogLevel, message)
 
         post(entity)
     }
@@ -115,7 +113,7 @@ class RestLogger(private val bun: RestLoggerBundle) : ILogger {
 
     private fun post(entity: WebLoggerEntity) = post(arrayListOf(entity))
 
-    private fun post(list : List<WebLoggerEntity>){
+    private fun post(list: List<WebLoggerEntity>) {
         GlobalScope.launch(Dispatchers.IO) {
             loga("RestLogger", "TASK: Writing data of size: ${list.size}")
             loggerApi.postLogs(list).execute()

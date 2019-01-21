@@ -32,7 +32,7 @@ import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
 import quanti.com.kotlinlog.weblogger.RestLogger
 import quanti.com.kotlinlog.weblogger.rest.IServerActive
-import quanti.com.kotlinlog.weblogger.bundle.RestLoggerBundle
+import quanti.com.kotlinlog.weblogger.bundle.WebLoggerBundle
 
 const val REQUEST = 98
 const val RANDOM_TEXT = "qwertyuiop"
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
     private var checked = 3
     private var bundle: BaseBundle = DayLogBundle()
-    private var apiServerBundle: RestLoggerBundle? = null
+    private var apiServerBundle: WebLoggerBundle? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
             editText.setText(url)
 
-            apiServerBundle = RestLoggerBundle(url, this)
+            apiServerBundle = WebLoggerBundle(url, this)
             initLog()
         }
 

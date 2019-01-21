@@ -13,7 +13,7 @@ import quanti.com.kotlinlog.weblogger.rest.IServerActive
  * @param minimalLogLevelThrowable minimal log level for calls with throwable - default LogLevel.Verbose
  * @param sessionName session name identificator on webserver
  */
-data class RestLoggerBundle @JvmOverloads constructor(
+data class WebLoggerBundle @JvmOverloads constructor(
         val url: String,
         val severActive: IServerActive = dummyIsServerActiveImplementation,
         val minimalLogLevel: Int = LogLevel.DEBUG,
