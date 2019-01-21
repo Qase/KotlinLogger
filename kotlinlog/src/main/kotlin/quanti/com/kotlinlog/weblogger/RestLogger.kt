@@ -10,27 +10,26 @@ import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.getWebLoggerString
 import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.loga
-import quanti.com.kotlinlog.weblogger.api.WebServerApi
-import quanti.com.kotlinlog.weblogger.bundle.WebServerApiBundle
+import quanti.com.kotlinlog.weblogger.rest.RestApiDefinition
+import quanti.com.kotlinlog.weblogger.bundle.RestLoggerBundle
 import quanti.com.kotlinlog.weblogger.entity.WebLoggerEntity
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 /**
- * WebApiLogger to quanti log webserver
+ * RestLogger to quanti log webserver
  *
  *
  *
  */
-class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
+class RestLogger(private val bun: RestLoggerBundle) : ILogger {
 
 
-    private val loggerApi: WebServerApi
+    private val loggerApi: RestApiDefinition
     private val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     private val blockingQueue = LinkedBlockingQueue<WebLoggerEntity>()
 
@@ -38,16 +37,16 @@ class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
     init {
 
         if (!bun.url.endsWith("/api/v1/")) {
-            Log.e("WebApiLogger", "Url doesn't end with /api/v1/. Have you specified correct webserver endpoint?")
+            Log.e("RestLogger", "Url doesn't end with /api/v1/. Have you specified correct webserver endpoint?")
         }
 
 
-        Log.d("WebApiLogger", "Creating connection to ${bun.url}")
+        Log.d("RestLogger", "Creating connection to ${bun.url}")
         val retrofit = Retrofit.Builder()
                 .baseUrl(bun.url)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
-        loggerApi = retrofit.create<WebServerApi>(WebServerApi::class.java)
+        loggerApi = retrofit.create<RestApiDefinition>(RestApiDefinition::class.java)
 
         GlobalScope.launch(Dispatchers.IO) {
             val list = arrayListOf(WebLoggerEntity.getTestEntity())
@@ -59,7 +58,7 @@ class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
         }
 
         val func = Runnable {
-            loga("WebApiLogger", "TASK: Writing data from queue: ${blockingQueue.size}")
+            loga("RestLogger", "TASK: Writing data from queue: ${blockingQueue.size}")
 
             if (blockingQueue.isEmpty())
                 return@Runnable
@@ -69,7 +68,7 @@ class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
 
             listOfLogs
                     .chunked(25)
-                    .forEach(this@WebApiLogger::post)
+                    .forEach(this@RestLogger::post)
         }
 
         threadExecutor.scheduleAtFixedRate(func, 1, 5, TimeUnit.SECONDS)
@@ -118,7 +117,7 @@ class WebApiLogger(private val bun: WebServerApiBundle) : ILogger {
 
     private fun post(list : List<WebLoggerEntity>){
         GlobalScope.launch(Dispatchers.IO) {
-            loga("WebApiLogger", "TASK: Writing data of size: ${list.size}")
+            loga("RestLogger", "TASK: Writing data of size: ${list.size}")
             loggerApi.postLogs(list).execute()
         }
     }

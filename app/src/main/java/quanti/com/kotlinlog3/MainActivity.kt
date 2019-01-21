@@ -30,19 +30,18 @@ import quanti.com.kotlinlog.file.bundle.BaseBundle
 import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
-import quanti.com.kotlinlog.utils.loga
-import quanti.com.kotlinlog.weblogger.WebApiLogger
-import quanti.com.kotlinlog.weblogger.api.IApiServerActive
-import quanti.com.kotlinlog.weblogger.bundle.WebServerApiBundle
+import quanti.com.kotlinlog.weblogger.RestLogger
+import quanti.com.kotlinlog.weblogger.rest.IServerActive
+import quanti.com.kotlinlog.weblogger.bundle.RestLoggerBundle
 
 const val REQUEST = 98
 const val RANDOM_TEXT = "qwertyuiop"
 
-class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IApiServerActive {
+class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IServerActive {
 
     private var checked = 3
     private var bundle: BaseBundle = DayLogBundle()
-    private var apiServerBundle: WebServerApiBundle? = null
+    private var apiServerBundle: RestLoggerBundle? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +65,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IA
 
             editText.setText(url)
 
-            apiServerBundle = WebServerApiBundle(url, this)
+            apiServerBundle = RestLoggerBundle(url, this)
             initLog()
         }
 
@@ -98,7 +97,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IA
 
         if (apiServerBundle != null) {
             try {
-                Log.addLogger(WebApiLogger(apiServerBundle!!))
+                Log.addLogger(RestLogger(apiServerBundle!!))
             } catch (e: Exception) {
                 Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
             }
