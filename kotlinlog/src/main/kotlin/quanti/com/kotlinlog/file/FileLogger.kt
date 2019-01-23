@@ -46,21 +46,21 @@ class FileLogger(
     private val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     private var appName: String = appCtx.getApplicationName()
 
+    private val func = Runnable {
+        //first write everything form queue to file
+        loga("TASK: Writing data from queue: ${blockingQueue.size}")
+        logFile.writeBatch(blockingQueue)
+
+        //perform cleaning
+        loga("TASK: Cleaning folder")
+        logFile.cleanFolder()
+
+        //clean error files
+        CrashLogFile.clean(appCtx, bun.maxDaysSavedThrowable)
+    }
+
 
     init {
-
-        val func = Runnable {
-            //first write everything form queue to file
-            loga("TASK: Writing data from queue: ${blockingQueue.size}")
-            logFile.writeBatch(blockingQueue)
-
-            //perform cleaning
-            loga("TASK: Cleaning folder")
-            logFile.cleanFolder()
-
-            //clean error files
-            CrashLogFile.clean(appCtx, bun.maxDaysSavedThrowable)
-        }
         threadExecutor.scheduleAtFixedRate(func, 1, 5, TimeUnit.SECONDS)
     }
 
@@ -113,6 +113,13 @@ class FileLogger(
      */
     private fun getFormatedString(appName: String, logLevel: Int, className: String, methodName: String, text: String): String {
         return "${getFormattedNow()}/$appName ${logLevel.getLogLevelString()}/${className}_$methodName: $text\n"
+    }
+
+    /**
+     * Forces all stored data in queue to be written
+     */
+    internal fun forceWrite(){
+        threadExecutor.execute(func)
     }
 
     companion object {

@@ -1,7 +1,9 @@
 package quanti.com.kotlinlog
 
 import quanti.com.kotlinlog.base.ILogger
+import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.utils.getClassNameWithoutPackage
+import java.io.File
 
 /***
  * PRIVATE
@@ -44,6 +46,11 @@ internal fun allLogThrowable(androidLogLevel: Int, tag: String?, text: String, t
     loggers.filterLogLevel(androidLogLevel).forEach {
         it.logThrowable(androidLogLevel, safeTag, element.methodName, text, t)
     }
+}
+
+internal fun forceWrite(){
+    val fileLogger = loggers.firstOrNull { it is FileLogger } as FileLogger
+    fileLogger.forceWrite()
 }
 
 private fun ArrayList<ILogger>.filterLogLevel(logLevel: Int) = filter { logLevel >= it.getMinimalLoggingLevel()}

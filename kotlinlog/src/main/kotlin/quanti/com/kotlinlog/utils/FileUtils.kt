@@ -7,6 +7,7 @@ import android.support.v4.content.FileProvider
 import quanti.com.kotlinlog.Log.Companion.i
 import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.MetadataFile
+import quanti.com.kotlinlog.forceWrite
 import java.io.*
 import java.util.concurrent.TimeUnit
 
@@ -113,6 +114,9 @@ fun getZipOfLogs(appCtx: Context, fileAge: Int = 4): File {
         write()
         closeOutputStream()
     }
+
+    loga("Force write")
+    forceWrite()
 
     val zipFileName = "Logs_${getFormattedFileNameForDayTemp()}_${appCtx.getApplicationName()}.zip"
     val zipFile = File(appCtx.filesDir, zipFileName)
