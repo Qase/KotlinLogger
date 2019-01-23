@@ -5,6 +5,8 @@ import android.media.MediaScannerConnection
 import android.os.Environment
 import android.support.v4.content.FileProvider
 import quanti.com.kotlinlog.Log.Companion.i
+import quanti.com.kotlinlog.file.file.CrashLogFile
+import quanti.com.kotlinlog.file.file.MetadataFile
 import java.io.*
 import java.util.concurrent.TimeUnit
 
@@ -104,6 +106,12 @@ fun getZipOfLogs(appCtx: Context, fileAge: Int = 4): File {
 
     if (appCtx.filesDir.listFiles().isEmpty()) {
         throw FileNotFoundException("No files were found")
+    }
+
+    //create metadata info file
+    MetadataFile(appCtx).apply {
+        write()
+        closeOutputStream()
     }
 
     val zipFileName = "Logs_${getFormattedFileNameForDayTemp()}_${appCtx.getApplicationName()}.zip"
