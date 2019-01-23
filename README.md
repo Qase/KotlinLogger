@@ -68,6 +68,12 @@ Log.addLogger(FileLogger(applicationContext, rotateBundle))
 val strictRotateBundle = StrictCircleLogBundle(maxFileSizeMegaBytes = 1)  
 Log.addLogger(FileLogger(applicationContext, strictRotateBundle))
 
+//WebLogger logs to [Qase LoggingServer](https://github.com/Qase/LoggingServer) using REST API or WebSockets
+//Run your own server and then debug your application remotely
+val restBundle = RestLoggerBundle("http://webserver/api/v1/")
+val webSocketBundle = WebSocketLoggerBundle("ws://webserver/ws/v1/")
+Log.addLogger(WebLogger(choose restBundle or webSocketBundle))
+
 ```
 
 
@@ -100,7 +106,7 @@ Log.logMetadata(appContext)
 
 //Use of SendLogDialogFragment
 //It can send zip of logs to email or save to sd card 
-//WRITE_EXTERNAL_STORAGE permission is needed if you want to save lgos to sd card
+//WRITE_EXTERNAL_STORAGE permission is needed if you want to save logs to sd card
 SendLogDialogFragment.newInstance("your@email.com", deleteLogs = true).show(supportFragmentManager, "TAG")
 ```
 <img src="github/dialog.png" width="250">
