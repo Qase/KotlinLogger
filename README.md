@@ -22,8 +22,10 @@ Mostly used in Prague based android develpoment company - [Quanti](https://www.q
 * Lot of optional parameters
 * Lightweight
 * Possibility to print system info
+* Send data to [Qase LoggingServer](https://github.com/Qase/LoggingServer)
 * Every logged exception is logged to own separate file
 * Sample [app](github/sampleApp.png) is ready to build
+
 
 ## Installation
 
@@ -68,7 +70,7 @@ Log.addLogger(FileLogger(applicationContext, rotateBundle))
 val strictRotateBundle = StrictCircleLogBundle(maxFileSizeMegaBytes = 1)  
 Log.addLogger(FileLogger(applicationContext, strictRotateBundle))
 
-//WebLogger logs to [Qase LoggingServer](https://github.com/Qase/LoggingServer) using REST API or WebSockets
+//WebLogger logs to Qase LogServer using REST API or WebSockets
 //Run your own server and then debug your application remotely
 val restBundle = RestLoggerBundle("http://webserver/api/v1/")
 val webSocketBundle = WebSocketLoggerBundle("ws://webserver/ws/v1/")
