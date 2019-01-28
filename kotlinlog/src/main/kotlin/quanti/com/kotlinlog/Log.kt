@@ -17,19 +17,35 @@ class Log {
 
         //ASYNC METHODS
         @JvmStatic @JvmOverloads
-        fun v(text: String, tag: String? = null) = allLog(LogLevel.VERBOSE, tag, text)
+        fun v(text: String) = allLog(LogLevel.VERBOSE, null, text)
 
         @JvmStatic @JvmOverloads
-        fun d(text: String, tag: String? = null) = allLog(LogLevel.DEBUG, tag, text)
+        fun d(text: String) = allLog(LogLevel.DEBUG, null, text)
 
         @JvmStatic @JvmOverloads
-        fun i(text: String, tag: String? = null) = allLog(LogLevel.INFO, tag, text)
+        fun i(text: String) = allLog(LogLevel.INFO, null, text)
 
         @JvmStatic @JvmOverloads
-        fun w(text: String, tag: String? = null) = allLog(LogLevel.WARN, tag, text)
+        fun w(text: String) = allLog(LogLevel.WARN, null, text)
 
         @JvmStatic @JvmOverloads
-        fun e(text: String, tag: String? = null) = allLog(LogLevel.ERROR, tag, text)
+        fun e(text: String) = allLog(LogLevel.ERROR, null, text)
+
+
+        @JvmStatic @JvmOverloads
+        fun v(tag: String ,text: String) = allLog(LogLevel.VERBOSE, tag, text)
+
+        @JvmStatic @JvmOverloads
+        fun d(tag: String ,text: String) = allLog(LogLevel.DEBUG, tag, text)
+
+        @JvmStatic @JvmOverloads
+        fun i(tag: String ,text: String) = allLog(LogLevel.INFO, tag, text)
+
+        @JvmStatic @JvmOverloads
+        fun w(tag: String ,text: String) = allLog(LogLevel.WARN, tag, text)
+
+        @JvmStatic @JvmOverloads
+        fun e(tag: String ,text: String) = allLog(LogLevel.ERROR, tag, text)
 
 
         //SYNC METHODS
@@ -49,20 +65,37 @@ class Log {
         fun eSync(text: String, tag: String? = null) = allLogSync(LogLevel.ERROR, tag, text)
 
         //THROWABLE METHODS
-        @JvmStatic @JvmOverloads
-        fun v(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.VERBOSE, tag, text, t)
 
         @JvmStatic @JvmOverloads
-        fun d(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.INFO, tag, text, t)
+        fun v(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.VERBOSE, null, text, t)
 
         @JvmStatic @JvmOverloads
-        fun i(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.WARN, tag, text, t)
+        fun d(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.INFO, null, text, t)
 
         @JvmStatic @JvmOverloads
-        fun w(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.DEBUG, tag, text, t)
+        fun i(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.WARN, null, text, t)
 
         @JvmStatic @JvmOverloads
-        fun e(text: String, t: Throwable, tag: String? = null) = allLogThrowable(LogLevel.ERROR, tag, text, t)
+        fun w(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.DEBUG, null, text, t)
+
+        @JvmStatic @JvmOverloads
+        fun e(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.ERROR, null, text, t)
+
+
+        @JvmStatic @JvmOverloads
+        fun v(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.VERBOSE, tag, text, t)
+
+        @JvmStatic @JvmOverloads
+        fun d(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.INFO, tag, text, t)
+
+        @JvmStatic @JvmOverloads
+        fun i(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.WARN, tag, text, t)
+
+        @JvmStatic @JvmOverloads
+        fun w(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.DEBUG, tag, text, t)
+
+        @JvmStatic @JvmOverloads
+        fun e(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.ERROR, tag, text, t)
 
 
         /**
@@ -82,7 +115,7 @@ class Log {
             val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
 
             Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-                
+
                 if (oldHandler != null)
                     oldHandler.uncaughtException(paramThread, paramThrowable) //Delegates to Android's error handling
                 else
