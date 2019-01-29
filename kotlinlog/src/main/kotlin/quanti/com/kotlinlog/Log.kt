@@ -131,6 +131,8 @@ class Log {
 
             Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
 
+                e(SECRET_CODE_UNHANDLED, paramThrowable)
+
                 if (oldHandler != null)
                     oldHandler.uncaughtException(paramThread, paramThrowable) //Delegates to Android's error handling
                 else
