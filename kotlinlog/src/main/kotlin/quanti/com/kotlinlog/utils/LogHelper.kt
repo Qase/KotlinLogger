@@ -9,7 +9,7 @@ fun loga(vararg strings: Any){
 
 fun loga(string: String){
     if(BuildConfig.DEBUG_LOG){
-        println("$TAG $string")
+        //println("$TAG $string")
         android.util.Log.i(TAG, string)
     }
 

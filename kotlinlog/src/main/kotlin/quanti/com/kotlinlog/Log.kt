@@ -145,6 +145,20 @@ class Log {
          */
         @JvmStatic
         fun addLogger(logger: ILogger) {
+
+            //check if logger is present
+
+            val oldLogger = loggers.firstOrNull{
+                d("LOG ADD", it.describe())
+                return@firstOrNull it.describe() == logger.describe()
+            }
+
+
+            if (oldLogger != null){
+                oldLogger.cleanResources()
+                loggers.remove(oldLogger)
+            }
+
             loggers.add(logger)
             loggerNotAdded = false
         }

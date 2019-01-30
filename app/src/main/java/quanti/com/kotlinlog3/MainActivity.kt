@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
 
     private fun initLog() {
-        Log.removeAllLoggers()
+//        Log.removeAllLoggers()
         Log.addLogger(FileLogger(applicationContext, bundle))
 
         Log.useUncheckedErrorHandler()

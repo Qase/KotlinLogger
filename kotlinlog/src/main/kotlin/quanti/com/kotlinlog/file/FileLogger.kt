@@ -48,7 +48,7 @@ class FileLogger(
 
     private val func = Runnable {
         //first write everything form queue to file
-        loga("TASK: Writing data from queue: ${blockingQueue.size}")
+        loga("TASK: Writing data from queue: ${blockingQueue.size} ${Thread.currentThread().name}")
         logFile.writeBatch(blockingQueue)
 
         //perform cleaning
@@ -103,7 +103,16 @@ class FileLogger(
     }
 
     override fun cleanResources() {
-        threadExecutor.shutdown()
+        try {
+            threadExecutor.shutdown()
+            threadExecutor.awaitTermination(5, TimeUnit.SECONDS)
+        } catch (e: Exception) {
+            threadExecutor.shutdownNow()
+        }
+    }
+
+    override fun describe(): String {
+        return "FileLogger_${logFile.javaClass.simpleName}"
     }
 
     override fun getMinimalLoggingLevel(): Int = bun.minimalLogLevel
@@ -118,7 +127,7 @@ class FileLogger(
     /**
      * Forces all stored data in queue to be written
      */
-    internal fun forceWrite(){
+    internal fun forceWrite() {
         threadExecutor.execute(func)
     }
 

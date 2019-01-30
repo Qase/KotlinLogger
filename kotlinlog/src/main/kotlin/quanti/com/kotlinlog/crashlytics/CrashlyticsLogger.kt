@@ -15,6 +15,7 @@ import quanti.com.kotlinlog.base.LoggerBundle
 class CrashlyticsLogger(
         private var bun: LoggerBundle = LoggerBundle(LogLevel.WARN)
 ) : ILogger {
+
     override fun getMinimalLoggingLevel(): Int = bun.minimalLogLevel
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {
@@ -29,5 +30,8 @@ class CrashlyticsLogger(
     }
 
     override fun cleanResources() {}
+
+    override fun describe() = "CrashlyticsLogger"
+
 
 }

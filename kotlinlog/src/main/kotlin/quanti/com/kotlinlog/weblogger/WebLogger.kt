@@ -22,6 +22,7 @@ import quanti.com.kotlinlog.weblogger.websocket.WebSocketSender
  */
 class WebLogger(private val bun: BaseWebLoggerBundle) : ILogger {
 
+
     private val sender = when (bun) {
         is RestLoggerBundle -> RestSender(bun.url)
         is WebSocketLoggerBundle -> WebSocketSender(bun.url)
@@ -61,5 +62,10 @@ class WebLogger(private val bun: BaseWebLoggerBundle) : ILogger {
     }
 
     override fun getMinimalLoggingLevel(): Int = bun.minimalLogLevel
+
+    override fun describe(): String {
+        return "WebLogger_${sender.javaClass.simpleName}"
+    }
+
 
 }

@@ -32,4 +32,9 @@ interface ILogger {
      */
     fun getMinimalLoggingLevel() : Int
 
+    /**
+     * Return textual description of this logger and associated bundle
+     */
+    fun describe(): String
+
 }
