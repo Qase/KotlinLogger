@@ -33,19 +33,19 @@ class Log {
 
 
         @JvmStatic
-        fun v(tag: String ,text: String) = allLog(LogLevel.VERBOSE, tag, text)
+        fun v(tag: String, text: String) = allLog(LogLevel.VERBOSE, tag, text)
 
         @JvmStatic
-        fun d(tag: String ,text: String) = allLog(LogLevel.DEBUG, tag, text)
+        fun d(tag: String, text: String) = allLog(LogLevel.DEBUG, tag, text)
 
         @JvmStatic
-        fun i(tag: String ,text: String) = allLog(LogLevel.INFO, tag, text)
+        fun i(tag: String, text: String) = allLog(LogLevel.INFO, tag, text)
 
         @JvmStatic
-        fun w(tag: String ,text: String) = allLog(LogLevel.WARN, tag, text)
+        fun w(tag: String, text: String) = allLog(LogLevel.WARN, tag, text)
 
         @JvmStatic
-        fun e(tag: String ,text: String) = allLog(LogLevel.ERROR, tag, text)
+        fun e(tag: String, text: String) = allLog(LogLevel.ERROR, tag, text)
 
 
         //SYNC METHODS
@@ -82,35 +82,35 @@ class Log {
         //THROWABLE METHODS
 
         @JvmStatic @JvmOverloads
-        fun v(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.VERBOSE, null, text, t)
+        fun v(t: Throwable, text: String = "") = allLogThrowable(LogLevel.VERBOSE, null, text, t)
 
         @JvmStatic @JvmOverloads
-        fun d(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.DEBUG, null, text, t)
+        fun d(t: Throwable, text: String = "") = allLogThrowable(LogLevel.DEBUG, null, text, t)
 
         @JvmStatic @JvmOverloads
-        fun i(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.INFO, null, text, t)
+        fun i(t: Throwable, text: String = "") = allLogThrowable(LogLevel.INFO, null, text, t)
 
         @JvmStatic @JvmOverloads
-        fun w(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.WARN, null, text, t)
+        fun w(t: Throwable, text: String = "") = allLogThrowable(LogLevel.WARN, null, text, t)
 
         @JvmStatic @JvmOverloads
-        fun e(t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.ERROR, null, text, t)
+        fun e(t: Throwable, text: String = "") = allLogThrowable(LogLevel.ERROR, null, text, t)
 
 
         @JvmStatic @JvmOverloads
-        fun v(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.VERBOSE, tag, text, t)
+        fun v(tag: String, t: Throwable, text: String = "") = allLogThrowable(LogLevel.VERBOSE, tag, text, t)
 
         @JvmStatic @JvmOverloads
-        fun d(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.DEBUG, tag, text, t)
+        fun d(tag: String, t: Throwable, text: String = "") = allLogThrowable(LogLevel.DEBUG, tag, text, t)
 
         @JvmStatic @JvmOverloads
-        fun i(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.INFO, tag, text, t)
+        fun i(tag: String, t: Throwable, text: String = "") = allLogThrowable(LogLevel.INFO, tag, text, t)
 
         @JvmStatic @JvmOverloads
-        fun w(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.WARN, tag, text, t)
+        fun w(tag: String, t: Throwable, text: String = "") = allLogThrowable(LogLevel.WARN, tag, text, t)
 
         @JvmStatic @JvmOverloads
-        fun e(tag: String, t: Throwable, text:String = "" ) = allLogThrowable(LogLevel.ERROR, tag, text, t)
+        fun e(tag: String, t: Throwable, text: String = "") = allLogThrowable(LogLevel.ERROR, tag, text, t)
 
 
         /**
