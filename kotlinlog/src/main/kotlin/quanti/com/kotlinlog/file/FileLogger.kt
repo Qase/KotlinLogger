@@ -132,8 +132,16 @@ class FileLogger(
     }
 
     companion object {
+
+        /**
+         * Deletes all stored logs in app local memory
+         */
         fun deleteAllLogs(appCtx: Context) {
-            appCtx.filesDir.listFiles().forEach { it.delete() }
+            appCtx
+                    .filesDir
+                    .listFiles()
+                    .filter { it.name.endsWith(".log") }
+                    .forEach { it.delete() }
         }
     }
 
