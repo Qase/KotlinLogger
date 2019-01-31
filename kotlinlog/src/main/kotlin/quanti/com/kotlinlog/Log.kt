@@ -65,19 +65,19 @@ class Log {
         fun eSync(text: String) = allLogSync(LogLevel.ERROR, null, text)
 
         @JvmStatic
-        fun vSync(text: String, tag: String) = allLogSync(LogLevel.VERBOSE, tag, text)
+        fun vSync(tag: String, text: String) = allLogSync(LogLevel.VERBOSE, tag, text)
 
         @JvmStatic
-        fun iSync(text: String, tag: String) = allLogSync(LogLevel.INFO, tag, text)
+        fun iSync(tag: String, text: String) = allLogSync(LogLevel.INFO, tag, text)
 
         @JvmStatic
-        fun wSync(text: String, tag: String) = allLogSync(LogLevel.WARN, tag, text)
+        fun wSync(tag: String, text: String) = allLogSync(LogLevel.WARN, tag, text)
 
         @JvmStatic
-        fun dSync(text: String, tag: String) = allLogSync(LogLevel.DEBUG, tag, text)
+        fun dSync(tag: String, text: String) = allLogSync(LogLevel.DEBUG, tag, text)
 
         @JvmStatic
-        fun eSync(text: String, tag: String) = allLogSync(LogLevel.ERROR, tag, text)
+        fun eSync(tag: String, text: String) = allLogSync(LogLevel.ERROR, tag, text)
 
         //THROWABLE METHODS
 
