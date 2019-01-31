@@ -1,7 +1,6 @@
 package quanti.com.kotlinlog.weblogger
 
 import quanti.com.kotlinlog.base.ILogger
-import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.weblogger.bundle.BaseWebLoggerBundle
 import quanti.com.kotlinlog.weblogger.bundle.RestLoggerBundle
 import quanti.com.kotlinlog.weblogger.bundle.WebSocketLoggerBundle
@@ -44,7 +43,7 @@ class WebLogger(private val bun: BaseWebLoggerBundle) : ILogger {
 
     override fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable) {
         var message = "$tag/$methodName: $text/n"
-        message += t.convertToLogCatString()
+        message += android.util.Log.getStackTraceString(t)
 
         val entity = WebLoggerEntity(bun.sessionName, androidLogLevel, message)
         sender.send(entity)

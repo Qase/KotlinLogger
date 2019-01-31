@@ -12,7 +12,6 @@ import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
 import quanti.com.kotlinlog.file.file.*
-import quanti.com.kotlinlog.utils.convertToLogCatString
 import quanti.com.kotlinlog.utils.getApplicationName
 import quanti.com.kotlinlog.utils.getFormattedNow
 import quanti.com.kotlinlog.utils.loga
@@ -81,7 +80,7 @@ class FileLogger(
 
         val sb = StringBuilder()
         sb.append(formattedString)
-        sb.append(t.convertToLogCatString())
+        sb.append(android.util.Log.getStackTraceString(t))
 
         val finalText = sb.toString()
 

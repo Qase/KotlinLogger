@@ -18,16 +18,6 @@ fun Context.getApplicationName(): String {
     return str.replace(' ', '_')
 }
 
-fun Throwable.convertToLogCatString(): String {
-
-    val err = StringWriter()
-    this.printStackTrace(PrintWriter(err))
-
-    val sb = StringBuilder()
-    sb.append(err)
-    return sb.toString()
-}
-
 fun StackTraceElement.getClassNameWithoutPackage(): String {
 
     val indexOfLastDot = className.lastIndexOf('.')
