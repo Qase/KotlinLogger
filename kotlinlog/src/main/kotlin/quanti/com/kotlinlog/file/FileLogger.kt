@@ -89,7 +89,7 @@ class FileLogger(
                 CrashLogFile(
                         appCtx,
                         t.javaClass.simpleName,
-                        text == SECRET_CODE_UNHANDLED
+                        tag == SECRET_CODE_UNHANDLED
                 ).apply {
                     write(finalText)
                     closeOutputStream()
