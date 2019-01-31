@@ -1,8 +1,8 @@
 package quanti.com.kotlinlog.utils
 
 import android.content.Context
-
-
+import java.io.PrintWriter
+import java.io.StringWriter
 
 
 /**
@@ -16,31 +16,6 @@ fun Context.getApplicationName(): String {
     val str = if (stringId == 0) applicationInfo.nonLocalizedLabel.toString() else getString(stringId)
 
     return str.replace(' ', '_')
-}
-
-fun Throwable.convertToLogCatString(): String {
-
-    val sb = StringBuilder()
-
-    sb.append(this.toString())
-    sb.append("\n")
-
-    this.stackTrace.forEach {
-        sb.append("\t\t\t\t")
-        if (it.isNativeMethod)
-            sb.append("\t")
-        sb.append(it.className)
-        sb.append(".")
-        sb.append(it.methodName)
-        sb.append("(")
-        sb.append(it.fileName)
-        sb.append(":")
-        sb.append(it.lineNumber.toString())
-        sb.append(")")
-        sb.append("\n")
-    }
-
-    return sb.toString()
 }
 
 fun StackTraceElement.getClassNameWithoutPackage(): String {
