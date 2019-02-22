@@ -11,14 +11,13 @@ import quanti.com.kotlinlog.weblogger.IWebLoggerEntitySender.Companion.gson
 import quanti.com.kotlinlog.weblogger.entity.WebLoggerEntity
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 class RestSender(url: String) : IWebLoggerEntitySender {
-
-
 
     private val loggerApi: RestApiDefinition
     private val threadExecutor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
@@ -37,7 +36,6 @@ class RestSender(url: String) : IWebLoggerEntitySender {
     init {
         Log.d("WebLogger", "Creating connection to $url")
         loggerApi = createRetrofit(url).create<RestApiDefinition>(RestApiDefinition::class.java)
-        sendTestMessage()
         threadExecutor.scheduleAtFixedRate(sendFunc, 1, 5, TimeUnit.SECONDS)
     }
 
@@ -56,7 +54,11 @@ class RestSender(url: String) : IWebLoggerEntitySender {
     private fun post(list: List<WebLoggerEntity>) {
         GlobalScope.launch(Dispatchers.IO) {
             loga("WebLogger", "TASK: Writing data of size: ${list.size}")
-            loggerApi.postLogs(list).execute()
+            try{
+                loggerApi.postLogs(list).execute()
+            } catch (e : Exception){
+                loga(e.toString())
+            }
         }
     }
 
@@ -69,17 +71,19 @@ class RestSender(url: String) : IWebLoggerEntitySender {
                 .build()
     }
 
-    private fun sendTestMessage(){
-
-    }
-
     override fun checkConnection(callback: IServerActive) {
         GlobalScope.launch(Dispatchers.IO) {
             val list = arrayListOf(WebLoggerEntity.getTestEntity())
-            val response = loggerApi.postLogs(list).execute()
 
+            var connected = false
+            try {
+                val response = loggerApi.postLogs(list).execute()
+                connected = response.isSuccessful
+            } catch (e: Exception){
+                loga(e.toString())
+            }
             withContext(Dispatchers.Main) {
-                callback.isServerActive(response.isSuccessful)
+                callback.isServerActive(connected)
             }
         }
     }
