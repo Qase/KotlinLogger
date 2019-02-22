@@ -33,6 +33,7 @@ object MetadataLogger {
             logs.add(Pair("DEVICE", Build.DEVICE))
         }
 
+        logs.add(Pair("API VERSION", getAndroidVersionName()))
         logs.add(Pair("BOARD", Build.BOARD))
         logs.add(Pair("FINGERPRINT", Build.FINGERPRINT))
         logs.add(Pair("HARDWARE", Build.HARDWARE))
@@ -101,4 +102,30 @@ fun String.extractFieldName(): String {
     val indexOfLast = this.indexOfLast { it == '.' } + 1
     return this.subSequence(indexOfLast, this.length).toString()
 
+}
+
+val names = hashMapOf(
+        28 to "28 - Android 9.0",
+        27 to "27 - Android 8.1",
+        26 to "26 - Android 8.0",
+        25 to "25 - Android 7.1",
+        24 to "24 - Android 7.0",
+        23 to "23 - Android 6.0",
+        22 to "22 - Android 5.1",
+        21 to "21 - Android 5.0",
+        20 to "20 - Android 4.4W",
+        19 to "19 - Android 4.4",
+        18 to "18 - Android 4.3",
+        17 to "17 - Android 4.2",
+        16 to "16 - Android 4.1"
+)
+
+fun getAndroidVersionName(): String{
+    val api = android.os.Build.VERSION.SDK_INT
+
+    if (names.containsKey(api)){
+        return names[api]!!
+    }
+
+    return api.toString()
 }
