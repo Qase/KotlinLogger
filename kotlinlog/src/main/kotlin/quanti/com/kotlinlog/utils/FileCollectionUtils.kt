@@ -4,6 +4,7 @@ import quanti.com.kotlinlog.Log
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.*
 import java.util.zip.ZipEntry
@@ -106,12 +107,18 @@ fun List<File>.zip(zipFile: File): File {
 
         for (i in this.indices) {
             //Log.v("Adding: " + files[i])
-            val fi = FileInputStream(this[i])
-            val entry = ZipEntry(this[i].name)
-            out.putNextEntry(entry)
+            try {
+                val fi = FileInputStream(this[i])
+                val entry = ZipEntry(this[i].name)
+                out.putNextEntry(entry)
 
-            fi.copyTo(out)
-            fi.close()
+                fi.copyTo(out)
+                fi.close()
+            } catch (fnf: FileNotFoundException) {
+                Log.w("the logfile no longer exists: $fnf" +
+                    "\nLogfile deleted during zipping. Probably caused by lot of logs or circle " +
+                    "logfile size is too small.")
+            }
         }
         out.close()
     } catch (ex: Exception) {
