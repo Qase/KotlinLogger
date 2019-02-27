@@ -8,7 +8,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.Settings
 import android.support.annotation.IdRes
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -32,39 +31,52 @@ import quanti.com.kotlinlog.file.bundle.CircleLogBundle
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
 import quanti.com.kotlinlog.weblogger.WebLogger
-import quanti.com.kotlinlog.weblogger.rest.IServerActive
-import quanti.com.kotlinlog.weblogger.bundle.BaseWebLoggerBundle
 import quanti.com.kotlinlog.weblogger.bundle.RestLoggerBundle
 import quanti.com.kotlinlog.weblogger.bundle.WebSocketLoggerBundle
+import quanti.com.kotlinlog.weblogger.rest.IServerActive
 
 const val REQUEST = 98
 const val RANDOM_TEXT = "qwertyuiop"
 
+const val TAG_FILELOGGER = "tfl"
+const val TAG_RESTLOGGER = "trl"
+const val TAG_WSLOGGER = "twsl"
+
 class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IServerActive {
 
     private var checked = 3
-    private var bundle: BaseBundle = DayLogBundle()
-    private var restLoggerBundle: RestLoggerBundle? = null
-    private var wsLoggerBundle: WebSocketLoggerBundle? = null
+
+    private var bundle: BaseBundle = StrictCircleLogBundle()
 
 
-
-
-    private val restButtonCallback = View.OnClickListener{
+    private val restButtonCallback = View.OnClickListener {
 
         val editText = findViewById<EditText>(R.id.apiServer_editText)
-        val url = getTextFrom(editText,false)
-        restLoggerBundle = RestLoggerBundle(url, this)
-        initLog()
+        val url = getTextFrom(editText, false)
+        val restLoggerBundle = RestLoggerBundle(url, this)
+        try {
+            Log.addLogger(WebLogger(restLoggerBundle), TAG_RESTLOGGER)
+        } catch (e: Exception) {
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+        }
     }
 
-    private val wsButtonCallback = View.OnClickListener{
+    private val wsButtonCallback = View.OnClickListener {
         val editText = findViewById<EditText>(R.id.wsServer_editText)
         val url = getTextFrom(editText, true)
-        wsLoggerBundle = WebSocketLoggerBundle(url, this)
-        initLog()
+        val wsLoggerBundle = WebSocketLoggerBundle(url, this)
+        try {
+            Log.addLogger(WebLogger(wsLoggerBundle), TAG_WSLOGGER)
+        } catch (e: Exception) {
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+        }
     }
 
+    private val switchButtonLongClickCallback = View.OnLongClickListener {
+        Log.removeLogger(TAG_FILELOGGER)
+        (findViewById<TextView>(R.id.loggerInUseTextView)).text = "Disabled"
+        return@OnLongClickListener true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +87,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
         findViewById<RadioGroup>(R.id.radioGroup).setOnCheckedChangeListener(this)
         findViewById<Button>(R.id.apiServer_button).setOnClickListener(restButtonCallback)
         findViewById<Button>(R.id.wsServer_button).setOnClickListener(wsButtonCallback)
-
+        findViewById<Button>(R.id.switchButton).setOnLongClickListener(switchButtonLongClickCallback)
     }
 
     override fun isServerActive(isActive: Boolean) {
@@ -91,35 +103,13 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
 
     private fun initLog() {
-//        Log.removeAllLoggers()
-        Log.addLogger(FileLogger(applicationContext, bundle))
-
         Log.useUncheckedErrorHandler()
         Log.addLogger(AndroidLogger())
 
         Fabric.with(this, Crashlytics())
         Log.addLogger(CrashlyticsLogger())
 
-        val text = bundle.javaClass.simpleName.replace("Bundle", "")
-
-        (findViewById<TextView>(R.id.loggerInUseTextView)).text = text
-
-        if (restLoggerBundle != null) {
-            try {
-                Log.addLogger(WebLogger(restLoggerBundle!!))
-            } catch (e: Exception) {
-                Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-            }
-        }
-
-        if (wsLoggerBundle != null) {
-            try {
-                Log.addLogger(WebLogger(wsLoggerBundle!!))
-            } catch (e: Exception) {
-                Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-            }
-        }
-
+        switchLogger_clicked(null)
     }
 
     override fun onCheckedChanged(group: RadioGroup, @IdRes checkedId: Int) {
@@ -209,7 +199,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
         Toast.makeText(this, "Logs deleted", Toast.LENGTH_SHORT).show()
     }
 
-    fun switchLogger_clicked(view: View) {
+    fun switchLogger_clicked(view: View?) {
         bundle = when (bundle) {
             is DayLogBundle -> CircleLogBundle(maxFileSizeMegaBytes = 1)
             is CircleLogBundle -> StrictCircleLogBundle(maxFileSizeMegaBytes = 1, numOfFiles = 4)
@@ -217,8 +207,9 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
             else -> throw Exception("Unknown bundle, should not arise at all")
         }
 
-        initLog()
-
+        Log.addLogger(FileLogger(applicationContext, bundle), TAG_FILELOGGER)
+        val text = bundle.javaClass.simpleName.replace("Bundle", "")
+        (findViewById<TextView>(R.id.loggerInUseTextView)).text = text
     }
 
     fun askForPermission_clicked(view: View) {
@@ -274,11 +265,11 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
     private fun getTextFrom(editText: EditText, ws: Boolean): String {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-        val url = when{
+        val url = when {
             editText.text.isNotEmpty() -> editText.text
             clipboard.hasPrimaryClip() -> {
                 val baseUrl = clipboard.primaryClip.getItemAt(0).text
-                when(ws){
+                when (ws) {
                     true -> "ws://$baseUrl/ws/v1/"
                     false -> "http://$baseUrl/api/v1/"
                 }
