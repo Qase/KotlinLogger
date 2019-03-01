@@ -4,6 +4,7 @@ import android.content.Context
 import quanti.com.kotlinlog.android.MetadataLogger
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.LogLevel
+import quanti.com.kotlinlog.utils.loga
 
 /**
  * Created by Trnka Vladislav on 30.05.2017.
@@ -141,26 +142,31 @@ class Log {
         }
 
         /**
-         * Adds new logger
+         * Add new logger with specified TAG for later use
+         * Replace old one associated with the same TAG
          */
         @JvmStatic
-        fun addLogger(logger: ILogger) {
+        fun addLogger(logger: ILogger, tag:String = logger.describe()){
+            //clean resources of old logger
+            loggers[tag]?.cleanResources()
 
-            //check if logger is present
+            //replace with new one
+            loggers[tag] = logger
+        }
 
-            val oldLogger = loggers.firstOrNull{
-                d("LOG ADD", it.describe())
-                return@firstOrNull it.describe() == logger.describe()
-            }
+        /**
+         * Remove logger using TAG
+         * @return true when logger found and deleted, false otherwise
+         */
+        @JvmStatic
+        fun removeLogger(tag:String) : Boolean{
+            //function remove return current value associated with given key
+            loga("Before delete", loggers.size, loggers.keys.toString())
+            val removedLogger = loggers.remove(tag)
+            removedLogger?.cleanResources()
 
-
-            if (oldLogger != null){
-                oldLogger.cleanResources()
-                loggers.remove(oldLogger)
-            }
-
-            loggers.add(logger)
-            loggerNotAdded = false
+            loga("After delete", loggers.size, loggers.keys.toString())
+            return removedLogger != null
         }
 
         /**
@@ -168,7 +174,7 @@ class Log {
          */
         @JvmStatic
         fun removeAllLoggers() {
-            loggers.forEach { it.cleanResources() }
+            loggers.values.forEach { it.cleanResources() }
             loggers.clear()
         }
     }

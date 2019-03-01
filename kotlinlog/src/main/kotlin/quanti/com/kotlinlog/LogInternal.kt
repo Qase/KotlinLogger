@@ -9,10 +9,9 @@ import java.io.File
  * PRIVATE
  */
 
-const val TAG = "LogFileDEBUG"
-const val SECRET_CODE_UNHANDLED = "UNHANDLED"
-var loggerNotAdded = true
-internal val loggers = arrayListOf<ILogger>()
+internal const val TAG = "LogFileDEBUG"
+internal const val SECRET_CODE_UNHANDLED = "UNHANDLED"
+internal val loggers = hashMapOf<String, ILogger>()
 
 
 internal fun allLog(androidLogLevel: Int, tag: String?, text: String) {
@@ -21,7 +20,7 @@ internal fun allLog(androidLogLevel: Int, tag: String?, text: String) {
     val element = getMethodStackTraceElement()
     val safeTag = tag ?: element.getClassNameWithoutPackage()
 
-    loggers.filterLogLevel(androidLogLevel).forEach {
+    loggers.values.filterLogLevel(androidLogLevel).forEach {
         it.log(androidLogLevel, safeTag, element.methodName, text)
     }
 }
@@ -32,7 +31,7 @@ internal fun allLogSync(androidLogLevel: Int, tag: String?, text: String) {
     val element = getMethodStackTraceElement()
     val safeTag = tag ?: element.getClassNameWithoutPackage()
 
-    loggers.filterLogLevel(androidLogLevel).forEach {
+    loggers.values.filterLogLevel(androidLogLevel).forEach {
         it.logSync(androidLogLevel, safeTag, element.methodName, text)
     }
 }
@@ -43,20 +42,20 @@ internal fun allLogThrowable(androidLogLevel: Int, tag: String?, text: String, t
     val element = getMethodStackTraceElement()
     val safeTag = tag ?: element.getClassNameWithoutPackage()
 
-    loggers.filterLogLevel(androidLogLevel).forEach {
+    loggers.values.filterLogLevel(androidLogLevel).forEach {
         it.logThrowable(androidLogLevel, safeTag, element.methodName, text, t)
     }
 }
 
 internal fun forceWrite(){
-    val fileLogger = loggers.firstOrNull { it is FileLogger } as FileLogger
+    val fileLogger = loggers.values.firstOrNull { it is FileLogger } as FileLogger
     fileLogger.forceWrite()
 }
 
-private fun ArrayList<ILogger>.filterLogLevel(logLevel: Int) = filter { logLevel >= it.getMinimalLoggingLevel()}
+private fun MutableCollection<ILogger>.filterLogLevel(logLevel: Int) = filter { logLevel >= it.getMinimalLoggingLevel()}
 
 private fun emptyCheck(): Boolean {
-    if (loggerNotAdded) {
+    if (loggers.isEmpty()) {
         android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
         return true
     }
