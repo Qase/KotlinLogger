@@ -9,9 +9,8 @@ import java.io.File
  * PRIVATE
  */
 
-const val TAG = "LogFileDEBUG"
-const val SECRET_CODE_UNHANDLED = "UNHANDLED"
-var loggerNotAdded = true
+internal const val TAG = "LogFileDEBUG"
+internal const val SECRET_CODE_UNHANDLED = "UNHANDLED"
 internal val loggers = hashMapOf<String, ILogger>()
 
 
@@ -56,7 +55,7 @@ internal fun forceWrite(){
 private fun MutableCollection<ILogger>.filterLogLevel(logLevel: Int) = filter { logLevel >= it.getMinimalLoggingLevel()}
 
 private fun emptyCheck(): Boolean {
-    if (loggerNotAdded) {
+    if (loggers.isEmpty()) {
         android.util.Log.e("Logger", "There is not logger to log to. Did not you forget to add logger?")
         return true
     }

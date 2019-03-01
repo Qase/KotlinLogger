@@ -142,28 +142,16 @@ class Log {
         }
 
         /**
-         * Add new logger
-         */
-        @JvmStatic
-        fun addLogger(logger: ILogger) {
-            addLogger(logger, logger.describe())
-        }
-
-        /**
          * Add new logger with specified TAG for later use
          * Replace old one associated with the same TAG
          */
         @JvmStatic
-        fun addLogger(logger: ILogger, tag:String){
-            //check if logger is present
-            val oldLogger = loggers[tag]
-            if (oldLogger != null){
-                oldLogger.cleanResources()
-                loggers.remove(tag)
-            }
+        fun addLogger(logger: ILogger, tag:String = logger.describe()){
+            //clean resources of old logger
+            loggers[tag]?.cleanResources()
 
+            //replace with new one
             loggers[tag] = logger
-            loggerNotAdded = false
         }
 
         /**
