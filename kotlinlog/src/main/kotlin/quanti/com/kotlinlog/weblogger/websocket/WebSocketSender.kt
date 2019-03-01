@@ -40,7 +40,7 @@ class WebSocketSender(url: String)
 
     override fun sendSync(entity: WebLoggerEntity) = send(entity)
 
-    override fun checkConnection(callback: IServerActive) {
+    override fun checkConnection(callback: IServerActive, checkConnectionEntity: ArrayList<WebLoggerEntity>) {
         if (connected != null){
             callback.isServerActive(connected!!)
         } else {

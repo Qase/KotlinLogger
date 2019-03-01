@@ -31,7 +31,7 @@ class WebLogger(private val bun: BaseWebLoggerBundle) : ILogger {
     }
 
     init {
-        sender.checkConnection(bun.severActive)
+        sender.checkConnection(bun.severActive, WebLoggerEntity.getTestEntityList(bun.sessionName));
     }
 
     override fun log(androidLogLevel: Int, tag: String, methodName: String, text: String) {

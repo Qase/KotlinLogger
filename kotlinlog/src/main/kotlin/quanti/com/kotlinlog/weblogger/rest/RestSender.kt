@@ -71,13 +71,12 @@ class RestSender(url: String) : IWebLoggerEntitySender {
                 .build()
     }
 
-    override fun checkConnection(callback: IServerActive) {
+    override fun checkConnection(callback: IServerActive, checkConnectionEntity: ArrayList<WebLoggerEntity>) {
         GlobalScope.launch(Dispatchers.IO) {
-            val list = arrayListOf(WebLoggerEntity.getTestEntity())
 
             var connected = false
             try {
-                val response = loggerApi.postLogs(list).execute()
+                val response = loggerApi.postLogs(checkConnectionEntity).execute()
                 connected = response.isSuccessful
             } catch (e: Exception){
                 loga(e.toString())
