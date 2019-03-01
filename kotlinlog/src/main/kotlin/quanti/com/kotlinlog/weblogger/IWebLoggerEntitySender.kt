@@ -13,7 +13,7 @@ interface IWebLoggerEntitySender {
 
     fun clean()
 
-    fun checkConnection(callback: IServerActive)
+    fun checkConnection(callback: IServerActive, checkConnectionEntity: ArrayList<WebLoggerEntity>)
 
     companion object {
         //OkHttpClients should be shared

@@ -19,7 +19,9 @@ data class WebLoggerEntity @JvmOverloads constructor(
             timestamp: Long = System.currentTimeMillis()) : this(sessionName, severity.getWebLoggerString(), message, id, timestamp)
 
     companion object {
-        fun getTestEntity(): WebLoggerEntity = WebLoggerEntity("testSession", "INFO", "TestMessage")
+        fun getTestEntity(sessionName: String): WebLoggerEntity = WebLoggerEntity(sessionName, "INFO", "Connection to WebLogger have been initialized.")
+
+        fun getTestEntityList(sessionName: String) = arrayListOf<WebLoggerEntity>(getTestEntity(sessionName))
     }
 }
 
