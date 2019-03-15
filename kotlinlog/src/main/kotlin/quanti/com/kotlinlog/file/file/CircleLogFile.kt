@@ -24,15 +24,15 @@ class CircleLogFile(
     override val logIdentifier: String = "circle"
 
     override var fileName: String = createNewFileName()
-    override var file: File = File(ctx.filesDir, fileName)
-    override var fos: FileOutputStream = ctx.openFileOutput(fileName, Context.MODE_APPEND)
+    override var file: File = File(ctx.logFilesDir, fileName)
+    override var fos: FileOutputStream = ctx.openLogFileOutput(fileName, true)
 
 
     override fun createNewFileName(): String {
         var fileName = "${getFormattedFileNameDayNow()}_$logIdentifier.log"
 
         //now check if file exists
-        if (File(ctx.filesDir, fileName).exists()) {
+        if (File(ctx.logFilesDir, fileName).exists()) {
             fileName = "${getFormattedFileNameDayNow()}_${getRandomString(4)}_$logIdentifier.log"
         }
 

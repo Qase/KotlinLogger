@@ -102,10 +102,10 @@ fun File.copyLogsTOSDCard(sdCardFolderName: String = "KotlinLogger"): File {
  */
 fun getZipOfLogs(appCtx: Context, fileAge: Int = 4): File {
     //first perform clean of mess
-    appCtx.filesDir.listFiles().deleteAllZips()
-    appCtx.filesDir.listFiles().deleteAllOldFiles(fileAge)
+    appCtx.logFilesDir.listFiles().deleteAllZips()
+    appCtx.logFilesDir.listFiles().deleteAllOldFiles(fileAge)
 
-    if (appCtx.filesDir.listFiles().isEmpty()) {
+    if (appCtx.logFilesDir.listFiles().isEmpty()) {
         throw FileNotFoundException("No files were found")
     }
 
@@ -119,10 +119,10 @@ fun getZipOfLogs(appCtx: Context, fileAge: Int = 4): File {
     forceWrite()
 
     val zipFileName = "Logs_${getFormattedFileNameForDayTemp()}_${appCtx.getApplicationName()}.zip"
-    val zipFile = File(appCtx.filesDir, zipFileName)
+    val zipFile = File(appCtx.logFilesDir, zipFileName)
     zipFile.createNewFile()  //create file if not exists
 
-    appCtx.filesDir
+    appCtx.logFilesDir
             .listFiles()
             .filter { it.isFile } //take only files
             .filter { it.name.contains(".log", ignoreCase = true) } //take only .log

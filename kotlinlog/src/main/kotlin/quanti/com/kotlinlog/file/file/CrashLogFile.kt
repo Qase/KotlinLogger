@@ -20,7 +20,7 @@ class CrashLogFile(
         getFormattedFileNameDayNowWithSeconds() + "_handled_$crashReason.log"
     }
 
-    private var fos: FileOutputStream = appCtx.openFileOutput(fileName, Context.MODE_APPEND)
+    private var fos: FileOutputStream = appCtx.openLogFileOutput(fileName, true)
 
     fun write(string: String) {
         fos.write(string.toByteArray())
@@ -32,7 +32,7 @@ class CrashLogFile(
     companion object {
         fun clean(appCtx: Context, maxDays: Int){
             //remove all files that exceeds specified limit
-            appCtx.filesDir
+            appCtx.logFilesDir
                     .listFiles()
                     .filter { it.name.contains("handled") }
                     .deleteAllOldFiles(maxDays)

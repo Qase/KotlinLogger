@@ -1,12 +1,13 @@
 package quanti.com.kotlinlog.utils
 
+import android.content.Context
 import quanti.com.kotlinlog.Log
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.util.*
+import java.util.Comparator
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -133,4 +134,16 @@ private val comparator = Comparator<File> { o1, o2 ->
     val secondTime = o2.lastModified()
 
     return@Comparator (secondTime - firstTime).toInt()
+}
+
+val Context.logFilesDir: File
+    get() {
+        val file = File(this.filesDir.absolutePath + "/kotlinlog/")
+        file.mkdirs()
+        return file
+    }
+
+fun Context.openLogFileOutput(name: String, append: Boolean): FileOutputStream {
+    val file = File(this.logFilesDir, name)
+    return FileOutputStream(file, append)
 }

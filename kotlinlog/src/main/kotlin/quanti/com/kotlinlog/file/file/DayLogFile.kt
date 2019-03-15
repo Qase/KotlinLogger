@@ -23,9 +23,8 @@ class DayLogFile(
     override val logIdentifier: String = "daylog"
 
     override var fileName: String = createNewFileName()
-    override var file: File = File(ctx.filesDir, fileName)
-    override var fos: FileOutputStream = ctx.openFileOutput(fileName, Context.MODE_APPEND)
-
+    override var file: File = File(ctx.logFilesDir, fileName)
+    override var fos: FileOutputStream = ctx.openLogFileOutput(fileName, true)
 
     override fun cleanFolder() {
         //switch to new file if needed

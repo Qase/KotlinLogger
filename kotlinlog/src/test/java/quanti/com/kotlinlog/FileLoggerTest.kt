@@ -15,6 +15,7 @@ import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.file.bundle.DayLogBundle
 import quanti.com.kotlinlog.utils.getFormattedFileNameForDayTemp
 import quanti.com.kotlinlog.utils.getRandomString
+import quanti.com.kotlinlog.utils.logFilesDir
 import java.io.File
 
 
@@ -36,7 +37,7 @@ class FileLoggerTest {
         Log.addLogger(logger)
 
         val fileName = "${getFormattedFileNameForDayTemp()}_dayLog.log"
-        file = File(appCtx.filesDir, fileName)
+        file = File(appCtx.logFilesDir, fileName)
     }
 
     /**
