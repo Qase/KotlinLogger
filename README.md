@@ -46,9 +46,12 @@ android{
 }
 ```
 
-2) Add all needed logers to your mainActivity. Every logger can be initialized using bundle or use default values.
+2) Initialise `Log` and add all needed loggers. Every logger can be initialized using bundle or use default values.
 
 ```kotlin
+// Log initialisation
+Log.initialise(context)
+
 //forwards all log to android logcat
 val androidBundle = LoggerBundle(LogLevel.INFO)
 Log.addLogger(AndroidLogger(androidBundle))
