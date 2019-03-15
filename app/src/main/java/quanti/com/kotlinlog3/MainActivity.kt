@@ -103,6 +103,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
 
     private fun initLog() {
+        Log.initialise(this.applicationContext)
         Log.useUncheckedErrorHandler()
         Log.addLogger(AndroidLogger())
 
