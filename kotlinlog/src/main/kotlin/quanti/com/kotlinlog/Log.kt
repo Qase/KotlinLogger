@@ -4,6 +4,7 @@ import android.content.Context
 import quanti.com.kotlinlog.android.MetadataLogger
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.LogLevel
+import quanti.com.kotlinlog.migration.KotlinLogMigrator
 import quanti.com.kotlinlog.utils.loga
 
 /**
@@ -15,6 +16,8 @@ import quanti.com.kotlinlog.utils.loga
 class Log {
 
     companion object {
+
+        private var initialised = false
 
         //ASYNC METHODS
         @JvmStatic
@@ -113,6 +116,21 @@ class Log {
         @JvmStatic @JvmOverloads
         fun e(tag: String, t: Throwable, text: String = "") = allLogThrowable(LogLevel.ERROR, tag, text, t)
 
+        /**
+         * The library has to be initialised before any loggers are added.
+         * Initialisation handles mainly migration to newer library versions.
+         */
+        @JvmStatic
+        fun initialise(context: Context) {
+            initialised = true;
+            KotlinLogMigrator.migrate(context)
+        }
+
+        private fun checkInitialisation() {
+            if (!initialised) {
+                throw IllegalStateException("Log uninitialized - please first initialise the library by calling Log.initialise(context)")
+            }
+        }
 
         /**
          * Logs some useful system data to all connected loggers
@@ -147,6 +165,7 @@ class Log {
          */
         @JvmStatic
         fun addLogger(logger: ILogger, tag:String = logger.describe()){
+            checkInitialisation()
             //clean resources of old logger
             loggers[tag]?.cleanResources()
 

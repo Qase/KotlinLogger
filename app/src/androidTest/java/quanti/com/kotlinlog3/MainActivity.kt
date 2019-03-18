@@ -13,6 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import quanti.com.kotlinlog.file.file.DayLogFile
+import quanti.com.kotlinlog.utils.logFilesDir
 import java.io.File
 
 
@@ -82,7 +83,7 @@ class HelloWorldEspressoTest {
 
 
         val count = appCtx
-                .filesDir
+                .logFilesDir
                 .listFiles()
                 .filter { it.name.contains("ArrayIndexOutOf") }
                 .count()
@@ -99,7 +100,7 @@ class HelloWorldEspressoTest {
 
 
         val count = appCtx
-                .filesDir
+                .logFilesDir
                 .listFiles()
                 .filter { it.name.contains("unhandled") }
                 .count()
@@ -124,7 +125,7 @@ class HelloWorldEspressoTest {
         Thread.sleep(12000L)
 
         val filtered = appCtx
-                .filesDir
+                .logFilesDir
                 .listFiles()
                 .filter { it.name.contains("strictcircle") }
 
@@ -155,7 +156,7 @@ class HelloWorldEspressoTest {
         Thread.sleep(12000L)
 
         val count = appCtx
-                .filesDir
+                .logFilesDir
                 .listFiles()
                 .filter { it.name.contains("strictcircle") }
                 .count()

@@ -14,6 +14,7 @@ import quanti.com.kotlinlog.file.bundle.StrictCircleLogBundle
 import quanti.com.kotlinlog.file.file.*
 import quanti.com.kotlinlog.utils.getApplicationName
 import quanti.com.kotlinlog.utils.getFormattedNow
+import quanti.com.kotlinlog.utils.logFilesDir
 import quanti.com.kotlinlog.utils.loga
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
@@ -137,7 +138,7 @@ class FileLogger(
          */
         fun deleteAllLogs(appCtx: Context) {
             appCtx
-                    .filesDir
+                    .logFilesDir
                     .listFiles()
                     .filter { it.name.endsWith(".log") }
                     .forEach { it.delete() }

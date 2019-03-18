@@ -24,8 +24,8 @@ class StrictCircleLogFile(
     override val logIdentifier: String = "strictcircle"
 
     override var fileName: String = createNewFileName()
-    override var file: File = File(ctx.filesDir, fileName)
-    override var fos: FileOutputStream = ctx.openFileOutput(fileName, Context.MODE_APPEND)
+    override var file: File = File(ctx.logFilesDir, fileName)
+    override var fos: FileOutputStream = ctx.openLogFileOutput(fileName, false)
 
     private fun writeWithCheck(string: String) {
         val str = string.toByteArray()
@@ -53,7 +53,7 @@ class StrictCircleLogFile(
         var fileName = "${getFormattedFileNameDayNow()}_$logIdentifier.log"
 
         //now check if file exists
-        if (File(ctx.filesDir, fileName).exists()) {
+        if (File(ctx.logFilesDir, fileName).exists()) {
             fileName = "${getFormattedFileNameDayNow()}_${getRandomString(4)}_$logIdentifier.log"
         }
 

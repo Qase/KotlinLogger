@@ -3,7 +3,9 @@ package quanti.com.kotlinlog.file.file
 import android.content.Context
 import quanti.com.kotlinlog.TAG
 import quanti.com.kotlinlog.utils.ActualTime
+import quanti.com.kotlinlog.utils.logFilesDir
 import quanti.com.kotlinlog.utils.loga
+import quanti.com.kotlinlog.utils.openLogFileOutput
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.LinkedBlockingQueue
@@ -78,7 +80,7 @@ abstract class AbstractLogFile(
             fos.close()
             val del = file.delete()
             loga("Deleting file: $del")
-            fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
+            fos = ctx.openLogFileOutput(fileName, true)
         }
     }
 
@@ -92,7 +94,7 @@ abstract class AbstractLogFile(
     /**
      * Returns all files that corresponds to this logger
      */
-    protected fun listOfLoggerFiles() = ctx.filesDir.listFiles().filter { it.name.contains(logIdentifier) }
+    protected fun listOfLoggerFiles() = ctx.logFilesDir.listFiles().filter { it.name.contains(logIdentifier) }
 
 
     /**
@@ -103,9 +105,9 @@ abstract class AbstractLogFile(
             fos.close()
             fileName = createNewFileName()
             loga("Creating new file $fileName")
-            file = File(ctx.filesDir, fileName)
+            file = File(ctx.logFilesDir, fileName)
             file.setLastModified(ActualTime.currentTimeMillis()) //needed for testing
-            fos = ctx.openFileOutput(fileName, Context.MODE_APPEND)
+            fos = ctx.openLogFileOutput(fileName, true)
         }
     }
 
