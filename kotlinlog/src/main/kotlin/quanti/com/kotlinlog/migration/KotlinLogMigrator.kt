@@ -12,8 +12,8 @@ internal class KotlinLogMigrator(val context: Context) {
 
         private val map: Map<Int, (Context) -> Unit> = mapOf(
                 Pair(1, { context ->
-                    val filesToCopy = context.filesDir.listFiles().filter { it.name.endsWith(".log") }
-                    filesToCopy.forEach {file ->
+                    val filesToCopy = context.filesDir.listFiles()?.filter { it.name.endsWith(".log") }
+                    filesToCopy?.forEach {file ->
                         val newDestination = File(context.logFilesDir.absolutePath, file.name)
                         file.renameTo(newDestination)
                     }
