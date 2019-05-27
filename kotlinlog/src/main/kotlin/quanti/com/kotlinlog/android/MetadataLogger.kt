@@ -11,11 +11,17 @@ object MetadataLogger {
 
     private val logs = ArrayList<Pair<String, String>>()
 
+    var customMetadataLambda: ((Context) -> List<Pair<String, String>>)? = null
+
     fun getLogStrings(context: Context): String {
         logs.clear()
         fillArrayBuild()
         logs.add(Pair("", ""))
         fillArrayBuildConfig(context)
+        customMetadataLambda?.invoke(context)?.let {
+            logs.add(Pair("", ""))
+            logs.addAll(it)
+        }
         return createNiceString()
     }
 

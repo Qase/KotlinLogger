@@ -8,6 +8,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.annotation.IdRes
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -21,6 +22,7 @@ import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import quanti.com.kotlinlog.Log
 import quanti.com.kotlinlog.android.AndroidLogger
+import quanti.com.kotlinlog.android.MetadataLogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.base.getLogLevel
 import quanti.com.kotlinlog.crashlytics.CrashlyticsLogger
@@ -34,6 +36,8 @@ import quanti.com.kotlinlog.weblogger.WebLogger
 import quanti.com.kotlinlog.weblogger.bundle.RestLoggerBundle
 import quanti.com.kotlinlog.weblogger.bundle.WebSocketLoggerBundle
 import quanti.com.kotlinlog.weblogger.rest.IServerActive
+import java.text.SimpleDateFormat
+import java.util.Date
 
 const val REQUEST = 98
 const val RANDOM_TEXT = "qwertyuiop"
@@ -187,6 +191,13 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
     }
 
     fun logMetadata_clicked(view: View) {
+        MetadataLogger.customMetadataLambda = {
+            val time = Date(System.currentTimeMillis())
+            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            val uptime = SystemClock.uptimeMillis()
+            listOf(Pair("CURRENT_TIME", format.format(time)),
+                    Pair("SYSTEM_UPTIME", uptime.toString()))
+        }
         Log.logMetadata(applicationContext)
     }
 
