@@ -5,10 +5,10 @@ import android.media.MediaScannerConnection
 import android.os.Environment
 import android.support.v4.content.FileProvider
 import quanti.com.kotlinlog.Log.Companion.i
-import quanti.com.kotlinlog.file.file.CrashLogFile
 import quanti.com.kotlinlog.file.file.MetadataFile
 import quanti.com.kotlinlog.forceWrite
-import java.io.*
+import java.io.File
+import java.io.FileNotFoundException
 import java.util.concurrent.TimeUnit
 
 /**
@@ -100,7 +100,8 @@ fun File.copyLogsTOSDCard(sdCardFolderName: String = "KotlinLogger"): File {
  * @param appCtx application context
  * @param fileAge how many days backward you want to go - default 4
  */
-fun getZipOfLogs(appCtx: Context, fileAge: Int = 4): File {
+
+fun getZipOfLogs(appCtx: Context, fileAge: Int = 4, images: List<File> = arrayListOf()): File {
     //first perform clean of mess
     appCtx.logFilesDir.listFiles().deleteAllZips()
     appCtx.logFilesDir.listFiles().deleteAllOldFiles(fileAge)
@@ -122,11 +123,13 @@ fun getZipOfLogs(appCtx: Context, fileAge: Int = 4): File {
     val zipFile = File(appCtx.logFilesDir, zipFileName)
     zipFile.createNewFile()  //create file if not exists
 
-    appCtx.logFilesDir
-            .listFiles()
-            .filter { it.isFile } //take only files
-            .filter { it.name.contains(".log", ignoreCase = true) } //take only .log
-            .zip(zipFile)
+    val listOfFiles = appCtx.logFilesDir
+        .listFiles()
+        .filter { it.isFile } //take only files
+        .filter { it.name.contains(".log", ignoreCase = true) }
+        .toMutableList()
+    listOfFiles.addAll(images)
+    listOfFiles.zip(zipFile)
     return zipFile
 }
 
