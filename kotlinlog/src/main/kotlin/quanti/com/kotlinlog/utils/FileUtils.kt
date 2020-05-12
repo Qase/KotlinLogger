@@ -101,7 +101,7 @@ fun File.copyLogsTOSDCard(sdCardFolderName: String = "KotlinLogger"): File {
  * @param fileAge how many days backward you want to go - default 4
  */
 
-fun getZipOfLogs(appCtx: Context, fileAge: Int = 4, images: List<File> = arrayListOf()): File {
+fun getZipOfLogs(appCtx: Context, fileAge: Int = 4, extraFiles: List<File> = arrayListOf()): File {
     //first perform clean of mess
     appCtx.logFilesDir.listFiles().deleteAllZips()
     appCtx.logFilesDir.listFiles().deleteAllOldFiles(fileAge)
@@ -128,7 +128,7 @@ fun getZipOfLogs(appCtx: Context, fileAge: Int = 4, images: List<File> = arrayLi
         .filter { it.isFile } //take only files
         .filter { it.name.contains(".log", ignoreCase = true) }
         .toMutableList()
-    listOfFiles.addAll(images)
+    listOfFiles.addAll(extraFiles)
     listOfFiles.zip(zipFile)
     return zipFile
 }
