@@ -99,6 +99,7 @@ fun File.copyLogsTOSDCard(sdCardFolderName: String = "KotlinLogger"): File {
  *
  * @param appCtx application context
  * @param fileAge how many days backward you want to go - default 4
+ * @param extraFiles extra files can be added to the zip file (for example screenshots from app)
  */
 
 fun getZipOfLogs(appCtx: Context, fileAge: Int = 4, extraFiles: List<File> = arrayListOf()): File {
