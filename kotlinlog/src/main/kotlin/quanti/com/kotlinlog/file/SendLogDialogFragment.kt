@@ -7,9 +7,18 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.widget.Toast
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import quanti.com.kotlinlog.R
-import quanti.com.kotlinlog.utils.*
+import quanti.com.kotlinlog.utils.copyLogsTOSDCard
+import quanti.com.kotlinlog.utils.getFormattedFileNameDayNow
+import quanti.com.kotlinlog.utils.getUriForFile
+import quanti.com.kotlinlog.utils.getZipOfLogs
+import quanti.com.kotlinlog.utils.hasFileWritePermission
 import java.io.File
 
 /**
@@ -26,25 +35,35 @@ class SendLogDialogFragment : DialogFragment() {
         const val EMAIL_BUTTON_TEXT = "email_button"
         const val FILE_BUTTON_TEXT = "file_button"
         const val SEND_EMAIL_ADDRESSES = "send_address"
+        const val EXTRA_FILES = "extra_files"
 
         @JvmOverloads
         @JvmStatic
         fun newInstance(
-                sendEmailAddress: String,
-                message: String = "Would you like to send logs by email or save them to SD card?",
-                title: String = "Send logs",
-                emailButtonText: String = "Email",
-                fileButtonText: String = "Save"
-        ) = newInstance(arrayOf(sendEmailAddress), message, title, emailButtonText, fileButtonText)
+            sendEmailAddress: String,
+            message: String = "Would you like to send logs by email or save them to SD card?",
+            title: String = "Send logs",
+            emailButtonText: String = "Email",
+            fileButtonText: String = "Save",
+            extraFiles: List<File> = arrayListOf()
+        ) = newInstance(
+            arrayOf(sendEmailAddress),
+            message,
+            title,
+            emailButtonText,
+            fileButtonText,
+            extraFiles
+        )
 
         @JvmOverloads
         @JvmStatic
         fun newInstance(
-                sendEmailAddress: Array<String>,
-                message: String = "Would you like to send logs by email or save them to SD card?",
-                title: String = "Send logs",
-                emailButtonText: String = "Email",
-                fileButtonText: String = "Save"
+            sendEmailAddress: Array<String>,
+            message: String = "Would you like to send logs by email or save them to SD card?",
+            title: String = "Send logs",
+            emailButtonText: String = "Email",
+            fileButtonText: String = "Save",
+            extraFiles: List<File> = arrayListOf()
         ): SendLogDialogFragment {
             val myFragment = SendLogDialogFragment()
 
@@ -54,6 +73,7 @@ class SendLogDialogFragment : DialogFragment() {
             args.putString(EMAIL_BUTTON_TEXT, emailButtonText)
             args.putString(FILE_BUTTON_TEXT, fileButtonText)
             args.putStringArray(SEND_EMAIL_ADDRESSES, sendEmailAddress)
+            args.putSerializable(EXTRA_FILES, ArrayList(extraFiles))
 
             myFragment.arguments = args
 
@@ -65,23 +85,32 @@ class SendLogDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        zipFile = GlobalScope.async { getZipOfLogs(activity!!.applicationContext) }
+        zipFile = GlobalScope.async {
+            val extraFiles = arguments!!.getSerializable(EXTRA_FILES) as ArrayList<File>
+            getZipOfLogs(activity!!.applicationContext, 4, extraFiles)
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val hasFilePermission = activity!!.applicationContext.hasFileWritePermission()
 
         return AlertDialog
-                .Builder(context!!)
-                .apply {
-                    setMessage(arguments!!.getString(MESSAGE))
-                    setTitle(arguments!!.getString(TITLE))
-                    setPositiveButton(arguments!!.getString(EMAIL_BUTTON_TEXT), this@SendLogDialogFragment::positiveButtonClick)
+            .Builder(context!!)
+            .apply {
+                setMessage(arguments!!.getString(MESSAGE))
+                setTitle(arguments!!.getString(TITLE))
+                setPositiveButton(
+                    arguments!!.getString(EMAIL_BUTTON_TEXT),
+                    this@SendLogDialogFragment::positiveButtonClick
+                )
 
-                    if (hasFilePermission) {
-                        setNeutralButton(arguments!!.getString(FILE_BUTTON_TEXT), this@SendLogDialogFragment::neutralButtonClick)
-                    }
-                }.create()
+                if (hasFilePermission) {
+                    setNeutralButton(
+                        arguments!!.getString(FILE_BUTTON_TEXT),
+                        this@SendLogDialogFragment::neutralButtonClick
+                    )
+                }
+            }.create()
     }
 
     /**
@@ -112,7 +141,11 @@ class SendLogDialogFragment : DialogFragment() {
         try {
             startActivity(Intent.createChooser(intent, "Send mail..."))
         } catch (ex: android.content.ActivityNotFoundException) {
-            Toast.makeText(appContext, getString(R.string.logs_email_no_client_installed), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                appContext,
+                getString(R.string.logs_email_no_client_installed),
+                Toast.LENGTH_LONG
+            ).show()
         }
 
     }
@@ -129,7 +162,11 @@ class SendLogDialogFragment : DialogFragment() {
         GlobalScope.launch(Dispatchers.IO) {
             val file = zipFile!!.await().copyLogsTOSDCard()
             launch(Dispatchers.Main) {
-                Toast.makeText(appContext, "File successfully copied" + "\n" + file.absolutePath, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    appContext,
+                    "File successfully copied" + "\n" + file.absolutePath,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
