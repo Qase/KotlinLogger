@@ -32,3 +32,5 @@
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
+
+-keep class quanti.com.kotlinlog.Log

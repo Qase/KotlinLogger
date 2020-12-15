@@ -3,7 +3,7 @@ package quanti.com.kotlinlog
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.file.FileLogger
 import quanti.com.kotlinlog.utils.getClassNameWithoutPackage
-import java.io.File
+import java.lang.IllegalStateException
 
 /***
  * PRIVATE
@@ -78,5 +78,5 @@ private fun getMethodStackTraceElement(): StackTraceElement {
         }
     }
 
-    return null!!
+    throw IllegalStateException("class log.Log is missing")
 }
