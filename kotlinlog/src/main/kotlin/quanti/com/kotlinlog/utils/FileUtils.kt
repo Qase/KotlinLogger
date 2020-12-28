@@ -84,16 +84,14 @@ fun File.getUriForFile(appCtx: Context) = FileProvider.getUriForFile(appCtx, app
 /**
  * Copy zip of logs to sd card
  */
-fun File.copyLogsTOSDCard(sdCardFolderName: String = "KotlinLogger"): File {
-    val outputFile = Environment
-            .getExternalStorageDirectory()
-            .addPath(sdCardFolderName, name)
+fun File.copyLogsTOSDCard(context: Context, sdCardFolderName: String = "KotlinLogger"): File {
+    val outputFile = context.getExternalFilesDir(null)
+            ?.addPath(sdCardFolderName, name) ?: throw Exception("External files directory was not found")
 
     copyTo(outputFile, overwrite = true)
 
     return outputFile
 }
-
 /**
  * Create zip of all logs in current app directory
  *

@@ -160,7 +160,7 @@ class SendLogDialogFragment : DialogFragment() {
         val appContext = this@SendLogDialogFragment.context!!.applicationContext
 
         GlobalScope.launch(Dispatchers.IO) {
-            val file = zipFile!!.await().copyLogsTOSDCard()
+            val file = zipFile!!.await().copyLogsTOSDCard(requireContext())
             launch(Dispatchers.Main) {
                 Toast.makeText(
                     appContext,
