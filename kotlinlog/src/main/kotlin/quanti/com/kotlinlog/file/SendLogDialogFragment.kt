@@ -47,7 +47,7 @@ class SendLogDialogFragment : DialogFragment() {
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
-            dialogTheme: Int = 0
+            dialogTheme: Int = R.style.Theme_AppCompat
         ) = newInstance(
             arrayOf(sendEmailAddress),
             message,
@@ -67,7 +67,7 @@ class SendLogDialogFragment : DialogFragment() {
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
-            dialogTheme: Int = 0
+            dialogTheme: Int = R.style.Theme_AppCompat
         ): SendLogDialogFragment {
             val myFragment = SendLogDialogFragment()
 
@@ -100,7 +100,7 @@ class SendLogDialogFragment : DialogFragment() {
         val hasFilePermission = activity!!.applicationContext.hasFileWritePermission()
 
         return AlertDialog
-            .Builder(context!!)
+            .Builder(context!!, arguments!!.getInt(DIALOG_THEME))
             .apply {
                 setMessage(arguments!!.getString(MESSAGE))
                 setTitle(arguments!!.getString(TITLE))
@@ -115,9 +115,9 @@ class SendLogDialogFragment : DialogFragment() {
                         this@SendLogDialogFragment::neutralButtonClick
                     )
                 }
-                if (arguments!!.getInt(DIALOG_THEME) != 0){
+                /**if (arguments!!.getInt(DIALOG_THEME) != 0){
                     setStyle(STYLE_NORMAL, arguments!!.getInt(DIALOG_THEME))
-                }
+                }**/
             }.create()
     }
 
