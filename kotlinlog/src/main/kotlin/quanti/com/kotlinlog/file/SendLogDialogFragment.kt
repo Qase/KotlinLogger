@@ -5,7 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
+import android.app.AlertDialog
 import android.widget.Toast
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -101,9 +101,8 @@ class SendLogDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val hasFilePermission = activity!!.applicationContext.hasFileWritePermission()
 
-        val builder = AlertDialog.Builder(context!!, arguments!!.getInt(DIALOG_THEME))
-
-        return builder
+        return AlertDialog
+            .Builder(context!!, arguments!!.getInt(DIALOG_THEME))
             .apply {
                 setMessage(arguments!!.getString(MESSAGE))
                 setTitle(arguments!!.getString(TITLE))
