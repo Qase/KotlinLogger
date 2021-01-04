@@ -47,7 +47,7 @@ class SendLogDialogFragment : DialogFragment() {
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
-            dialogTheme: Int = R.style.Theme_AppCompat
+            dialogTheme: Int? = null
         ) = newInstance(
             arrayOf(sendEmailAddress),
             message,
@@ -67,7 +67,7 @@ class SendLogDialogFragment : DialogFragment() {
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
-            dialogTheme: Int = R.style.Theme_AppCompat
+            dialogTheme: Int? = null
         ): SendLogDialogFragment {
             val myFragment = SendLogDialogFragment()
 
@@ -78,7 +78,9 @@ class SendLogDialogFragment : DialogFragment() {
             args.putString(FILE_BUTTON_TEXT, fileButtonText)
             args.putStringArray(SEND_EMAIL_ADDRESSES, sendEmailAddress)
             args.putSerializable(EXTRA_FILES, ArrayList(extraFiles))
-            args.putInt(DIALOG_THEME, dialogTheme)
+            if (dialogTheme != null) {
+                args.putInt(DIALOG_THEME, dialogTheme)
+            }
 
             myFragment.arguments = args
 
@@ -99,8 +101,9 @@ class SendLogDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val hasFilePermission = activity!!.applicationContext.hasFileWritePermission()
 
-        return AlertDialog
-            .Builder(context!!, arguments!!.getInt(DIALOG_THEME))
+        val builder = AlertDialog.Builder(context!!, arguments!!.getInt(DIALOG_THEME))
+
+        return builder
             .apply {
                 setMessage(arguments!!.getString(MESSAGE))
                 setTitle(arguments!!.getString(TITLE))
@@ -115,9 +118,6 @@ class SendLogDialogFragment : DialogFragment() {
                         this@SendLogDialogFragment::neutralButtonClick
                     )
                 }
-                /**if (arguments!!.getInt(DIALOG_THEME) != 0){
-                    setStyle(STYLE_NORMAL, arguments!!.getInt(DIALOG_THEME))
-                }**/
             }.create()
     }
 
