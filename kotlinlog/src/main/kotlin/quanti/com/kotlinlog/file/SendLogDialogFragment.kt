@@ -47,7 +47,7 @@ class SendLogDialogFragment : DialogFragment() {
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
-            dialogTheme: Int
+            dialogTheme: Int = R.style.Theme_AppCompat_Dialog
         ) = newInstance(
             arrayOf(sendEmailAddress),
             message,
@@ -67,7 +67,7 @@ class SendLogDialogFragment : DialogFragment() {
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
-            dialogTheme: Int
+            dialogTheme: Int = R.style.Theme_AppCompat_Dialog
         ): SendLogDialogFragment {
             val myFragment = SendLogDialogFragment()
 
