@@ -5,7 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
+import android.app.AlertDialog
 import android.widget.Toast
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +36,7 @@ class SendLogDialogFragment : DialogFragment() {
         const val FILE_BUTTON_TEXT = "file_button"
         const val SEND_EMAIL_ADDRESSES = "send_address"
         const val EXTRA_FILES = "extra_files"
+        const val DIALOG_THEME = "dialog_theme"
 
         @JvmOverloads
         @JvmStatic
@@ -45,14 +46,16 @@ class SendLogDialogFragment : DialogFragment() {
             title: String = "Send logs",
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
-            extraFiles: List<File> = arrayListOf()
+            extraFiles: List<File> = arrayListOf(),
+            dialogTheme: Int? = null
         ) = newInstance(
             arrayOf(sendEmailAddress),
             message,
             title,
             emailButtonText,
             fileButtonText,
-            extraFiles
+            extraFiles,
+            dialogTheme
         )
 
         @JvmOverloads
@@ -63,7 +66,8 @@ class SendLogDialogFragment : DialogFragment() {
             title: String = "Send logs",
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
-            extraFiles: List<File> = arrayListOf()
+            extraFiles: List<File> = arrayListOf(),
+            dialogTheme: Int? = null
         ): SendLogDialogFragment {
             val myFragment = SendLogDialogFragment()
 
@@ -74,6 +78,9 @@ class SendLogDialogFragment : DialogFragment() {
             args.putString(FILE_BUTTON_TEXT, fileButtonText)
             args.putStringArray(SEND_EMAIL_ADDRESSES, sendEmailAddress)
             args.putSerializable(EXTRA_FILES, ArrayList(extraFiles))
+            if (dialogTheme != null) {
+                args.putInt(DIALOG_THEME, dialogTheme)
+            }
 
             myFragment.arguments = args
 
@@ -95,7 +102,7 @@ class SendLogDialogFragment : DialogFragment() {
         val hasFilePermission = activity!!.applicationContext.hasFileWritePermission()
 
         return AlertDialog
-            .Builder(context!!)
+            .Builder(context!!, arguments!!.getInt(DIALOG_THEME))
             .apply {
                 setMessage(arguments!!.getString(MESSAGE))
                 setTitle(arguments!!.getString(TITLE))
