@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
 
     fun send_clicked(view: View) {
-//        SendLogDialogFragment.newInstance("kidal5@centrum.cz", deleteLogs = true).show(supportFragmentManager, "OMG")
+        SendLogDialogFragment.newInstance("kidal5@centrum.cz").show(supportFragmentManager, "OMG")
     }
 
     fun deleteLogs_clicked(view: View) {
