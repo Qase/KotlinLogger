@@ -17,6 +17,8 @@ android {
         targetSdkVersion 27
         versionCode 3
         versionName "2.2.3"
+        buildConfigField 'int', 'VERSION_CODE', "$versionCode"
+        buildConfigField 'String', 'VERSION_NAME', "\"$versionName\""
         consumerProguardFile('proguard-rules.pro')
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
