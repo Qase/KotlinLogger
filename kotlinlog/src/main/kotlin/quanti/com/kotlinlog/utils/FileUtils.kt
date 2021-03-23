@@ -3,7 +3,7 @@ package quanti.com.kotlinlog.utils
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.os.Environment
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 import quanti.com.kotlinlog.Log.Companion.i
 import quanti.com.kotlinlog.file.file.MetadataFile
 import quanti.com.kotlinlog.forceWrite

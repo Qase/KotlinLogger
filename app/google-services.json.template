@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1234",
+    "project_id": "kotlinloggerexample",
+    "storage_bucket": "kotlinloggertest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1234:android:abcdef123456",
+        "android_client_info": {
+          "package_name": "quanti.com.kotlinlog3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1234-abcdef123456.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "abcdef123456"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1234-abcdef123456.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

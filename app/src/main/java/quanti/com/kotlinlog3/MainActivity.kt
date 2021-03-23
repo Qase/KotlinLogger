@@ -9,15 +9,13 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
-import android.support.annotation.IdRes
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.*
-import com.crashlytics.android.Crashlytics
-import io.fabric.sdk.android.Fabric
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import quanti.com.kotlinlog.Log
@@ -111,7 +109,8 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
         Log.useUncheckedErrorHandler()
         Log.addLogger(AndroidLogger())
 
-        Fabric.with(this, Crashlytics())
+        // No need initialize Firebase Crashlytics. It is initialized automatically by
+        // com.google.firebase.crashlytics plugin and google-services.json
         Log.addLogger(CrashlyticsLogger())
 
         switchLogger_clicked(null)

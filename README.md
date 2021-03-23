@@ -57,7 +57,11 @@ val androidBundle = LoggerBundle(LogLevel.INFO)
 Log.addLogger(AndroidLogger(androidBundle))
 
 //default log level is warn
-Fabric.with(this, Crashlytics())
+//apply plugins google-services and firebase.crashlytics, copy google-services.json in app/ directory
+//download google-services.json from https://console.firebase.google.com/u/0/project/{project_id}/settings/general/android:{project_package}
+//add these two lines in app/build.gradle
+//  apply plugin: 'com.google.gms.google-services'
+//  apply plugin: 'com.google.firebase.crashlytics'
 Log.addLogger(CrashlyticsLogger())
 
 //Every LogBundles has ton of options, see javadoc for more
