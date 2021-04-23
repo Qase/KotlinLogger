@@ -5,6 +5,7 @@ import quanti.com.kotlinlog.android.MetadataLogger
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.migration.KotlinLogMigrator
+import quanti.com.kotlinlog.utils.logFilesDir
 import quanti.com.kotlinlog.utils.loga
 
 /**
@@ -17,7 +18,7 @@ class Log {
 
     companion object {
 
-        private var initialised = false
+        private var instance: Log? = null
 
         //ASYNC METHODS
         @JvmStatic
@@ -122,12 +123,16 @@ class Log {
          */
         @JvmStatic
         fun initialise(context: Context) {
-            initialised = true;
+            if (instance == null) {
+                instance = Log()
+                System.loadLibrary("native-logger")
+            }
+            instance?.init(context.logFilesDir.absolutePath)
             KotlinLogMigrator.migrate(context)
         }
 
         private fun checkInitialisation() {
-            if (!initialised) {
+            if (instance == null) {
                 throw IllegalStateException("Log uninitialized - please first initialise the library by calling Log.initialise(context)")
             }
         }
@@ -198,7 +203,7 @@ class Log {
         }
     }
 
-
+    external fun init(path: String)
 }
 
 
