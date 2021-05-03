@@ -14,7 +14,7 @@ import quanti.com.kotlinlog.utils.loga
  * Main logger to all subloggers
  */
 
-class Log {
+class Log(private val context: Context) {
 
     companion object {
 
@@ -125,7 +125,7 @@ class Log {
         @JvmStatic
         fun initialise(context: Context) {
             if (instance == null) {
-                instance = Log()
+                instance = Log(context)
             }
             KotlinLogMigrator.migrate(context)
         }
@@ -137,13 +137,13 @@ class Log {
         }
 
         @JvmStatic
-        fun initialiseNdk(context: Context) {
+        fun initialiseNdk() {
             checkInitialisation()
-            instance?.init(context.logFilesDir.absolutePath)
+            instance?.init(instance!!.context.logFilesDir.absolutePath)
         }
 
         @JvmStatic
-        fun deInitialiseNdk(context: Context) {
+        fun deInitialiseNdk() {
             checkInitialisation()
             instance?.deInit()
         }
