@@ -19,6 +19,7 @@ class Log {
     companion object {
 
         private var instance: Log? = null
+        private var isNdkInitialised: Boolean = false
 
         //ASYNC METHODS
         @JvmStatic
@@ -125,7 +126,6 @@ class Log {
         fun initialise(context: Context) {
             if (instance == null) {
                 instance = Log()
-                System.loadLibrary("native-logger")
             }
             instance?.init(context.logFilesDir.absolutePath)
             KotlinLogMigrator.migrate(context)
@@ -135,6 +135,18 @@ class Log {
             if (instance == null) {
                 throw IllegalStateException("Log uninitialized - please first initialise the library by calling Log.initialise(context)")
             }
+        }
+
+        @JvmStatic
+        fun initialiseNdk(context: Context) {
+            checkInitialisation()
+            instance?.init(context.logFilesDir.absolutePath)
+        }
+
+        @JvmStatic
+        fun deInitialiseNdk(context: Context) {
+            checkInitialisation()
+            instance?.deInit()
         }
 
         /**
@@ -203,7 +215,16 @@ class Log {
         }
     }
 
+    init {
+        if (!isNdkInitialised) {
+            isNdkInitialised = true
+            System.loadLibrary("native-logger")
+        }
+    }
+
     external fun init(path: String)
+
+    external fun deInit()
 }
 
 

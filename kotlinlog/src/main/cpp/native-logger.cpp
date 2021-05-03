@@ -206,7 +206,7 @@ Java_quanti_com_kotlinlog_Log_init(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_quanti_com_kotlinlog_Log_deiniti(
+Java_quanti_com_kotlinlog_Log_deInit(
         JNIEnv* env,
         jobject /* this */) {
     deinitializeNativeCrashHandler();
