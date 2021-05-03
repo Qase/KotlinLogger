@@ -16,6 +16,11 @@ android {
         buildConfigField 'String', 'VERSION_NAME', "\"$versionName\""
         consumerProguardFile('proguard-rules.pro')
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+            }
+        }
     }
     buildTypes {
         release {
@@ -40,6 +45,13 @@ android {
 //                    showStackTraces "true"
                 }
             }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.10.2"
         }
     }
 
