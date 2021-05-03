@@ -127,7 +127,6 @@ class Log {
             if (instance == null) {
                 instance = Log()
             }
-            instance?.init(context.logFilesDir.absolutePath)
             KotlinLogMigrator.migrate(context)
         }
 
