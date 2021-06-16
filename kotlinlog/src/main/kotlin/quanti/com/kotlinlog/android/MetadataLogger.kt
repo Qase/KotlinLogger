@@ -17,7 +17,6 @@ object MetadataLogger {
         logs.clear()
         fillArrayBuild()
         logs.add(Pair("", ""))
-        fillArrayBuildConfig(context)
         customMetadataLambda?.invoke(context)?.let {
             logs.add(Pair("", ""))
             logs.addAll(it)
@@ -45,21 +44,6 @@ object MetadataLogger {
         logs.add(Pair("HARDWARE", Build.HARDWARE))
         logs.add(Pair("ID", Build.ID))
         logs.add(Pair("TAGS", Build.TAGS))
-
-    }
-
-    private fun fillArrayBuildConfig(context: Context) {
-        try {
-            val clazz = Class.forName(context.packageName + ".BuildConfig")
-            clazz.fields.forEach {
-                logs.add(Pair(
-                        it.toGenericString().extractFieldName(),
-                        it.get(null).toString()
-                ))
-            }
-        } catch (ex: Exception) {
-        }
-
 
     }
 
