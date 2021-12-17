@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.app.AlertDialog
+import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import kotlinx.coroutines.Deferred
@@ -143,6 +144,14 @@ class SendLogDialogFragment : DialogFragment() {
             putExtra(Intent.EXTRA_SUBJECT, subject)
             putExtra(Intent.EXTRA_TEXT, bodyText)
             putExtra(Intent.EXTRA_STREAM, zipFileUri)
+        }
+
+        context?.packageManager?.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)?.let {
+            context?.grantUriPermission(
+                it.activityInfo.packageName,
+                zipFileUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
         }
 
         try {

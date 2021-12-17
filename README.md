@@ -12,7 +12,7 @@
 
 Smart android logger written in Kotlin language.
 
-Mostly used in Prague based android develpoment company - [Quanti](https://www.quanti.cz/) for everything. Product is still being actively developed.
+Mostly used in Prague based android development company - [Quanti](https://www.quanti.cz/) for everything. Product is still being actively developed.
 
 ## Features
 * Usable in every JVM language including Java/Kotlin/Scala ...
