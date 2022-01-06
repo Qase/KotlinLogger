@@ -34,3 +34,4 @@
 }
 
 -keep class quanti.com.kotlinlog.Log
+-keep class **.*log.Log**
