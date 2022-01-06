@@ -3,7 +3,6 @@ package quanti.com.kotlinlog.utils
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import java.util.jar.Manifest
 
 /**
  * Created by Trnka Vladislav on 04.07.2017.
