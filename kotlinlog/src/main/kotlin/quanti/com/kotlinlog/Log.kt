@@ -5,6 +5,7 @@ import quanti.com.kotlinlog.android.MetadataLogger
 import quanti.com.kotlinlog.base.ILogger
 import quanti.com.kotlinlog.base.LogLevel
 import quanti.com.kotlinlog.migration.KotlinLogMigrator
+import quanti.com.kotlinlog.utils.logFilesDir
 import quanti.com.kotlinlog.utils.loga
 
 /**
@@ -13,11 +14,12 @@ import quanti.com.kotlinlog.utils.loga
  * Main logger to all subloggers
  */
 
-class Log {
+class Log(private val context: Context) {
 
     companion object {
 
-        private var initialised = false
+        private var instance: Log? = null
+        private var isNdkInitialised: Boolean = false
 
         //ASYNC METHODS
         @JvmStatic
@@ -122,14 +124,28 @@ class Log {
          */
         @JvmStatic
         fun initialise(context: Context) {
-            initialised = true;
+            if (instance == null) {
+                instance = Log(context)
+            }
             KotlinLogMigrator.migrate(context)
         }
 
         private fun checkInitialisation() {
-            if (!initialised) {
+            if (instance == null) {
                 throw IllegalStateException("Log uninitialized - please first initialise the library by calling Log.initialise(context)")
             }
+        }
+
+        @JvmStatic
+        fun initialiseNdk() {
+            checkInitialisation()
+            instance?.init(instance!!.context.logFilesDir.absolutePath)
+        }
+
+        @JvmStatic
+        fun deInitialiseNdk() {
+            checkInitialisation()
+            instance?.deInit()
         }
 
         /**
@@ -198,7 +214,16 @@ class Log {
         }
     }
 
+    init {
+        if (!isNdkInitialised) {
+            isNdkInitialised = true
+            System.loadLibrary("native-logger")
+        }
+    }
 
+    external fun init(path: String)
+
+    external fun deInit()
 }
 
 
