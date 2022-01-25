@@ -33,8 +33,8 @@ class KotlinLogMigrationTest {
 
         KotlinLogMigrator.migrate(appCtx)
 
-        Assert.assertEquals(2, appCtx.filesDir.listFiles().size) // text file + kotlinlog directory
-        Assert.assertEquals(2, appCtx.logFilesDir.listFiles().size)
+        Assert.assertEquals(2, appCtx.filesDir.listFiles()?.size) // text file + kotlinlog directory
+        Assert.assertEquals(2, appCtx.logFilesDir.listFiles()?.size)
     }
 
     private fun setLastVersion(lastVersion: Int) {

@@ -30,16 +30,16 @@ class DayLogFile(
         //switch to new file if needed
         loga("fileAge: " + file.fileAge())
         loga("fileName: " + file.name)
-        if (file.fileAge() > 0 || !file.name!!.contains(getFormattedFileNameForDayTemp())) {
+        if (file.fileAge() > 0 || !file.name.contains(getFormattedFileNameForDayTemp())) {
             createNewFile()
         }
 
         //remove all zips
-        listOfLoggerFiles().deleteAllZips()
+        listOfLoggerFiles()?.deleteAllZips()
 
         //remove all files older than x days
         loga("max days saved: $maxDays")
-        listOfLoggerFiles().deleteAllOldFiles(maxDays)
+        listOfLoggerFiles()?.deleteAllOldFiles(maxDays)
     }
 
 

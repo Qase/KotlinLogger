@@ -40,8 +40,8 @@ class RemoveFileTest {
     fun createFileDoNotShift() {
         createFile()
 
-        appCtx.filesDir.listFiles().deleteAllOldFiles(3)
-        Assert.assertEquals(1, appCtx.filesDir.listFiles().size)
+        appCtx.filesDir.listFiles()?.deleteAllOldFiles(3)
+        Assert.assertEquals(1, appCtx.filesDir.listFiles()?.size)
     }
 
     @Test
@@ -50,15 +50,15 @@ class RemoveFileTest {
 
         ActualTime.shiftByOneDay()
 
-        appCtx.filesDir.listFiles().deleteAllOldFiles(0)
-        Assert.assertEquals(true, appCtx.filesDir.listFiles().isEmpty())
+        appCtx.filesDir.listFiles()?.deleteAllOldFiles(0)
+        Assert.assertEquals(true, appCtx.filesDir.listFiles()?.isEmpty())
     }
 
     @Test
     fun createZip() {
         createFile(".zip")
-        appCtx.filesDir.listFiles().deleteAllZips()
-        Assert.assertEquals(true, appCtx.filesDir.listFiles().isEmpty())
+        appCtx.filesDir.listFiles()?.deleteAllZips()
+        Assert.assertEquals(true, appCtx.filesDir.listFiles()?.isEmpty())
     }
 
     @Test
@@ -68,8 +68,8 @@ class RemoveFileTest {
         (1..zipCount).forEach { createFile(".zip") }
         (1..txtCount).forEach { createFile(".txt") }
 
-        appCtx.filesDir.listFiles().deleteAllZips()
-        Assert.assertEquals(txtCount, appCtx.filesDir.listFiles().size)
+        appCtx.filesDir.listFiles()?.deleteAllZips()
+        Assert.assertEquals(txtCount, appCtx.filesDir.listFiles()?.size)
     }
 
     @Test
@@ -77,11 +77,11 @@ class RemoveFileTest {
 
         val beforeCount = 5
         val afterCount = 9
-        (1..beforeCount).forEach { createFile() }
+        repeat((beforeCount)) { createFile() }
         ActualTime.shiftByOneDay()
-        (1..afterCount).forEach { createFile() }
-        appCtx.filesDir.listFiles().deleteAllOldFiles(0)
-        Assert.assertEquals(afterCount, appCtx.filesDir.listFiles().size)
+        repeat(afterCount) { createFile() }
+        appCtx.filesDir.listFiles()?.deleteAllOldFiles(0)
+        Assert.assertEquals(afterCount, appCtx.filesDir.listFiles()?.size)
 
     }
 

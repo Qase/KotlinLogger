@@ -33,6 +33,7 @@ class FileLoggerTest {
         RuntimeEnvironment.application.applicationInfo.nonLocalizedLabel = "FAKE APP NAME"
 
         appCtx = RuntimeEnvironment.application.applicationContext
+        Log.initialise(appCtx)
         logger = FileLogger(appCtx, flb)
         Log.addLogger(logger)
 

@@ -36,6 +36,7 @@ import quanti.com.kotlinlog.weblogger.bundle.WebSocketLoggerBundle
 import quanti.com.kotlinlog.weblogger.rest.IServerActive
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 const val REQUEST = 98
 const val RANDOM_TEXT = "qwertyuiop"
@@ -192,7 +193,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
     fun logMetadata_clicked(view: View) {
         MetadataLogger.customMetadataLambda = {
             val time = Date(System.currentTimeMillis())
-            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
             val uptime = SystemClock.uptimeMillis()
             listOf(Pair("CURRENT_TIME", format.format(time)),
                     Pair("SYSTEM_UPTIME", uptime.toString()))
@@ -240,6 +241,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             showGoodPermission()
@@ -268,9 +270,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
     }
 
     fun testShare_clicked(view: View) {
-
         SendLogDialogFragment.newInstance("kidal5@centrum.cz").show(supportFragmentManager, "STRING")
-
     }
 
     private fun getTextFrom(editText: EditText, ws: Boolean): String {
@@ -279,7 +279,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
         val url = when {
             editText.text.isNotEmpty() -> editText.text
             clipboard.hasPrimaryClip() -> {
-                val baseUrl = clipboard.primaryClip.getItemAt(0).text
+                val baseUrl = clipboard.primaryClip?.getItemAt(0)?.text
                 when (ws) {
                     true -> "ws://$baseUrl/ws/v1/"
                     false -> "http://$baseUrl/api/v1/"

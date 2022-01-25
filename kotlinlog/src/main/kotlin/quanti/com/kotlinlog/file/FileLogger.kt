@@ -20,6 +20,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 
 /**
@@ -75,6 +76,7 @@ class FileLogger(
     }
 
 
+    @DelicateCoroutinesApi
     override fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable) {
 
         val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
@@ -138,10 +140,10 @@ class FileLogger(
          */
         fun deleteAllLogs(appCtx: Context) {
             appCtx
-                    .logFilesDir
-                    .listFiles()
-                    .filter { it.name.endsWith(".log") }
-                    .forEach { it.delete() }
+                .logFilesDir
+                .listFiles()
+                ?.filter { it.name.endsWith(".log") }
+                ?.forEach { it.delete() }
         }
     }
 

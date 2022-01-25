@@ -48,13 +48,13 @@ class CircleLogFile(
         }
 
         //remove all zips
-        listOfLoggerFiles().deleteAllZips()
+        listOfLoggerFiles()?.deleteAllZips()
 
         //remove all files that exceeds specified limit
         listOfLoggerFiles()
-                .sortByAge()
-                .drop(bundle.numOfFiles)
-                .deleteAll()
+                ?.sortByAge()
+                ?.drop(bundle.numOfFiles)
+                ?.deleteAll()
     }
 
 }

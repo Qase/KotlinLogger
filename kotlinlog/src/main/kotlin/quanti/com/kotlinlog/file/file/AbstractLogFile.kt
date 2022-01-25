@@ -57,7 +57,7 @@ abstract class AbstractLogFile(
                 createNewFile()
             }
             while (queue.isNotEmpty()) {
-                fos.write(queue.poll().toByteArray())
+                queue.poll()?.toByteArray()?.let{ fos.write(it) }
             }
         }
     }
@@ -94,7 +94,7 @@ abstract class AbstractLogFile(
     /**
      * Returns all files that corresponds to this logger
      */
-    protected fun listOfLoggerFiles() = ctx.logFilesDir.listFiles().filter { it.name.contains(logIdentifier) }
+    protected fun listOfLoggerFiles() = ctx.logFilesDir.listFiles()?.filter { it.name.contains(logIdentifier) }
 
 
     /**

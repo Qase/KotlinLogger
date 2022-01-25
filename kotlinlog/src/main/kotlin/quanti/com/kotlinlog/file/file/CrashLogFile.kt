@@ -34,8 +34,8 @@ class CrashLogFile(
             //remove all files that exceeds specified limit
             appCtx.logFilesDir
                     .listFiles()
-                    .filter { it.name.contains("handled") }
-                    .deleteAllOldFiles(maxDays)
+                    ?.filter { it.name.contains("handled") }
+                    ?.deleteAllOldFiles(maxDays)
         }
     }
 
