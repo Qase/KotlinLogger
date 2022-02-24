@@ -1,25 +1,20 @@
 package quanti.com.kotlinlog.file
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.app.AlertDialog
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.io.File
+import kotlinx.coroutines.*
 import quanti.com.kotlinlog.R
 import quanti.com.kotlinlog.utils.copyLogsTOSDCard
 import quanti.com.kotlinlog.utils.getFormattedFileNameDayNow
 import quanti.com.kotlinlog.utils.getUriForFile
 import quanti.com.kotlinlog.utils.getZipOfLogs
 import quanti.com.kotlinlog.utils.hasFileWritePermission
-import java.io.File
 
 /**
  * Created by Trnka Vladislav on 20.06.2017.
@@ -88,32 +83,32 @@ class SendLogDialogFragment : DialogFragment() {
         }
     }
 
-    var zipFile: Deferred<File>? = null
+    private var zipFile: Deferred<File>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        zipFile = GlobalScope.async {
-            val extraFiles = arguments!!.getSerializable(EXTRA_FILES) as ArrayList<File>
-            getZipOfLogs(activity!!.applicationContext, 4, extraFiles)
+        zipFile = CoroutineScope(Dispatchers.IO).async {
+            val extraFiles = requireArguments().getSerializable(EXTRA_FILES) as ArrayList<File>
+            getZipOfLogs(requireActivity().applicationContext, 4, extraFiles)
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val hasFilePermission = activity!!.applicationContext.hasFileWritePermission()
+        val hasFilePermission = requireActivity().applicationContext.hasFileWritePermission()
 
         return AlertDialog
-            .Builder(context!!, arguments!!.getInt(DIALOG_THEME))
+            .Builder(requireContext(), requireArguments().getInt(DIALOG_THEME))
             .apply {
-                setMessage(arguments!!.getString(MESSAGE))
-                setTitle(arguments!!.getString(TITLE))
+                setMessage(requireArguments().getString(MESSAGE))
+                setTitle(requireArguments().getString(TITLE))
                 setPositiveButton(
-                    arguments!!.getString(EMAIL_BUTTON_TEXT),
+                    requireArguments().getString(EMAIL_BUTTON_TEXT),
                     this@SendLogDialogFragment::positiveButtonClick
                 )
 
                 if (hasFilePermission) {
                     setNeutralButton(
-                        arguments!!.getString(FILE_BUTTON_TEXT),
+                        requireArguments().getString(FILE_BUTTON_TEXT),
                         this@SendLogDialogFragment::neutralButtonClick
                     )
                 }
@@ -125,56 +120,54 @@ class SendLogDialogFragment : DialogFragment() {
      * Create zip of all logs and open email client to send
      */
     @Suppress("UNUSED_PARAMETER")
-    private fun positiveButtonClick(dialog: DialogInterface, which: Int) = runBlocking {
+    private fun positiveButtonClick(dialog: DialogInterface, which: Int) =
+        CoroutineScope(Dispatchers.Main).launch {
+            val appContext = this@SendLogDialogFragment.requireContext().applicationContext
 
-        val appContext = this@SendLogDialogFragment.context!!.applicationContext
+            val addresses = requireArguments().getStringArray(SEND_EMAIL_ADDRESSES)
+            val subject =
+                getString(R.string.logs_email_subject) + " " + getFormattedFileNameDayNow()
+            val bodyText = getString(R.string.logs_email_text)
 
-        val addresses = arguments!!.getStringArray(SEND_EMAIL_ADDRESSES)
-        val subject = getString(R.string.logs_email_subject) + " " + getFormattedFileNameDayNow()
-        val bodyText = getString(R.string.logs_email_text)
+            // await non block's current thread
+            val zipFileUri = zipFile?.await()?.getUriForFile(appContext)
 
-        //await non block's current thread
-        val zipFileUri = zipFile?.await()?.getUriForFile(appContext)
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "message/rfc822" // email
+                type = "message/rfc822" // email
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                putExtra(Intent.EXTRA_EMAIL, addresses)
+                putExtra(Intent.EXTRA_SUBJECT, subject)
+                putExtra(Intent.EXTRA_TEXT, bodyText)
+                putExtra(Intent.EXTRA_STREAM, zipFileUri)
+            }
 
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "message/rfc822" //email
-            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            putExtra(Intent.EXTRA_EMAIL, addresses)
-            putExtra(Intent.EXTRA_SUBJECT, subject)
-            putExtra(Intent.EXTRA_TEXT, bodyText)
-            putExtra(Intent.EXTRA_STREAM, zipFileUri)
+            try {
+                startActivity(Intent.createChooser(intent, "Send mail..."))
+            } catch (ex: android.content.ActivityNotFoundException) {
+                Toast.makeText(
+                    appContext,
+                    getString(R.string.logs_email_no_client_installed),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
-
-        try {
-            startActivity(Intent.createChooser(intent, "Send mail..."))
-        } catch (ex: android.content.ActivityNotFoundException) {
-            Toast.makeText(
-                appContext,
-                getString(R.string.logs_email_no_client_installed),
-                Toast.LENGTH_LONG
-            ).show()
-        }
-
-    }
 
     /**
      * On neutral button click
      * Copy ZIP of all logs to sd card
      */
     @Suppress("UNUSED_PARAMETER")
-    private fun neutralButtonClick(dialog: DialogInterface, which: Int) {
+    private fun neutralButtonClick(dialog: DialogInterface, which: Int) =
+        CoroutineScope(Dispatchers.Main).launch {
+            val appContext = this@SendLogDialogFragment.requireContext().applicationContext
 
-        val appContext = this@SendLogDialogFragment.context!!.applicationContext
+            val file = zipFile?.await()?.copyLogsTOSDCard(requireContext())
 
-        GlobalScope.launch(Dispatchers.IO) {
-            val file = zipFile!!.await().copyLogsTOSDCard(requireContext())
-            launch(Dispatchers.Main) {
-                Toast.makeText(
-                    appContext,
-                    "File successfully copied" + "\n" + file.absolutePath,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+            Toast.makeText(
+                appContext,
+                "File successfully copied" + "\n" + file?.absolutePath,
+                Toast.LENGTH_LONG
+            ).show()
         }
-    }
 }

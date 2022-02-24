@@ -5,13 +5,12 @@ group = 'com.qithub.qase'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 3
-        versionName "2.2.6"
+        versionName "2.2.7"
         buildConfigField 'int', 'VERSION_CODE', "$versionCode"
         buildConfigField 'String', 'VERSION_NAME', "\"$versionName\""
         consumerProguardFile('proguard-rules.pro')
@@ -58,6 +57,7 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+    ndkVersion '21.3.6528147'
 }
 
 dependencies {
