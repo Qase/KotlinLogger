@@ -8,7 +8,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import java.io.File
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import quanti.com.kotlinlog.R
 import quanti.com.kotlinlog.utils.copyLogsTOSDCard
 import quanti.com.kotlinlog.utils.getFormattedFileNameDayNow
@@ -87,7 +90,7 @@ class SendLogDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        zipFile = CoroutineScope(Dispatchers.IO).async {
+        zipFile = GlobalScope.async {
             val extraFiles = requireArguments().getSerializable(EXTRA_FILES) as ArrayList<File>
             getZipOfLogs(requireActivity().applicationContext, 4, extraFiles)
         }
@@ -121,19 +124,16 @@ class SendLogDialogFragment : DialogFragment() {
      */
     @Suppress("UNUSED_PARAMETER")
     private fun positiveButtonClick(dialog: DialogInterface, which: Int) =
-        CoroutineScope(Dispatchers.Main).launch {
+        runBlocking {
             val appContext = this@SendLogDialogFragment.requireContext().applicationContext
 
             val addresses = requireArguments().getStringArray(SEND_EMAIL_ADDRESSES)
             val subject =
                 getString(R.string.logs_email_subject) + " " + getFormattedFileNameDayNow()
             val bodyText = getString(R.string.logs_email_text)
-
-            // await non block's current thread
             val zipFileUri = zipFile?.await()?.getUriForFile(appContext)
 
             val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "message/rfc822" // email
                 type = "message/rfc822" // email
                 flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                 putExtra(Intent.EXTRA_EMAIL, addresses)
@@ -159,7 +159,7 @@ class SendLogDialogFragment : DialogFragment() {
      */
     @Suppress("UNUSED_PARAMETER")
     private fun neutralButtonClick(dialog: DialogInterface, which: Int) =
-        CoroutineScope(Dispatchers.Main).launch {
+        runBlocking {
             val appContext = this@SendLogDialogFragment.requireContext().applicationContext
 
             val file = zipFile?.await()?.copyLogsTOSDCard(requireContext())
