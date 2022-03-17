@@ -8,8 +8,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import java.io.File
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import quanti.com.kotlinlog.R
@@ -90,7 +91,7 @@ class SendLogDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        zipFile = GlobalScope.async {
+        zipFile = CoroutineScope(Dispatchers.IO).async {
             val extraFiles = requireArguments().getSerializable(EXTRA_FILES) as ArrayList<File>
             getZipOfLogs(requireActivity().applicationContext, 4, extraFiles)
         }
