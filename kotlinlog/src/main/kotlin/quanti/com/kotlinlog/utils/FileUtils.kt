@@ -101,11 +101,23 @@ fun File.copyLogsTOSDCard(context: Context, sdCardFolderName: String = "KotlinLo
  */
 
 fun getZipOfLogs(appCtx: Context, fileAge: Int = 4, extraFiles: List<File> = arrayListOf()): File {
-    //first perform clean of mess
-    appCtx.logFilesDir.listFiles().deleteAllZips()
-    appCtx.logFilesDir.listFiles().deleteAllOldFiles(fileAge)
+    val listOfFiles = getLogFiles(appCtx, fileAge).toMutableList()
+    listOfFiles.addAll(extraFiles)
 
-    if (appCtx.logFilesDir.listFiles().isEmpty()) {
+    val zipFileName = "Logs_${getFormattedFileNameForDayTemp()}_${appCtx.getApplicationName()}.zip"
+    val zipFile = File(appCtx.logFilesDir, zipFileName)
+    zipFile.createNewFile()  //create file if not exists
+    listOfFiles.zip(zipFile)
+
+    return zipFile
+}
+
+fun getLogFiles(appCtx: Context, fileAge: Int = 4): List<File> {
+    //first perform clean of mess
+    appCtx.logFilesDir.listFiles()?.deleteAllZips()
+    appCtx.logFilesDir.listFiles()?.deleteAllOldFiles(fileAge)
+
+    if (appCtx.logFilesDir.listFiles().isNullOrEmpty()) {
         throw FileNotFoundException("No files were found")
     }
 
@@ -118,17 +130,9 @@ fun getZipOfLogs(appCtx: Context, fileAge: Int = 4, extraFiles: List<File> = arr
     loga("Force write")
     forceWrite()
 
-    val zipFileName = "Logs_${getFormattedFileNameForDayTemp()}_${appCtx.getApplicationName()}.zip"
-    val zipFile = File(appCtx.logFilesDir, zipFileName)
-    zipFile.createNewFile()  //create file if not exists
-
-    val listOfFiles = appCtx.logFilesDir
+    return appCtx.logFilesDir
         .listFiles()
-        .filter { it.isFile } //take only files
-        .filter { it.name.contains(".log", ignoreCase = true) }
-        .toMutableList()
-    listOfFiles.addAll(extraFiles)
-    listOfFiles.zip(zipFile)
-    return zipFile
+        ?.filter { it.isFile } //take only files
+        ?.filter { it.name.contains(".log", ignoreCase = true) }
+        ?: listOf()
 }
-
