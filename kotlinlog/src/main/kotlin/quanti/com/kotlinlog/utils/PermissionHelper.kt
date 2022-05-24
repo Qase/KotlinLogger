@@ -2,6 +2,7 @@ package quanti.com.kotlinlog.utils
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.core.content.ContextCompat
 
 /**
@@ -20,7 +21,11 @@ fun Context.checkPermission(permission: String) = ContextCompat.checkSelfPermiss
  */
 fun Context.hasPermission(permission: String) = checkPermission(permission) == PackageManager.PERMISSION_GRANTED
 
-fun Context.hasFileWritePermission() = hasPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+/**
+ * Returns true if Write external storage permission is provided
+ * or if the Android is >= Android 10 since this permission is irrelevant for those versions
+ */
+fun Context.hasFileWritePermission() = hasPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) || (Build.VERSION.SDK_INT >= 29)
 
 
 
