@@ -1,15 +1,22 @@
 package quanti.com.kotlinlog.utils
 
+import android.content.ContentResolver
+import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.media.MediaScannerConnection
+import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
-import quanti.com.kotlinlog.Log.Companion.i
-import quanti.com.kotlinlog.file.file.MetadataFile
-import quanti.com.kotlinlog.forceWrite
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.concurrent.TimeUnit
+import quanti.com.kotlinlog.Log.Companion.i
+import quanti.com.kotlinlog.file.file.MetadataFile
+import quanti.com.kotlinlog.forceWrite
 
 /**
  * File extensions written in kotlin
@@ -82,16 +89,84 @@ fun File.addPath(vararg childrenPath :String): File {
 fun File.getUriForFile(appCtx: Context) = FileProvider.getUriForFile(appCtx, appCtx.packageName, this)
 
 /**
- * Copy zip of logs to sd card
+ * Copy zip of logs to sd card and returns path if successful or null if failed
  */
-fun File.copyLogsTOSDCard(context: Context, sdCardFolderName: String = "KotlinLogger"): File {
-    val outputFile = context.getExternalFilesDir(null)
-            ?.addPath(sdCardFolderName, name) ?: throw Exception("External files directory was not found")
+fun File.copyLogsToSDCard(context: Context, folderName: String): String? {
+    return try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            copyLogsToSDCardNewPostQ(context, folderName)
+        } else {
+            copyLogsToSDCardLegacyPreQ(folderName)
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
 
+private fun File.copyLogsToSDCardLegacyPreQ(folderName: String): String? {
+    val path = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            "${Environment.DIRECTORY_DOCUMENTS}/$folderName"
+        } else {
+            folderName
+        }
+    val outputFile = Environment.getExternalStorageDirectory()
+        ?.addPath(path, name)
+        ?: return null
+
+    outputFile.mkdirs()
     copyTo(outputFile, overwrite = true)
 
-    return outputFile
+    return outputFile.absolutePath
 }
+
+@RequiresApi(Build.VERSION_CODES.Q)
+private fun File.copyLogsToSDCardNewPostQ(context: Context, folderName: String): String? {
+    val resolver = context.contentResolver
+    val volume = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+    val path = "${Environment.DIRECTORY_DOCUMENTS}/" + if (folderName.isNotBlank()) "$folderName/" else ""
+    val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+        put(MediaStore.MediaColumns.MIME_TYPE, "application/zip")
+        put(MediaStore.MediaColumns.RELATIVE_PATH, path)
+    }
+
+    val inputUri = Uri.fromFile(this)
+    val outputUri: Uri? = getExistingFileUriOrNull(resolver, path, volume, name) ?: resolver.insert(volume, contentValues)
+
+    if (outputUri != null) {
+        resolver.openInputStream(inputUri).use { input ->
+            // rwt mode should overwrite file if currently exists
+            resolver.openOutputStream(outputUri,"rwt").use { output ->
+                output?.let { input?.copyTo(it, DEFAULT_BUFFER_SIZE) }
+            }
+        }
+        return "$path$name"
+    }
+
+    return null
+}
+
+@RequiresApi(Build.VERSION_CODES.Q)
+fun getExistingFileUriOrNull(resolver: ContentResolver, relativePath: String, volumeUri: Uri, name: String): Uri? {
+    val projection = arrayOf(
+        MediaStore.MediaColumns._ID
+    )
+
+    val selection = "${MediaStore.MediaColumns.RELATIVE_PATH}='$relativePath' AND ${MediaStore.MediaColumns.DISPLAY_NAME}='$name'"
+
+    resolver.query( volumeUri,
+        projection, selection, null, null ).use { cursor ->
+        if (cursor != null && cursor.count >= 1) {
+            cursor.moveToFirst().let {
+                val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+                return ContentUris.withAppendedId(volumeUri, id)
+            }
+        }
+    }
+
+    return null
+}
+
 /**
  * Create zip of all logs in current app directory
  *

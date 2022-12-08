@@ -279,7 +279,7 @@ class MainActivity : AppCompatActivity(), RadioGroup.OnCheckedChangeListener, IS
         val url = when {
             editText.text.isNotEmpty() -> editText.text
             clipboard.hasPrimaryClip() -> {
-                val baseUrl = clipboard.primaryClip.getItemAt(0).text
+                val baseUrl = clipboard.primaryClip?.getItemAt(0)?.text
                 when (ws) {
                     true -> "ws://$baseUrl/ws/v1/"
                     false -> "http://$baseUrl/api/v1/"
