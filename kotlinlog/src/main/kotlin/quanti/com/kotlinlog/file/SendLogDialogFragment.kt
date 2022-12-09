@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import quanti.com.kotlinlog.R
-import quanti.com.kotlinlog.utils.copyLogsTOSDCard
+import quanti.com.kotlinlog.utils.copyLogsToSDCard
 import quanti.com.kotlinlog.utils.getFormattedFileNameDayNow
 import quanti.com.kotlinlog.utils.getUriForFile
 import quanti.com.kotlinlog.utils.getZipOfLogs
@@ -36,6 +36,9 @@ class SendLogDialogFragment : DialogFragment() {
         const val SEND_EMAIL_ADDRESSES = "send_address"
         const val EXTRA_FILES = "extra_files"
         const val DIALOG_THEME = "dialog_theme"
+        const val SAVE_LOGS_DIR_NAME = "save_logs_dir_name"
+
+        private const val DEFAULT_SAVE_LOGS_DIR_NAME = "KotlinLogger"
 
         @JvmOverloads
         @JvmStatic
@@ -46,7 +49,8 @@ class SendLogDialogFragment : DialogFragment() {
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
-            dialogTheme: Int? = null
+            dialogTheme: Int? = null,
+            saveLogsDestinationDirName: String = DEFAULT_SAVE_LOGS_DIR_NAME
         ) = newInstance(
             arrayOf(sendEmailAddress),
             message,
@@ -54,7 +58,8 @@ class SendLogDialogFragment : DialogFragment() {
             emailButtonText,
             fileButtonText,
             extraFiles,
-            dialogTheme
+            dialogTheme,
+            saveLogsDestinationDirName
         )
 
         @JvmOverloads
@@ -66,7 +71,8 @@ class SendLogDialogFragment : DialogFragment() {
             emailButtonText: String = "Email",
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
-            dialogTheme: Int? = null
+            dialogTheme: Int? = null,
+            saveLogsDestinationDirName: String = DEFAULT_SAVE_LOGS_DIR_NAME
         ): SendLogDialogFragment {
             val myFragment = SendLogDialogFragment()
 
@@ -77,6 +83,7 @@ class SendLogDialogFragment : DialogFragment() {
             args.putString(FILE_BUTTON_TEXT, fileButtonText)
             args.putStringArray(SEND_EMAIL_ADDRESSES, sendEmailAddress)
             args.putSerializable(EXTRA_FILES, ArrayList(extraFiles))
+            args.putString(SAVE_LOGS_DIR_NAME, saveLogsDestinationDirName)
             if (dialogTheme != null) {
                 args.putInt(DIALOG_THEME, dialogTheme)
             }
@@ -163,11 +170,18 @@ class SendLogDialogFragment : DialogFragment() {
         runBlocking {
             val appContext = this@SendLogDialogFragment.requireContext().applicationContext
 
-            val file = zipFile?.await()?.copyLogsTOSDCard(requireContext())
+            val destinationDir = requireArguments().getString(SAVE_LOGS_DIR_NAME)
+            val resultPath = zipFile?.await()?.copyLogsToSDCard(requireContext(), destinationDir ?: DEFAULT_SAVE_LOGS_DIR_NAME)
+
+            val text = if (resultPath == null) {
+                "File copy failed"
+            } else {
+                "File successfully copied to\n$resultPath"
+            }
 
             Toast.makeText(
                 appContext,
-                "File successfully copied" + "\n" + file?.absolutePath,
+                text,
                 Toast.LENGTH_LONG
             ).show()
         }
