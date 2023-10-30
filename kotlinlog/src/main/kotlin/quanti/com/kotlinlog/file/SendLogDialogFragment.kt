@@ -37,8 +37,10 @@ class SendLogDialogFragment : DialogFragment() {
         const val EXTRA_FILES = "extra_files"
         const val DIALOG_THEME = "dialog_theme"
         const val SAVE_LOGS_DIR_NAME = "save_logs_dir_name"
+        const val MAX_FILE_AGE = "max_file_age"
 
         private const val DEFAULT_SAVE_LOGS_DIR_NAME = "KotlinLogger"
+        private const val DEFAULT_MAX_FILE_AGE = 4
 
         @JvmOverloads
         @JvmStatic
@@ -50,7 +52,8 @@ class SendLogDialogFragment : DialogFragment() {
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
             dialogTheme: Int? = null,
-            saveLogsDestinationDirName: String = DEFAULT_SAVE_LOGS_DIR_NAME
+            saveLogsDestinationDirName: String = DEFAULT_SAVE_LOGS_DIR_NAME,
+            maxFileAge: Int = DEFAULT_MAX_FILE_AGE,
         ) = newInstance(
             arrayOf(sendEmailAddress),
             message,
@@ -59,7 +62,8 @@ class SendLogDialogFragment : DialogFragment() {
             fileButtonText,
             extraFiles,
             dialogTheme,
-            saveLogsDestinationDirName
+            saveLogsDestinationDirName,
+            maxFileAge
         )
 
         @JvmOverloads
@@ -72,7 +76,8 @@ class SendLogDialogFragment : DialogFragment() {
             fileButtonText: String = "Save",
             extraFiles: List<File> = arrayListOf(),
             dialogTheme: Int? = null,
-            saveLogsDestinationDirName: String = DEFAULT_SAVE_LOGS_DIR_NAME
+            saveLogsDestinationDirName: String = DEFAULT_SAVE_LOGS_DIR_NAME,
+            maxFileAge: Int = DEFAULT_MAX_FILE_AGE,
         ): SendLogDialogFragment {
             val myFragment = SendLogDialogFragment()
 
@@ -84,6 +89,7 @@ class SendLogDialogFragment : DialogFragment() {
             args.putStringArray(SEND_EMAIL_ADDRESSES, sendEmailAddress)
             args.putSerializable(EXTRA_FILES, ArrayList(extraFiles))
             args.putString(SAVE_LOGS_DIR_NAME, saveLogsDestinationDirName)
+            args.putInt(MAX_FILE_AGE, maxFileAge)
             if (dialogTheme != null) {
                 args.putInt(DIALOG_THEME, dialogTheme)
             }
@@ -100,7 +106,8 @@ class SendLogDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         zipFile = CoroutineScope(Dispatchers.IO).async {
             val extraFiles = requireArguments().getSerializable(EXTRA_FILES) as ArrayList<File>
-            getZipOfLogs(requireActivity().applicationContext, 4, extraFiles)
+            val maxFileAge = requireArguments().getInt(MAX_FILE_AGE)
+            getZipOfLogs(requireActivity().applicationContext, maxFileAge, extraFiles)
         }
     }
 
