@@ -29,15 +29,15 @@ import quanti.com.kotlinlog.utils.hasFileWritePermission
 class SendLogDialogFragment : DialogFragment() {
 
     companion object {
-        const val MESSAGE = "send_message"
-        const val TITLE = "send_title"
-        const val EMAIL_BUTTON_TEXT = "email_button"
-        const val FILE_BUTTON_TEXT = "file_button"
-        const val SEND_EMAIL_ADDRESSES = "send_address"
-        const val EXTRA_FILES = "extra_files"
-        const val DIALOG_THEME = "dialog_theme"
-        const val SAVE_LOGS_DIR_NAME = "save_logs_dir_name"
-        const val MAX_FILE_AGE = "max_file_age"
+        private const val MESSAGE = "send_message"
+        private const val TITLE = "send_title"
+        private const val EMAIL_BUTTON_TEXT = "email_button"
+        private const val FILE_BUTTON_TEXT = "file_button"
+        private const val SEND_EMAIL_ADDRESSES = "send_address"
+        private const val EXTRA_FILES = "extra_files"
+        private const val DIALOG_THEME = "dialog_theme"
+        private const val SAVE_LOGS_DIR_NAME = "save_logs_dir_name"
+        private const val MAX_FILE_AGE = "max_file_age"
 
         private const val DEFAULT_SAVE_LOGS_DIR_NAME = "KotlinLogger"
         private const val DEFAULT_MAX_FILE_AGE = 4
