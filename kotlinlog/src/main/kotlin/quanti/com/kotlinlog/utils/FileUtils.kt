@@ -86,7 +86,13 @@ fun File.addPath(vararg childrenPath :String): File {
 /**
  * Get shareable uri fo current file
  */
-fun File.getUriForFile(appCtx: Context) = FileProvider.getUriForFile(appCtx, appCtx.packageName, this)
+fun File.getUriForFile(appCtx: Context): Uri {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        FileProvider.getUriForFile(appCtx, appCtx.packageName, this)
+    } else{
+        Uri.fromFile(this)
+    }
+}
 
 /**
  * Copy zip of logs to sd card and returns path if successful or null if failed
@@ -104,11 +110,7 @@ fun File.copyLogsToSDCard(context: Context, folderName: String): String? {
 }
 
 private fun File.copyLogsToSDCardLegacyPreQ(folderName: String): String? {
-    val path = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            "${Environment.DIRECTORY_DOCUMENTS}/$folderName"
-        } else {
-            folderName
-        }
+    val path = "${Environment.DIRECTORY_DOCUMENTS}/$folderName"
     val outputFile = Environment.getExternalStorageDirectory()
         ?.addPath(path, name)
         ?: return null

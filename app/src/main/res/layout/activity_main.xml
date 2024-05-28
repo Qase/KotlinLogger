@@ -4,470 +4,464 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
 
-    >
-
-
-
-
-<android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp"
-    tools:layout_editor_absoluteY="81dp">
-
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Five threads, each 1000 messages"
-        app:layout_constraintBottom_toBottomOf="@+id/test2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/test2"
-        app:layout_constraintTop_toTopOf="@+id/test2" />
+        android:padding="20dp"
+        tools:layout_editor_absoluteY="81dp">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="One thread, 50 messages"
-        app:layout_constraintBottom_toBottomOf="@+id/test1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/test1"
-        app:layout_constraintTop_toTopOf="@+id/test1" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Five threads, each 1000 messages"
+            app:layout_constraintBottom_toBottomOf="@+id/test2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/test2"
+            app:layout_constraintTop_toTopOf="@+id/test2" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="One thread, 10000 messages, sometimes exception"
-        app:layout_constraintBottom_toBottomOf="@+id/test3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/test3"
-        app:layout_constraintTop_toTopOf="@+id/test3" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="One thread, 50 messages"
+            app:layout_constraintBottom_toBottomOf="@+id/test1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/test1"
+            app:layout_constraintTop_toTopOf="@+id/test1" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Three threads, each 10000 messages, sometimes exception"
-        app:layout_constraintBottom_toBottomOf="@+id/test4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/test4"
-        app:layout_constraintTop_toTopOf="@+id/test4" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="One thread, 10000 messages, sometimes exception"
+            app:layout_constraintBottom_toBottomOf="@+id/test3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/test3"
+            app:layout_constraintTop_toTopOf="@+id/test3" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Three threads, each 10000 messages, sometimes exception"
+            app:layout_constraintBottom_toBottomOf="@+id/test4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/test4"
+            app:layout_constraintTop_toTopOf="@+id/test4" />
 
-        <RadioButton
-            android:id="@+id/verbose"
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RadioButton
+                android:id="@+id/verbose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="V" />
+
+            <RadioButton
+                android:id="@+id/debug"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="D" />
+
+            <RadioButton
+                android:id="@+id/info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="I" />
+
+            <RadioButton
+                android:id="@+id/warn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="W" />
+
+            <RadioButton
+                android:id="@+id/error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="E" />
+
+
+        </RadioGroup>
+
+
+        <Button
+            android:id="@+id/hitme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="V" />
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="hitme_clicked"
+            android:text="Hit me"
+            app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <RadioButton
-            android:id="@+id/debug"
+        <Button
+            android:id="@+id/throwButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="D" />
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="throwException_clicked"
+            android:text="Throw"
+            app:layout_constraintBottom_toTopOf="@+id/test4"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <RadioButton
-            android:id="@+id/info"
+
+        <Button
+            android:id="@+id/test1"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="testone_clicked"
+            android:text="Test #1"
+            app:layout_constraintBottom_toTopOf="@+id/hitme"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/test2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="I" />
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="testtwo_clicked"
+            android:text="Test #2"
+            app:layout_constraintBottom_toTopOf="@+id/test1"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <RadioButton
-            android:id="@+id/warn"
+        <Button
+            android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="W" />
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="send_clicked"
+            android:text="Send"
+            app:layout_constraintBottom_toTopOf="@+id/meta"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <RadioButton
-            android:id="@+id/error"
+        <Button
+            android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:text="E" />
 
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="deleteLogs_clicked"
+            android:text="Delete"
+            app:layout_constraintBottom_toTopOf="@+id/send"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </RadioGroup>
+        <Button
+            android:id="@+id/test3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="testthree_clicked"
+            android:text="test #3"
+            app:layout_constraintBottom_toTopOf="@+id/test2"
+            app:layout_constraintStart_toStartOf="parent" />
 
+        <Button
+            android:id="@+id/throwu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="throwUncheckedException_clicked"
+            android:text="Throw U"
+            app:layout_constraintBottom_toTopOf="@+id/throwButton"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/hitme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="8dp"
-        android:onClick="hitme_clicked"
-        android:text="Hit me"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/switchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="switchLogger_clicked"
+            android:text="Switch"
+            app:layout_constraintBottom_toTopOf="@+id/delete"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/throwButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="throwException_clicked"
-        android:text="Throw"
-        app:layout_constraintBottom_toTopOf="@+id/test4"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/apiServer_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:text="REST"
+            app:layout_constraintBottom_toTopOf="@+id/share"
+            app:layout_constraintStart_toStartOf="parent" />
 
+        <Button
+            android:id="@+id/testn6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="askForPermission_clicked"
+            android:text="Request"
+            app:layout_constraintBottom_toTopOf="@+id/switchButton"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/test1"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="testone_clicked"
-        android:text="Test #1"
-        app:layout_constraintBottom_toTopOf="@+id/hitme"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="testShare_clicked"
+            android:text="Share"
+            app:layout_constraintBottom_toTopOf="@+id/testn6"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/test2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="testtwo_clicked"
-        android:text="Test #2"
-        app:layout_constraintBottom_toTopOf="@+id/test1"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/wsServer_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:text="WS"
+            app:layout_constraintBottom_toTopOf="@+id/apiServer_button"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="send_clicked"
-        android:text="Send"
-        app:layout_constraintBottom_toTopOf="@+id/meta"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/test4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="testfour_clicked"
+            android:text="test #4"
+            app:layout_constraintBottom_toTopOf="@+id/test3"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/meta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="2dp"
+            android:onClick="logMetadata_clicked"
+            android:text="Meta"
+            app:layout_constraintBottom_toTopOf="@+id/throwu"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="deleteLogs_clicked"
-        android:text="Delete"
-        app:layout_constraintBottom_toTopOf="@+id/send"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="One log line based on selected radio button"
+            app:layout_constraintBottom_toBottomOf="@+id/hitme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/hitme"
+            app:layout_constraintTop_toTopOf="@+id/hitme" />
 
-    <Button
-        android:id="@+id/test3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="testthree_clicked"
-        android:text="test #3"
-        app:layout_constraintBottom_toTopOf="@+id/test2"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Throw exception"
+            app:layout_constraintBottom_toBottomOf="@+id/throwButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/throwButton"
+            app:layout_constraintTop_toTopOf="@+id/throwButton" />
 
-    <Button
-        android:id="@+id/throwu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="throwUncheckedException_clicked"
-        android:text="Throw U"
-        app:layout_constraintBottom_toTopOf="@+id/throwButton"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Throw unchecked exception"
+            app:layout_constraintBottom_toBottomOf="@+id/throwu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/throwu"
+            app:layout_constraintTop_toTopOf="@+id/throwu" />
 
-    <Button
-        android:id="@+id/switchButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="switchLogger_clicked"
-        android:text="Switch"
-        app:layout_constraintBottom_toTopOf="@+id/delete"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Send logs to email or save to sdcard"
+            app:layout_constraintBottom_toTopOf="@+id/meta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/send"
+            app:layout_constraintTop_toBottomOf="@+id/delete" />
 
-    <Button
-        android:id="@+id/apiServer_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:text="REST"
-        app:layout_constraintBottom_toTopOf="@+id/share"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Logs metadata about phone"
+            app:layout_constraintBottom_toBottomOf="@+id/meta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/meta"
+            app:layout_constraintTop_toTopOf="@+id/meta" />
 
-    <Button
-        android:id="@+id/testn6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="askForPermission_clicked"
-        android:text="Request"
-        app:layout_constraintBottom_toTopOf="@+id/switchButton"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Delete everything in folder"
+            app:layout_constraintBottom_toBottomOf="@+id/delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/delete"
+            app:layout_constraintTop_toTopOf="@+id/delete" />
 
-    <Button
-        android:id="@+id/share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="testShare_clicked"
-        android:text="Share"
-        app:layout_constraintBottom_toTopOf="@+id/testn6"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/loggerInUseTextView"
+            android:layout_width="454dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/switchButton"
+            app:layout_constraintStart_toEndOf="@+id/switchButton"
+            app:layout_constraintTop_toTopOf="@+id/switchButton" />
 
-    <Button
-        android:id="@+id/wsServer_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:text="WS"
-        app:layout_constraintBottom_toTopOf="@+id/apiServer_button"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/loggerInUseTextView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Fire request for file permission"
+            app:layout_constraintBottom_toBottomOf="@+id/testn6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/testn6"
+            app:layout_constraintTop_toTopOf="@+id/testn6" />
 
-    <Button
-        android:id="@+id/test4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="testfour_clicked"
-        android:text="test #4"
-        app:layout_constraintBottom_toTopOf="@+id/test3"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/loggerInUseTextView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Share"
+            app:layout_constraintBottom_toBottomOf="@+id/share"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toEndOf="@+id/share"
+            app:layout_constraintTop_toTopOf="@+id/share" />
 
-    <Button
-        android:id="@+id/meta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:onClick="logMetadata_clicked"
-        android:text="Meta"
-        app:layout_constraintBottom_toTopOf="@+id/throwu"
-        app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/apiServer_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:ems="10"
+            android:hint="http://webserver_address/api/v1/"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="@+id/apiServer_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/apiServer_button"
+            app:layout_constraintTop_toTopOf="@+id/apiServer_button" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="One log line based on selected radio button"
-        app:layout_constraintBottom_toBottomOf="@+id/hitme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/hitme"
-        app:layout_constraintTop_toTopOf="@+id/hitme" />
+        <EditText
+            android:id="@+id/wsServer_editText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:ems="10"
+            android:hint="ws://webserver_address/ws/v1/"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="@+id/wsServer_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/apiServer_button"
+            app:layout_constraintTop_toTopOf="@+id/wsServer_button" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Throw exception"
-        app:layout_constraintBottom_toBottomOf="@+id/throwButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/throwButton"
-        app:layout_constraintTop_toTopOf="@+id/throwButton" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Throw unchecked exception"
-        app:layout_constraintBottom_toBottomOf="@+id/throwu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/throwu"
-        app:layout_constraintTop_toTopOf="@+id/throwu" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Send logs to email or save to sdcard"
-        app:layout_constraintBottom_toTopOf="@+id/meta"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/send"
-        app:layout_constraintTop_toBottomOf="@+id/delete" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Logs metadata about phone"
-        app:layout_constraintBottom_toBottomOf="@+id/meta"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/meta"
-        app:layout_constraintTop_toTopOf="@+id/meta" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Delete everything in folder"
-        app:layout_constraintBottom_toBottomOf="@+id/delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/delete"
-        app:layout_constraintTop_toTopOf="@+id/delete" />
-
-    <TextView
-        android:id="@+id/loggerInUseTextView"
-        android:layout_width="454dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/switchButton"
-        app:layout_constraintStart_toEndOf="@+id/switchButton"
-        app:layout_constraintTop_toTopOf="@+id/switchButton" />
-
-    <TextView
-        android:id="@+id/loggerInUseTextView2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Fire request for file permission"
-        app:layout_constraintBottom_toBottomOf="@+id/testn6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/testn6"
-        app:layout_constraintTop_toTopOf="@+id/testn6" />
-
-    <TextView
-        android:id="@+id/loggerInUseTextView3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Share"
-        app:layout_constraintBottom_toBottomOf="@+id/share"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toEndOf="@+id/share"
-        app:layout_constraintTop_toTopOf="@+id/share" />
-
-    <EditText
-        android:id="@+id/apiServer_editText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:hint="http://webserver_address/api/v1/"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="@+id/apiServer_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/apiServer_button"
-        app:layout_constraintTop_toTopOf="@+id/apiServer_button" />
-
-    <EditText
-        android:id="@+id/wsServer_editText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:hint="ws://webserver_address/ws/v1/"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="@+id/wsServer_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/apiServer_button"
-        app:layout_constraintTop_toTopOf="@+id/wsServer_button" />
-
-</android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
 
