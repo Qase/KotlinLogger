@@ -28,8 +28,6 @@ android {
         }
     }
 
-    ndkVersion '21.3.6528147'
-
     kotlinOptions {
         jvmTarget = "17"
     }
@@ -57,9 +55,10 @@ dependencies {
 
     // Test
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestImplementation(
+            'com.android.support.test.espresso:espresso-core:2.2.2',
+            { exclude group: 'com.android.support', module: 'support-annotations' }
+    )
 }
 
 repositories {
