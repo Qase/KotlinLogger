@@ -1,20 +1,19 @@
-<manifest package="quanti.com.kotlinlog"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-          xmlns:android="http://schemas.android.com/apk/res/android"
->
-
-    <application android:allowBackup="true"
-                 android:supportsRtl="true"
-    >
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
 
         <provider
             android:name="quanti.com.kotlinlog.file.LogFileProvider"
             android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true">
+
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
+
         </provider>
 
     </application>
