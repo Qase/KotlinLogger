@@ -136,6 +136,17 @@ class FileLogger(
         /**
          * Deletes all stored logs in app local memory
          */
+        fun deleteLogsForIdentifier(appCtx: Context, logIdentifier: String) {
+            appCtx
+                    .logFilesDir
+                    .listFiles()
+                    .filter { it.name.contains(logIdentifier) }
+                    .filter { it.name.endsWith(".log") }
+                    .forEach { it.delete() }
+        }
+        /**
+         * Deletes all stored logs in app local memory
+         */
         fun deleteAllLogs(appCtx: Context) {
             appCtx
                     .logFilesDir
