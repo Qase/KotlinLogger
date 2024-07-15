@@ -66,7 +66,6 @@ private fun emptyCheck(): Boolean {
 /**
  * @return Returns method name by reflexion
  */
-@Suppress("UNREACHABLE_CODE")
 private fun getMethodStackTraceElement(): StackTraceElement {
     val ste = Thread.currentThread().stackTrace
     var found = false
