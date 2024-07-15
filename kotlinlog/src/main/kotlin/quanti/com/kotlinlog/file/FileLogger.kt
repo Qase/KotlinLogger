@@ -1,6 +1,7 @@
 package quanti.com.kotlinlog.file
 
 import android.content.Context
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -71,10 +72,11 @@ class FileLogger(
 
     override fun logSync(androidLogLevel: Int, tag: String, methodName: String, text: String) {
         val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
-        logFile.write(formattedString)
+        blockingQueue.add(formattedString)
+        forceWrite()
     }
 
-
+    @OptIn(DelicateCoroutinesApi::class)
     override fun logThrowable(androidLogLevel: Int, tag: String, methodName: String, text: String, t: Throwable) {
 
         val formattedString = getFormatedString(appName, androidLogLevel, tag, methodName, text)
@@ -98,8 +100,9 @@ class FileLogger(
             }
         }
 
-        //we want errors to be sync
-        logFile.write(finalText)
+        blockingQueue.add(finalText)
+        // write errors and queued logs immediately
+        forceWrite()
     }
 
     override fun cleanResources() {
@@ -137,22 +140,20 @@ class FileLogger(
          * Deletes all stored logs in app local memory
          */
         fun deleteLogsForIdentifier(appCtx: Context, logIdentifier: String) {
-            appCtx
-                    .logFilesDir
-                    .listFiles()
-                    .filter { it.name.contains(logIdentifier) }
-                    .filter { it.name.endsWith(".log") }
-                    .forEach { it.delete() }
+            appCtx.logFilesDir
+                .listFiles()
+                ?.filter { it.name.contains(logIdentifier) }
+                ?.filter { it.name.endsWith(".log") }
+                ?.forEach { it.delete() }
         }
         /**
          * Deletes all stored logs in app local memory
          */
         fun deleteAllLogs(appCtx: Context) {
-            appCtx
-                    .logFilesDir
-                    .listFiles()
-                    .filter { it.name.endsWith(".log") }
-                    .forEach { it.delete() }
+            appCtx.logFilesDir
+                .listFiles()
+                ?.filter { it.name.endsWith(".log") }
+                ?.forEach { it.delete() }
         }
     }
 
