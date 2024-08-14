@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -100,17 +101,6 @@ class SendLogDialogFragment : DialogFragment() {
         }
     }
 
-    private var zipFile: Deferred<File>? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        zipFile = CoroutineScope(Dispatchers.IO).async {
-            val extraFiles = requireArguments().getSerializable(EXTRA_FILES) as ArrayList<File>
-            val maxFileAge = requireArguments().getInt(MAX_FILE_AGE)
-            getZipOfLogs(requireActivity().applicationContext, maxFileAge, extraFiles)
-        }
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val hasFilePermission = requireActivity().applicationContext.hasFileWritePermission()
 
@@ -146,7 +136,7 @@ class SendLogDialogFragment : DialogFragment() {
             val subject =
                 getString(R.string.logs_email_subject) + " " + getFormattedFileNameDayNow()
             val bodyText = getString(R.string.logs_email_text)
-            val zipFileUri = zipFile?.await()?.getUriForFile(appContext)
+            val zipFileUri = getZipFileDeferred().await().getUriForFile(appContext)
 
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "message/rfc822" // email
@@ -178,7 +168,7 @@ class SendLogDialogFragment : DialogFragment() {
             val appContext = this@SendLogDialogFragment.requireContext().applicationContext
 
             val destinationDir = requireArguments().getString(SAVE_LOGS_DIR_NAME)
-            val resultPath = zipFile?.await()?.copyLogsToSDCard(requireContext(), destinationDir ?: DEFAULT_SAVE_LOGS_DIR_NAME)
+            val resultPath = getZipFileDeferred().await().copyLogsToSDCard(requireContext(), destinationDir ?: DEFAULT_SAVE_LOGS_DIR_NAME)
 
             val text = if (resultPath == null) {
                 "File copy failed"
@@ -192,4 +182,17 @@ class SendLogDialogFragment : DialogFragment() {
                 Toast.LENGTH_LONG
             ).show()
         }
+
+    private fun getZipFileDeferred(): Deferred<File> {
+        return CoroutineScope(Dispatchers.IO).async {
+            val extraFiles = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requireArguments().getSerializable(EXTRA_FILES, ArrayList::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                requireArguments().getSerializable(EXTRA_FILES)
+            } as ArrayList<File>
+            val maxFileAge = requireArguments().getInt(MAX_FILE_AGE)
+            getZipOfLogs(requireActivity().applicationContext, maxFileAge, extraFiles)
+        }
+    }
 }

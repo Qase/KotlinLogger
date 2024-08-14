@@ -194,10 +194,6 @@ fun getLogFiles(appCtx: Context, fileAge: Int = 4): List<File> {
     appCtx.logFilesDir.listFiles()?.deleteAllZips()
     appCtx.logFilesDir.listFiles()?.deleteAllOldFiles(fileAge)
 
-    if (appCtx.logFilesDir.listFiles().isNullOrEmpty()) {
-        throw FileNotFoundException("No files were found")
-    }
-
     //create metadata info file
     MetadataFile(appCtx).apply {
         write()
