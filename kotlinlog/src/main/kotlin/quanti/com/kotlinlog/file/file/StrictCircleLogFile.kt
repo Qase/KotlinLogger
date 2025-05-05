@@ -50,11 +50,11 @@ class StrictCircleLogFile(
     }
 
     override fun createNewFileName(): String {
-        var fileName = "${getFormattedFileNameDayNow()}_$logIdentifier.log"
+        var fileName = "${getFormattedFileNameDayNowWithSeconds()}_$logIdentifier.log"
 
         //now check if file exists
         if (File(ctx.logFilesDir, fileName).exists()) {
-            fileName = "${getFormattedFileNameDayNow()}_${getRandomString(4)}_$logIdentifier.log"
+            fileName = "${getFormattedFileNameDayNowWithSeconds()}_${getRandomString(4)}_$logIdentifier.log"
         }
 
         loga("New filename $fileName")

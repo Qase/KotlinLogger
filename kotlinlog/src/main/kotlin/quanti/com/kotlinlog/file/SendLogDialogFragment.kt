@@ -133,8 +133,7 @@ class SendLogDialogFragment : DialogFragment() {
             val appContext = this@SendLogDialogFragment.requireContext().applicationContext
 
             val addresses = requireArguments().getStringArray(SEND_EMAIL_ADDRESSES)
-            val subject =
-                getString(R.string.logs_email_subject) + " " + getFormattedFileNameDayNow()
+            val subject = getString(R.string.logs_email_subject) + " " + getFormattedFileNameDayNow()
             val bodyText = getString(R.string.logs_email_text)
             val zipFileUri = getZipFileDeferred().await().getUriForFile(appContext)
 
