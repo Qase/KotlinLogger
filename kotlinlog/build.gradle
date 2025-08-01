@@ -12,7 +12,7 @@ android {
         minSdk 21
         targetSdk 34
         versionCode 8
-        versionName "2.3.0"
+        versionName "2.3.1"
         buildConfigField 'int', 'VERSION_CODE', "$versionCode"
         buildConfigField 'String', 'VERSION_NAME', "\"$versionName\""
         consumerProguardFile('proguard-rules.pro')
@@ -74,26 +74,26 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
 
     //gson
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.google.code.gson:gson:2.13.1'
 
     //retrofit stuff and converters
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
 
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:19.0.3'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:19.4.4'
 
     // Testing-only dependencies
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    androidTestImplementation "org.mockito:mockito-core:3.2.0"
+    androidTestImplementation "org.mockito:mockito-core:5.18.0"
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.13'
+    testImplementation 'org.robolectric:robolectric:4.15.1'
 }
