@@ -53,9 +53,9 @@ class WebSocketSender(url: String)
         connected = false
     }
 
-    override fun onOpen(webSocket: WebSocket?, response: Response) {
+    override fun onOpen(webSocket: WebSocket, response: Response) {
         connected = true
-        loga(TAG, "WS open :", response.message())
+        loga(TAG, "WS open :", response.message)
 
         if (callback != null){
             callback?.isServerActive(true)
@@ -71,13 +71,13 @@ class WebSocketSender(url: String)
         loga(TAG, "Receiving bytes : " + bytes.hex())
     }
 
-    override fun onClosing(webSocket: WebSocket, code: Int, reason: String?) {
+    override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
         webSocket.close(NORMAL_CLOSURE_STATUS, null)
         loga(TAG, "Closing : $code / $reason")
         connected = false
     }
 
-    override fun onFailure(webSocket: WebSocket?, t: Throwable, response: Response?) {
+    override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         connected = false
         loga(TAG, "Error : " + t.message)
 
