@@ -1,0 +1,46 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+
+group = 'com.github.qase'
+
+android {
+    namespace "quanti.com.kotlinlog.compose"
+
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+        consumerProguardFile('proguard-rules.pro')
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+dependencies {
+    api project(':kotlinlog')
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2'
+
+    implementation platform('androidx.compose:compose-bom:2024.10.01')
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.runtime:runtime'
+}

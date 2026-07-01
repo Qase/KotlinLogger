@@ -25,6 +25,7 @@ Mostly used in Prague based android develpoment company - [Quanti](https://www.q
 * Send data to [Qase LoggingServer](https://github.com/Qase/LoggingServer)
 * Every logged exception is logged to own separate file
 * Sample [app](github/sampleApp.png) is ready to build
+* `SendLogDialog` Jetpack Compose composable (`:kotlinlog-compose`) alongside the classic `SendLogDialogFragment` — works from a plain `ComponentActivity`, no `FragmentActivity`/`FragmentManager` required
 
 
 ## Installation
@@ -119,6 +120,29 @@ Log.logMetadata(appContext)
 SendLogDialogFragment.newInstance("your@email.com", deleteLogs = true).show(supportFragmentManager, "TAG")
 ```
 <img src="github/dialog.png" width="250">
+
+5) Compose usage (no FragmentActivity needed)
+
+If your screen is built with Jetpack Compose - even hosted in a plain `ComponentActivity`
+with no Fragments at all - add the `:kotlinlog-compose` artifact and use the `SendLogDialog`
+composable instead. It shows the exact same native dialog as `SendLogDialogFragment`, just
+driven by Compose state:
+
+```kotlin
+implementation 'com.github.Qase.KotlinLogger:kotlinlog-compose:TAG'
+```
+
+```kotlin
+var showSendLogDialog by rememberSaveable { mutableStateOf(false) }
+
+Button(onClick = { showSendLogDialog = true }) { Text("Send logs") }
+
+SendLogDialog(
+    show = showSendLogDialog,
+    onDismissRequest = { showSendLogDialog = false },
+    sendEmailAddress = "your@email.com",
+)
+```
 
 
 ## License
