@@ -18,6 +18,7 @@ before_install:
 - yes | sdkmanager "platforms;android-28"
 script:
 - "./gradlew assemble -p kotlinlog"
+- "./gradlew assemble -p kotlinlog-compose"
 notifications:
   email: false
   slack:

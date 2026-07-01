@@ -1,25 +1,12 @@
 package quanti.com.kotlinlog.file
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import java.io.File
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import quanti.com.kotlinlog.R
-import quanti.com.kotlinlog.utils.copyLogsToSDCard
-import quanti.com.kotlinlog.utils.getFormattedFileNameDayNow
-import quanti.com.kotlinlog.utils.getUriForFile
-import quanti.com.kotlinlog.utils.getZipOfLogs
-import quanti.com.kotlinlog.utils.hasFileWritePermission
 
 /**
  * Created by Trnka Vladislav on 20.06.2017.
@@ -40,17 +27,17 @@ class SendLogDialogFragment : DialogFragment() {
         private const val SAVE_LOGS_DIR_NAME = "save_logs_dir_name"
         private const val MAX_FILE_AGE = "max_file_age"
 
-        private const val DEFAULT_SAVE_LOGS_DIR_NAME = "KotlinLogger"
-        private const val DEFAULT_MAX_FILE_AGE = 4
+        private const val DEFAULT_SAVE_LOGS_DIR_NAME = SendLogDialogOptions.DEFAULT_SAVE_LOGS_DIR_NAME
+        private const val DEFAULT_MAX_FILE_AGE = SendLogDialogOptions.DEFAULT_MAX_FILE_AGE
 
         @JvmOverloads
         @JvmStatic
         fun newInstance(
             sendEmailAddress: String,
-            message: String = "Would you like to send logs by email or save them to SD card?",
-            title: String = "Send logs",
-            emailButtonText: String = "Email",
-            fileButtonText: String = "Save",
+            message: String = SendLogDialogOptions.DEFAULT_MESSAGE,
+            title: String = SendLogDialogOptions.DEFAULT_TITLE,
+            emailButtonText: String = SendLogDialogOptions.DEFAULT_EMAIL_BUTTON_TEXT,
+            fileButtonText: String = SendLogDialogOptions.DEFAULT_FILE_BUTTON_TEXT,
             extraFiles: List<File> = arrayListOf(),
             dialogTheme: Int? = null,
             saveLogsDestinationDirName: String = DEFAULT_SAVE_LOGS_DIR_NAME,
@@ -71,10 +58,10 @@ class SendLogDialogFragment : DialogFragment() {
         @JvmStatic
         fun newInstance(
             sendEmailAddress: Array<String>,
-            message: String = "Would you like to send logs by email or save them to SD card?",
-            title: String = "Send logs",
-            emailButtonText: String = "Email",
-            fileButtonText: String = "Save",
+            message: String = SendLogDialogOptions.DEFAULT_MESSAGE,
+            title: String = SendLogDialogOptions.DEFAULT_TITLE,
+            emailButtonText: String = SendLogDialogOptions.DEFAULT_EMAIL_BUTTON_TEXT,
+            fileButtonText: String = SendLogDialogOptions.DEFAULT_FILE_BUTTON_TEXT,
             extraFiles: List<File> = arrayListOf(),
             dialogTheme: Int? = null,
             saveLogsDestinationDirName: String = DEFAULT_SAVE_LOGS_DIR_NAME,
@@ -102,25 +89,35 @@ class SendLogDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val hasFilePermission = requireActivity().applicationContext.hasFileWritePermission()
+        return SendLogDialogCore.createDialog(
+            context = requireContext(),
+            options = optionsFromArguments(),
+            onPositiveButtonClick = this::positiveButtonClick,
+            onNeutralButtonClick = this::neutralButtonClick,
+        )
+    }
 
-        return AlertDialog
-            .Builder(requireContext(), requireArguments().getInt(DIALOG_THEME))
-            .apply {
-                setMessage(requireArguments().getString(MESSAGE))
-                setTitle(requireArguments().getString(TITLE))
-                setPositiveButton(
-                    requireArguments().getString(EMAIL_BUTTON_TEXT),
-                    this@SendLogDialogFragment::positiveButtonClick
-                )
+    private fun optionsFromArguments(): SendLogDialogOptions {
+        val args = requireArguments()
 
-                if (hasFilePermission) {
-                    setNeutralButton(
-                        requireArguments().getString(FILE_BUTTON_TEXT),
-                        this@SendLogDialogFragment::neutralButtonClick
-                    )
-                }
-            }.create()
+        val extraFiles = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            args.getSerializable(EXTRA_FILES, ArrayList::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            args.getSerializable(EXTRA_FILES)
+        } as ArrayList<File>
+
+        return SendLogDialogOptions(
+            sendEmailAddresses = args.getStringArray(SEND_EMAIL_ADDRESSES)?.toList().orEmpty(),
+            message = args.getString(MESSAGE) ?: SendLogDialogOptions.DEFAULT_MESSAGE,
+            title = args.getString(TITLE) ?: SendLogDialogOptions.DEFAULT_TITLE,
+            emailButtonText = args.getString(EMAIL_BUTTON_TEXT) ?: SendLogDialogOptions.DEFAULT_EMAIL_BUTTON_TEXT,
+            fileButtonText = args.getString(FILE_BUTTON_TEXT) ?: SendLogDialogOptions.DEFAULT_FILE_BUTTON_TEXT,
+            extraFiles = extraFiles,
+            dialogTheme = args.getInt(DIALOG_THEME),
+            saveLogsDestinationDirName = args.getString(SAVE_LOGS_DIR_NAME) ?: SendLogDialogOptions.DEFAULT_SAVE_LOGS_DIR_NAME,
+            maxFileAge = args.getInt(MAX_FILE_AGE, SendLogDialogOptions.DEFAULT_MAX_FILE_AGE),
+        )
     }
 
     /**
@@ -130,31 +127,7 @@ class SendLogDialogFragment : DialogFragment() {
     @Suppress("UNUSED_PARAMETER")
     private fun positiveButtonClick(dialog: DialogInterface, which: Int) =
         runBlocking {
-            val appContext = this@SendLogDialogFragment.requireContext().applicationContext
-
-            val addresses = requireArguments().getStringArray(SEND_EMAIL_ADDRESSES)
-            val subject = getString(R.string.logs_email_subject) + " " + getFormattedFileNameDayNow()
-            val bodyText = getString(R.string.logs_email_text)
-            val zipFileUri = getZipFileDeferred().await().getUriForFile(appContext)
-
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "message/rfc822" // email
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                putExtra(Intent.EXTRA_EMAIL, addresses)
-                putExtra(Intent.EXTRA_SUBJECT, subject)
-                putExtra(Intent.EXTRA_TEXT, bodyText)
-                putExtra(Intent.EXTRA_STREAM, zipFileUri)
-            }
-
-            try {
-                startActivity(Intent.createChooser(intent, "Send mail..."))
-            } catch (ex: android.content.ActivityNotFoundException) {
-                Toast.makeText(
-                    appContext,
-                    getString(R.string.logs_email_no_client_installed),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+            SendLogDialogCore.sendLogsByEmail(requireContext(), optionsFromArguments())
         }
 
     /**
@@ -164,34 +137,6 @@ class SendLogDialogFragment : DialogFragment() {
     @Suppress("UNUSED_PARAMETER")
     private fun neutralButtonClick(dialog: DialogInterface, which: Int) =
         runBlocking {
-            val appContext = this@SendLogDialogFragment.requireContext().applicationContext
-
-            val destinationDir = requireArguments().getString(SAVE_LOGS_DIR_NAME)
-            val resultPath = getZipFileDeferred().await().copyLogsToSDCard(requireContext(), destinationDir ?: DEFAULT_SAVE_LOGS_DIR_NAME)
-
-            val text = if (resultPath == null) {
-                "File copy failed"
-            } else {
-                "File successfully copied to\n$resultPath"
-            }
-
-            Toast.makeText(
-                appContext,
-                text,
-                Toast.LENGTH_LONG
-            ).show()
+            SendLogDialogCore.saveLogsToSdCard(requireContext(), optionsFromArguments())
         }
-
-    private fun getZipFileDeferred(): Deferred<File> {
-        return CoroutineScope(Dispatchers.IO).async {
-            val extraFiles = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                requireArguments().getSerializable(EXTRA_FILES, ArrayList::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                requireArguments().getSerializable(EXTRA_FILES)
-            } as ArrayList<File>
-            val maxFileAge = requireArguments().getInt(MAX_FILE_AGE)
-            getZipOfLogs(requireActivity().applicationContext, maxFileAge, extraFiles)
-        }
-    }
 }

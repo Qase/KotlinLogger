@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 34
-        versionCode 8
-        versionName "2.3.2"
+        versionCode 9
+        versionName "2.4.0"
         buildConfigField 'int', 'VERSION_CODE', "$versionCode"
         buildConfigField 'String', 'VERSION_NAME', "\"$versionName\""
         consumerProguardFile('proguard-rules.pro')
