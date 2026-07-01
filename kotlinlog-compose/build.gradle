@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
-group = 'com.qithub.qase'
+group = 'com.github.qase'
 
 android {
     namespace "quanti.com.kotlinlog.compose"
